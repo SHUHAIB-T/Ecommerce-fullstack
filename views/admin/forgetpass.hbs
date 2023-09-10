@@ -1,0 +1,52 @@
+<style>
+    label {
+    display: none;
+  }
+  #otp{
+    display: none;
+  }
+  #btn-very{
+    display: none;
+  }
+ 
+</style>
+
+<div class="h4 bg-light text-primary my-3 d-flex p-2 justify-content-center align-items-center ">Forget Password?</div>
+<section class="vh-100">
+  <div class="container-fluid h-70 ">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 shadow-lg p-3 mb-5 bg-white rounded px-4 py-4">
+        <div class="login d-flex justify-content-center align-items-center ">
+          <h4 class="card-title text-primary fw-bold">Recover Password with Email</h4>
+        </div>
+        <hr>
+          <!-- Email input -->
+          <div id="email-input" class="form-outline mb-4">
+            <h6 class="form-label labell fw-bold" for="form3Example3">Email address</h6>
+            <input type="email" id="email" name="email" class="form-control form-control-lg"
+              placeholder="Enter your Email" required />
+          </div>
+         <span id="error-message" style="color: red;"></span>
+          <div id="otp" class="form-outline mb-4">
+            <h6 class="form-label labell fw-bold" for="form3Example3">Enter OTP send to <span id="email-id"></span></h6>
+            <input id="otp-input" type="text" name="text" class="form-control form-control-lg"
+              placeholder="Enter the otp here" />
+          </div>
+          <div class="form-outline mb-1" style="width: 100%;">
+            <a href="/admin/login" class="sign-up-link ">back to Login?</a>
+          </div>
+          <!-- Password input -->
+          <div style="display: block;" class="text-center text-lg-start pt-2 d-flex justify-content-around align-items-center ">
+            <button id="btn-gen" class="btn btn-primary btn-lg" style="display:block; padding:0.5em 2rem">GEANRATE OTP</button>
+            <button type="reset" id="btn" class="btn btn-lg" style="padding:0.5em 2rem">CLEAR</button>
+          </div>
+          <div class="text-center text-lg-start pt-2 d-flex justify-content-around align-items-center ">
+            <button id="btn-very" class="btn btn-primary btn-lg" style="display:none; padding:0.5em 2rem">VERIFY OTP</button>
+          </div>
+      </div>
+      <div class="col-md-9 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+        <img src="https://drive.google.com/uc?id=1r7eetQlKqBJfHA_6reLHqBTi_rjxsQ0p" class="img-fluid"
+          style="width: 25rem;" alt="Sample image">
+      </div>
+    </div>
+</section>

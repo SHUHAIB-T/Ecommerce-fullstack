@@ -1,0 +1,69 @@
+<style>
+  .error {
+    color: red;
+    display: block;
+  }
+
+  label {
+    display: none;
+  }
+</style>
+
+<div class="h4 bg-light text-primary my-3 d-flex p-2 justify-content-center align-items-center ">Admin Login</div>
+{{#if alert}}
+<div class="alert alert-success" role="alert">
+    {{this.alert.message}}
+</div>
+{{/if}}
+<section class="vh-100">
+  <div class="container-fluid h-70 ">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 shadow-lg p-3 mb-5 bg-white rounded px-4 py-4">
+        <div class="login d-flex justify-content-center align-items-center ">
+          <h4 class="card-title text-primary fw-bold">Login</h4>
+        </div>
+        <hr>
+        <form action="/admin/login" method="POST" id="loginForm">
+          {{#if err}}
+          <div class="form-control" style="border:none !important">
+            <div class="err text-danger">
+              <p>{{this.err.message}}</p>
+            </div>
+          </div>
+          {{/if}}
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <h6 class="form-label labell fw-bold" for="form3Example3">Email address</h6>
+            <input type="email" id="form3Example3" name="email" class="form-control form-control-lg"
+              placeholder="Enter your Email" required />
+            <label></label>
+          </div>
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+            <h6 class="form-label labell fw-bold" for="form3Example4 ">Password</h6>
+            <input type="password" id="form3Example4" name="password" class="form-control form-control-lg"
+              placeholder="Enter password" required />
+            <label></label>
+          </div>
+          <div class="form-outline mb-1" style="width: 100%;">
+            <a href="/admin/forget-pass" class="sign-up-link ">forget password?</a>
+          </div>
+          <div class="text-center text-lg-start pt-2 d-flex justify-content-center align-items-center ">
+            <button type="submit" class="btn btn-primary btn-lg" style="padding:0.5em 5rem">Login</button>
+          </div>
+
+        </form>
+      </div>
+      <div class="col-md-9 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+        <img src="https://drive.google.com/uc?id=1d6TSW-vNTHxeOVVMWsnwUVhNeSl2CSdg"
+          class="img-fluid" style="width: 25rem;" alt="Sample image">
+      </div>
+    </div>
+</section>
+<script>
+    $(document).ready(() => {
+        setTimeout(() => {
+            $('.alert').toggle()
+        }, 2000)
+    })
+</script>

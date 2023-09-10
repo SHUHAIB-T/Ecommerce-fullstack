@@ -1,0 +1,78 @@
+
+<div class="h4 bg-light text-primary my-3 d-flex p-2 justify-content-center align-items-center ">Reset Password</div>
+<section class="vh-100">
+  <div class="container-fluid h-70 ">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 shadow-lg p-3 mb-5 bg-white rounded px-4 py-4">
+        <div class="login d-flex justify-content-center align-items-center ">
+          <h4 class="card-title text-primary fw-bold">Reset Password</h4>
+        </div>
+        <hr>
+        <div id="error-message" style="color: red;"></div>
+        <form action="/admin/upadte-pass" method="POST" id="myForm">
+                <!-- new Password -->
+          <div class="form-outline mb-4">
+            <h6 class="form-label labell text-primary fw-bold" for="form3Example3">Enter new password</h6>
+            <input type="password" id="password" name="password" class="form-control form-control-lg"
+              placeholder="Enter new password" required />
+          </div>
+          {{!-- confirm password --}}
+          <div class="form-outline mb-4">
+            <h6 class="form-label labell text-primary fw-bold" for="form3Example3">Confirm password</h6>
+            <input type="password" id="confirmPassword" name="password" class="form-control form-control-lg"
+              placeholder="Confirm new password" required />
+          </div>
+          <div class="text-center text-lg-start pt-2 d-flex justify-content-center align-items-center ">
+            <button type="submit" class="btn btn-primary btn-lg" style="padding:0.5em 2rem">Update Password</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-9 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+        <img src="https://drive.google.com/uc?id=16B1Yiu7tIDw8SzcXInLiNKA_uIcQvRze"
+          class="img-fluid" style="width: 25rem;" alt="Sample image">
+      </div>
+    </div>
+</section>
+
+
+<script>
+    $(document).ready(function () {
+        $("#myForm").submit(function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+
+            // Get input values
+            var password = $("#password").val();
+            var confirmPassword = $("#confirmPassword").val();
+
+            // Define regular expression for email validation
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Validation checks
+            var errors = [];
+
+            if (password.length < 6) {
+                errors.push("Password must be at least 6 characters long.");
+            }
+
+            if (password !== confirmPassword) {
+                errors.push("Passwords do not match.");
+            }
+
+            // Display validation errors or submit the form
+            if (errors.length > 0) {
+                var errorMessage = "<ul>";
+                $.each(errors, function (index, error) {
+                    errorMessage += "<li>" + error + "</li>";
+                });
+                errorMessage += "</ul>";
+
+                $("#error-message").html(errorMessage).show();
+            } else {
+                // Validation successful, submit the form
+                $("#error-message").hide();
+                $("#myForm").off("submit").submit();
+            }
+        });
+    });
+</script>

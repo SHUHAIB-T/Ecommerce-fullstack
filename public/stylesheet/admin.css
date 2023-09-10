@@ -1,0 +1,9 @@
+:root{
+    --background:rgba(211, 219, 238, 1)
+}
+.nav{
+    background-color: var(--background)
+}
+#btn{
+    background-color: var(--background)
+}
