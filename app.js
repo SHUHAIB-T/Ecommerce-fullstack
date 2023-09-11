@@ -8,11 +8,15 @@ const path = require('path')
 const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 4000;
 const hbs = require('express-handlebars')
-const adminRouter = require('./routes/adminRouter');
-const userRouter = require('./routes/userRouter')
 const session = require('express-session')
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const publicDirectoryPath = path.join(__dirname, '/public')
+const flash=require('connect-flash')
+
+//requiring routers
+const adminRouter = require('./routes/adminRouter');
+const userRouter = require('./routes/userRouter');
+const adminCategory = require('./routes/adminCategory')
 
 //connect database
 dbConnect();
@@ -22,15 +26,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
 
+//connect flash
+app.use(flash())
+
 //setting  us the view engine 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(publicDirectoryPath))
+
 app.engine('hbs', hbs.engine({ 
     layoutsDir: __dirname + '/views/layouts',
     extname: 'hbs',
     defaultLayout: 'layout',
-    partialsDir:__dirname+'/views/partials'
+    partialsDir:__dirname+'/views/partials',
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+      }
     }));
 
     app.use(session({
@@ -47,6 +59,7 @@ app.use(nocache());
 //admin router
 app.use('/', userRouter);
 app.use('/admin',adminRouter)
+app.use('/admin/categories',adminCategory)
 
 
 //error handling

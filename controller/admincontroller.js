@@ -7,8 +7,9 @@ const Admin = require('../models/adminModel')
 
 //render dashboard
 const render_dharboard = (req, res) => {
-    const email = res.locals.admin.email
-    res.status(500).render('admin/admin-dash', { email: email })
+    const admin = res.locals.admin
+    console.log(admin)
+    res.status(500).render('admin/admin-dash', { Admin: admin })
 }
 //redirect to dash board
 const redirect_dash = (req, res) => {
@@ -21,24 +22,22 @@ const render_login = async (req, res) => {
     if (token) {
         await jwt.verify(token, process.env.SECRET_KEY, (err, decodeded) => {
             if (err) {
-                res.render('admin/admin-login', { admin: true, err: req.session.err, alert:req.session.alert })
+                res.render('admin/admin-login', { fullscreen:true,admin: true, err: req.session.err, success:req.flash('success')[0] })
                 delete req.session.err
-                delete req.session.alert
             } else {
                 res.redirect('/admin/dash')
             }
         })
     } else {
-        res.render('admin/admin-login', { admin: true, err: req.session.err,alert:req.session.alert })
+        res.render('admin/admin-login', { fullscreen:true,admin: true, err: req.session.err,success:req.flash('success')[0] })
         delete req.session.err
-        delete req.session.alert
     }
 
 }
 
 //render forget password page
 const render_forget_pass = (req, res) => {
-    res.render('admin/forgetpass', { admin: true, err: req.session.otp_err })
+    res.render('admin/forgetpass', { fullscreen:true,admin: true, err: req.session.otp_err })
 }
 
 const getRandomSixDigitNumber = () => {
@@ -88,7 +87,7 @@ const veryfy_otp = async (req,res) => {
 }
 
 const render_rest_pass =  (req,res) => {
-    res.render('admin/reset-pass',{admin:true})
+    res.render('admin/reset-pass',{fullscreen:true,admin:true})
 }
 const update_password = async(req,res) => {
     let password = req.body.password[0]
@@ -96,9 +95,7 @@ const update_password = async(req,res) => {
     let admin = await Admin.findOne({email:req.session.email})
     if(admin){
         await Admin.updateOne({email:req.session.email},{password:newPass})
-        req.session.alert = {
-            message:"Password Updated successfully"
-        }
+        req.flash('success','Password Updated Succerfully');
         res.redirect('/admin/login')
     }
 }
@@ -111,5 +108,5 @@ module.exports = {
     send_otp,
     veryfy_otp ,
     render_rest_pass,
-    update_password
+    update_password,
 }

@@ -2,8 +2,9 @@
   <div>
     <img src="https://drive.google.com/uc?id=1-gwe3jjZOANjkTlQ7mqFahQ4YBz1vUEc" alt="">
   </div>
-  {{#if email}}
-  <a class="btn btn-warning" onclick="return confirm('Are you sure want to logout')" href="/admin/logout">
+  {{#if Admin}}
+  <span>{{Admin.email}}</span>
+  <a class="btn btn-warning" onclick="return confirm('Are you sure want to logout {{Admin.first_name}} {{Admin.last_name}} ?')" href="/admin/logout">
       Log Out
     </a>
   {{else}}
