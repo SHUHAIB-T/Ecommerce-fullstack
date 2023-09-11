@@ -22,15 +22,14 @@ const render_login = async (req, res) => {
     if (token) {
         await jwt.verify(token, process.env.SECRET_KEY, (err, decodeded) => {
             if (err) {
-                res.render('admin/admin-login', { fullscreen:true,admin: true, err: req.session.err, success:req.flash('success')[0] })
+                res.render('admin/admin-login', { fullscreen:true,admin: true, error:req.flash('error')[0], success:req.flash('success')[0] })
                 delete req.session.err
             } else {
                 res.redirect('/admin/dash')
             }
         })
     } else {
-        res.render('admin/admin-login', { fullscreen:true,admin: true, err: req.session.err,success:req.flash('success')[0] })
-        delete req.session.err
+        res.render('admin/admin-login', { fullscreen:true,admin: true, error:req.flash('error')[0],success:req.flash('success')[0] })
     }
 
 }

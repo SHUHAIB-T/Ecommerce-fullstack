@@ -11,7 +11,13 @@ const categorySchema = new mongoose.Schema({
     },
     cat_status:{
         type:Boolean,
-        required:true
+        required:true,
+        default:true
+    },
+    delete:{
+        type:Boolean,
+        required:true,
+        default:false
     }
 },{
     timestamps:true

@@ -1,11 +1,9 @@
-{{#if alert}}
-<div class="alert alert-success" role="alert">
-    {{this.alert.message}}
-</div>
-{{/if}}
 <section class="category d-flex mt-2">
-<div class="object-fit-contain mt-3" style="width: 98%;">
-  <div class="h3 text-primary fw-bold mb-3 ">Category</div>
+<div class="object-fit-contain mt-3" style="width: 98%;"> 
+  <div class="header d-flex justify-content-between">  
+          <h3 class="h3 text-primary fw-bold mb-3">Categories</h3>
+          <a href="/admin/categories/new-category" class="btn btn-primary" style="height:40px;">New Category</a>
+        </div>
   <table style="width: 100%;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
   <thead>
     <tr>
@@ -35,12 +33,16 @@
       <td>
         {{!-- edit category button --}}
         <a href="/admin/categories/edit_category/{{this._id}}" class="ms-3"><i class="fa-solid fa-pen"></i></a>
-        <a href="" class="text-danger ms-2"><i class="fa-solid fa-trash"></i></a>
+        <a href="/admin/categories/delete_category/{{this._id}}" class="text-danger ms-2"><i class="fa-solid fa-trash"></i></a>
       </td>
     </tr>
     {{/each}}
   </tbody>
 </table>
 </div>
-
 </section>  
+<script>
+    $(document).ready(function () {
+        new DataTable('#example');
+    })
+</script>

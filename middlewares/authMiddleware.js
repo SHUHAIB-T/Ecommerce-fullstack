@@ -8,7 +8,6 @@ const isAdminloggedIn = async (req,res,next)=> {
             if(err){
                 res.redirect('/admin/login')
             }else{
-                console.log(decodedToken)
                 const admin =await Admin.findOne({_id:decodedToken.id})
                 res.locals.admin = admin;
                 next()

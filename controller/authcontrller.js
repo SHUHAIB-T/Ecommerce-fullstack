@@ -33,16 +33,12 @@ const doLogin = async (req,res) => {
             const token = createToken(admin._id)
             res.cookie("adminTocken",token,{httpOnly:true,maxAge:maxAge}).redirect('/admin/dash')
         }else{
-            req.session.err = {
-                message:"password incorrect"
-            }
+            req.flash('error','password Not matching')
             console.log(req.session.err)
             res.redirect('/admin/login')
         }
     }else{
-        req.session.err = {
-            message:"user cannot find"
-        }
+        req.flash('error','no admin Exist with this Email Id')
         res.redirect('/admin/login')
     }
 
