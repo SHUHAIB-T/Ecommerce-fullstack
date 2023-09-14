@@ -13,10 +13,13 @@ const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const publicDirectoryPath = path.join(__dirname, '/public')
 const flash=require('connect-flash')
 
+const express_fileupload = require('express-fileupload')
+
 //requiring routers
 const adminRouter = require('./routes/adminRouter');
 const userRouter = require('./routes/userRouter');
-const adminCategory = require('./routes/adminCategory')
+const categoryRouter = require('./routes/category_router')
+const productRouter = require('./routes/product_router')
 
 //connect database
 dbConnect();
@@ -26,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
 
+// app.use(express_fileupload())
 //connect flash
 app.use(flash())
 
@@ -59,7 +63,8 @@ app.use(nocache());
 //admin router
 app.use('/', userRouter);
 app.use('/admin',adminRouter)
-app.use('/admin/categories',adminCategory)
+app.use('/admin/categories',categoryRouter)
+app.use('/admin/products',productRouter)
 
 
 //error handling

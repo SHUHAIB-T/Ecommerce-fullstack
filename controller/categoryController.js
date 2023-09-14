@@ -1,7 +1,5 @@
-const adminModel = require('../models/adminModel')
 const Category = require('../models/categoryModel')
 
-const mongoose = require('mongoose')
 
 const crateCategory = async (req,res) => {
     const newCategory = await Category.create(req.body)
@@ -13,8 +11,7 @@ const crateCategory = async (req,res) => {
 const render_Edit_Category = async (req,res) => {
     const admin = res.locals.admin
     const category = await getcategory(req.params.id).then((category) => category)
-    console.log(category.cat_name)
-    res.render('admin/edit-category',{admin:true,Admin:admin, category:category})
+    res.render('category/edit-category',{admin:true,Admin:admin, category:category})
 }
 
 const getcategory = (cat_id) => {
@@ -56,14 +53,13 @@ const delete_category = async (req,res) => {
 const render_category_page = async (req,res) =>{
     let categories = await getAllCategories()
     const admin = res.locals.admin
-    console.log(categories)
-    res.render('admin/category',{admin:true,categories:categories, Admin: admin , success:req.flash('success')[0]})
+    res.render('category/category',{admin:true,categories:categories, Admin: admin , success:req.flash('success')[0]})
 }
 
 //render new category form
 const render_new_category = (req,res) => {
     const admin = res.locals.admin
-    res.render('admin/new-category',{admin:true, Admin:admin})
+    res.render('category/new-category',{admin:true, Admin:admin})
 }
 
 
@@ -75,5 +71,6 @@ module.exports = {
     render_category_page,
     render_Edit_Category,
     render_new_category,
-    delete_category
+    delete_category,
+    getAllCategories
 }

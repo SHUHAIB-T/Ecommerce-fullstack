@@ -8,7 +8,6 @@ const Admin = require('../models/adminModel')
 //render dashboard
 const render_dharboard = (req, res) => {
     const admin = res.locals.admin
-    console.log(admin)
     res.status(500).render('admin/admin-dash', { Admin: admin })
 }
 //redirect to dash board

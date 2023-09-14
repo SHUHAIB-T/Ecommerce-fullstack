@@ -1,0 +1,22 @@
+:root{
+    --background:rgba(211, 219, 238, 1);
+    --text-color: rgba(0, 102, 176, 1);
+    --white:rgb(255, 255, 255);
+}
+
+.blue-secondary{
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-family: Roboto;
+}
+.button-cancel{
+    background-color: var(--background) !important
+}
+
+.add-btn{
+    background-color: var(--text-color) !important;
+    color: var(--white) !important;
+}
+.text-second{
+    color: var(--text-color) !important;
+}

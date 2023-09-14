@@ -1,0 +1,81 @@
+<section class="new-product p-md-5">
+    <div class="h3 fw-bold text-second px-4">
+        <a class="text-second h6" style="text-decoration: none;" href="/admin/products"><i class="fa-solid fa-left-long"></i><span>Product</span></a>
+        <br><span>New Product</span>
+    </div>
+    <form method="post" class="row d-flex justify-content-center" enctype="multipart/form-data"  action="/admin/products/add-product">
+        <section class="left-secton col-md-6 p-3">
+            
+            <div class="card p-md-5 p-2 me-md-5">
+                <h5 >Choose product images </h5>
+                <span class="fw-normal mb-4 text-success">file supports only: jpeg,jpg,png,webp</span>
+                <span class="fw-bold">Select the Primary Image</span>
+                <input type="file" accept=".jpg,.jpeg,.png,.webp"  class="form-control FilUploader" name="primaryImage" class="mb-3" />
+                <span class="fw-bold">Select secondary images <br> <span class="fw-normal text-success">Maximum 3 images</span></span>
+                <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp" name="images" class="mb-3"  multiple/>
+                
+            </div>
+            <div class="form-floating my-2 me-md-5">
+                <label class="form-label fw-bold" for="form4Example3">Description</label>
+                <br>
+                <textarea class="form-control mt-4 text-area" rows="5"  name="description"
+                    style="min-height:150px !important; " required></textarea>
+            </div>
+
+        </section>
+        <section class="right-section col-md-6  col-md-6 p-4">
+            <div class="form-group mb-4">
+                <label for="" class="fw-bold mb-2">Product Name</label>
+                <input type="text" name="product_name" class="form-control">
+            </div>
+            <div class="row mb-2">
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Brand Name</label>
+                    <input type="text" name="brand_name" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Color</label>
+                    <input type="text" name="color" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Stock</label>
+                    <input type="number" name="stock" class="form-control">
+                </div>
+                <div class="form-group col-md-6 d-flex flex-column">
+                    <label for="" class="fw-bold mb-2">Category Name</label>
+                    <select class="form-select" name="category" >
+                       {{#each category}}
+                            <option value="{{this._id}}">{{this.cat_name}}</option>
+                       {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Actual Price</label>
+                    <input type="number" name="prod_price" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Selling Price</label>
+                    <input type="number" name="sellig_price" class="form-control">
+                </div>
+                <div class="form-group mt-2 col-md-6">
+                    <label for="" class="fw-bold ">GST(%)</label>
+                    <input type="number" name="GST" class="form-control">
+                </div>
+            </div>
+        </section>
+        <button type="submit" class=" btn add-btn py-3 " style="width:20vw;">submit</button>
+        <button type="reset" class=" btn button-cancel ms-2 py-3 " style="width:20vw;">Clear</button>
+
+    </form>
+</section>
+
+<script>
+    $("#image").on("change", function() {
+    if ($("#image")[0].files.length > 3) {
+        alert("You can select only 3 images");
+        $(this).val('')
+    } 
+    });
+</script>

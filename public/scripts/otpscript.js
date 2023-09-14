@@ -6,9 +6,8 @@ const otp_input = document.getElementById('otp')
 const show_mail = document.getElementById('email-id')
 const error_message = document.getElementById('error-message')
 
-
-genBTN.addEventListener('click', () => {
-  
+if (genBTN) {
+  genBTN.addEventListener('click', () => {
     const email = document.getElementById("email").value;
     console.log(email)
     dev.style.display = 'none'
@@ -16,51 +15,54 @@ genBTN.addEventListener('click', () => {
     very.style.display = 'block'
     emailInput.style.display = 'none'
     otp_input.style.display = 'block'
-    try{
+    try {
       fetch('/admin/forget-pass', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({email}),
-    })
-      .then(response => response.json())
-      .then(data => {
-        show_mail.textContent = data;
-        console.log('Success:', data);
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
       })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    }catch(err){
+        .then(response => response.json())
+        .then(data => {
+          show_mail.textContent = data;
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (err) {
       console.log(err)
     }
   })
+}
 
 
-  //verify otp fetch
-very.addEventListener('click',() => {
-  const otp = document.getElementById('otp-input').value;
-  const email = document.getElementById("email").value;
-  try{
-    fetch('/admin/verify-otp', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({email,otp}),
+//verify otp fetch
+if (very) {
+  very.addEventListener('click', () => {
+    const otp = document.getElementById('otp-input').value;
+    const email = document.getElementById("email").value;
+    try {
+      fetch('/admin/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, otp }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          error_message.textContent = data?.msg;
+          if (data.success) {
+            location.assign('/admin/reset-pass')
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch (err) {
+      console.log(err)
+    }
   })
-    .then(response => response.json())
-    .then(data => {
-      error_message.textContent = data?.msg;
-      if(data.success){
-        location.assign('/admin/reset-pass')
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }catch(err){
-    console.log(err)
-  }
-})
+}

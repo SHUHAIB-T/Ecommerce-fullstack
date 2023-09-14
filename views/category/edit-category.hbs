@@ -1,0 +1,28 @@
+
+<div style="width: 80%;" class="container py-5 w mb-5 new-category">
+    <div class="div h3 text-second fw-bold">Edit Category</div>
+    <form action="/admin/categories/upadate_category" method="post">
+        <div class="form-group">
+            <label class="fw-bold" for="exampleFormControlInput1">Category Name</label>
+            <input type="text" class="form-control" name="cat_name" id="exampleFormControlInput1" value="{{category.cat_name}}">
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="_id" class="form-control" id="exampleFormControlInput1" value="{{category._id}}">
+        </div>
+        <label class="fw-bold" for="exampleFormControlInput1">Status</label>
+        <select class="form-select" name="cat_status" aria-label="Default select example">
+            <option value="true">List</option>
+            <option value="false">Unlist</option>
+        </select>
+        <div class="form-group">
+            <label class="fw-bold"  for="exampleFormControlTextarea1">Description</label>
+            <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{category.description}}</textarea>
+        </div>
+        <div class="text-center text-lg-start mt-4 d-flex">
+            <button type="submit" class="btn add-btn btn-lg"
+                style="display:block; padding:0.5em 2rem">Update</button>
+            <button type="reset"  class="btn button-cancel btn-lg px-5 mx-3">CLEAR</button>
+        </div>
+    </form>
+
+</div>

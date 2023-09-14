@@ -1,0 +1,113 @@
+<section class="new-product p-md-5" style="margin-top: -30px;">
+    <div class="h3 fw-bold text-second px-4">
+        <a class="text-second h6" style="text-decoration: none;" href="/admin/products"><i
+                class="fa-solid fa-left-long"></i><span>Product</span></a>
+        <br><span>Edit Product</span>
+    </div>
+    <form method="post" class="row d-flex justify-content-center" enctype="multipart/form-data"
+        action="/admin/products/update-product">
+        <section class="right-section mt-1 col-md-6  col-md-6 p-4">
+            <div class="form-group mb-4">
+                <label for="" class="fw-bold mb-2">Product Name</label>
+                <input type="text" name="product_name" value="{{obj.product_name}}" class="form-control">
+            </div>
+            <div class="row mb-4">
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Brand Name</label>
+                    <input type="text" name="brand_name" value="{{obj.brand_name}}" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Color</label>
+                    <input type="text" name="color" value="{{obj.color}}" class="form-control">
+                </div>
+                
+                <input type="hidden" name="id" value="{{obj._id}}" class="form-control">
+
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Stock</label>
+                    <input type="number" name="stock" value="{{obj.stock}}" class="form-control">
+                </div>
+                <div class="form-group col-md-6 d-flex flex-column">
+                    <label for="" class="fw-bold mb-2">Category Name</label>
+                    <select class="form-select" name="category">
+                        <option value="{{obj.category._id}}">{{obj.category.cat_name}}</option>
+                        {{#each category}}
+                        <option value="{{this._id}}">{{this.cat_name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="form-group col-md-6 d-flex mt-2 flex-column">
+                    <label class="fw-bold" for="exampleFormControlInput1">Status</label>
+                    <select class="form-select" name="status" aria-label="Default select example">
+                        {{#if obj.status}}
+                        <option value="true">List</option>
+                        <option value="false">Unlist</option>
+                        {{else}}
+                        <option value="false">Unlist</option>
+                        <option value="true">List</option>
+                        {{/if}}
+                    </select>
+                </div>
+                <div class="form-group mt-2 col-md-6">
+                    <label for="" class="fw-bold ">GST(%)</label>
+                    <input type="number" name="GST" value="{{obj.GST}}" class="form-control">
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Actual Price</label>
+                    <input type="number" name="prod_price" value="{{obj.actual_price}}" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="" class="fw-bold mb-2">Selling Price</label>
+                    <input type="number" name="sellig_price" value="{{obj.selling_price}}" class="form-control">
+                </div>
+            </div>
+            <div class="form-floating me-md-5">
+                <label class="form-label fw-bold" for="form4Example3">Description</label>
+                <br>
+                <textarea class="form-control mt-4 text-area"  rows="5" name="description"
+                    style="min-height:150px !important; " required>{{obj.description}}</textarea>
+            </div>
+        </section>
+        <section class="left-secton mt-5   col-md-6 p-3">
+           <div class="card mb-3">
+                <div class="card-body">
+                    <div class="primary-img row">
+                        <label for="inputtext3" class="col-sm-2 col-md-12 col-form-label mb-2">Primary Image</label>
+                       {{#each obj.primary_image}}<img src="/productImages/{{this.name}}" id="img{{this.name}}" alt="" style="width:70px;" class="col-md-3">
+                        <div class="col-sm-10 col-md-9">
+                            <input type="hidden" class="form-control mb-2 prod-img" value="{{this._id}}" name="id_primary_img">
+                            <input type="file" class="form-control prod-img" id="{{this.name}}" onchange="previewImg(event)" name="primaryImage">
+                        </div>
+                        {{/each}}
+                    </div>
+                     <div class="secondary-img row">
+                        <label for="inputtext3" class="col-sm-2 col-md-12 col-form-label mb-2">secondary Images</label>
+                       {{#each obj.secondary_images}}<img src="/productImages/{{this.name}}" alt="" id="img{{this.name}}" style="width:70px;" class="col-md-3 mb-2">
+                        <div class="col-sm-10 col-md-9">
+                            <input type="file" class="form-control mb-2 prod-img" id="{{this.name}}" onchange="previewImg(event)" name="images">
+                            <input type="hidden" class="form-control mb-2 prod-img" value="{{this._id}}" name="id_secondary_img">
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <button type="reset" class=" btn button-cancel py-3 " style="width:20vw;">Clear</button>
+        <button type="submit" class=" btn add-btn ms-2  py-3 " style="width:20vw;">Update</button>
+
+    </form>
+</section>
+
+<script>
+    $(document).ready(function () {
+    previewImg=(e)=>{
+    console.log(e.target.value)
+    let image=URL.createObjectURL(e.target.files[0]);
+    let imgPreview=document.getElementById('img'+e.target.id)
+    imgPreview.src=image;
+    }
+})
+</script>

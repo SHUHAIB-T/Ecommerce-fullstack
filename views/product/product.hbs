@@ -1,0 +1,57 @@
+<section class="category d-flex mt-2">
+<div class="object-fit-contain mt-3"> 
+  <div class="header d-flex justify-content-between">  
+          <h3 class="h3 text-second fw-bold mb-3">Products</h3>
+          <a href="/admin/products/new-product" class="btn add-btn" style="height:40px;">New Product</a>
+        </div>
+  <table style="width: 100%;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th class="th-sm">image
+      </th>
+      <th class="th-sm">Product name
+      </th>
+      <th class="th-sm">Brand
+      </th>
+      <th class="th-sm">Category
+      </th>
+      <th class="th-sm">Stock
+      </th>
+      <th class="th-sm">Selling Price
+      </th>
+      <th class="th-sm">status
+      </th>
+      <th class="th-sm">Delete/Edit
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+      <td >{{#each this.primary_image}}<img class="rounded mx-auto d-block" style="width: 4rem;" src="/productImages/{{this.name}}" alt="">{{/each}}</td>
+      <td>{{this.product_name}}</td>
+      <td>{{this.brand_name}}</td>
+      <td>{{this.category.cat_name}}</td>
+      <td>{{this.stock}}</td>
+      <td>{{this.selling_price}}</td>
+      {{#if this.status}}
+      <td>list</td>
+      {{else}}
+      <td>Unlist</td>
+      {{/if}}
+      <td>
+        {{!-- edit category button --}}
+        <a href="/admin/products/edit-product/{{this._id}}" class="ms-3"><i class="fa-solid fa-pen"></i></a>
+        <a href="/admin/products/delete_products/{{this._id}}" onclick="return confirm('Are you sure want to delete {{this.product_name}}')" class="text-danger ms-2"><i class="fa-solid fa-trash"></i></a>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+</section>  
+<script>
+    $(document).ready(function () {
+        new DataTable('#example');
+    })
+</script>
