@@ -1,0 +1,41 @@
+<section class="vh-100 mt-5">
+  <div class="container-fluid h-70 ">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-9 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+        <img src="https://drive.google.com/uc?id=1QzOpbpp1up8rUa-kzSw94BOc5riKRZ2V"
+          class="img-fluid" style="width: 25rem;" alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 shadow-lg p-3 mb-5 bg-white rounded px-4 py-4">
+        <div class="login d-flex justify-content-center align-items-center ">
+          <h4 class="card-title text-primary fw-bold">Login</h4>
+        </div>
+        <hr>
+        <form action="/login" method="POST" id="loginForm">
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            {{#if err}}
+            <span style="color: red;">{{err.msg}}</span>
+            {{/if}}
+            <h6 class="form-label labell fw-bold" for="form3Example3">Email address</h6>
+            <input type="email" id="form3Example3" name="email" class="form-control form-control-lg"
+              placeholder="Enter your Email" required />
+          </div>
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+            <h6 class="form-label labell fw-bold" for="form3Example4 ">Password</h6>
+            <input type="password" id="form3Example4" name="password" class="form-control form-control-lg"
+              placeholder="Enter password" required />
+            <label></label>
+          </div>
+          <div class="form-outline mb-1" style="width: 100%;">
+            <a href="/sign-up" class="sign-up-link ">don't have account? signup</a>
+          </div>
+          <div class="text-center text-lg-start pt-2 d-flex justify-content-center align-items-center ">
+            <button type="submit" class="btn btn-primary btn-lg" style="padding:0.5em 5rem">Login</button>
+          </div>
+
+        </form>
+      </div>
+      
+    </div>
+</section>

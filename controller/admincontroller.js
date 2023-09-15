@@ -51,10 +51,10 @@ const send_otp = async (req,res) => {
     const mail = req.body.email
     await OTP.create({email:mail,otp:otp})
     const mailOptions = {
-        from: 'timescart11@gmail.com', // Sender's email address
-        to: mail, // Recipient's email address
-        subject: 'Hello Welcome to Times cart', // Email subject
-        text:`this is you otp fo verification ${otp}` // Email content (plain text)
+        from: 'timescart11@gmail.com', 
+        to: mail, 
+        subject: 'Hello Welcome to Times cart',
+        text:`this is you otp fo verification ${otp}` 
     };
 
     // Send the email
@@ -98,6 +98,7 @@ const update_password = async(req,res) => {
     }
 }
 
+
 module.exports = {
     render_login,
     render_dharboard,
@@ -107,4 +108,5 @@ module.exports = {
     veryfy_otp ,
     render_rest_pass,
     update_password,
+   
 }

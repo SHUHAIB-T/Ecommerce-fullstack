@@ -5,7 +5,7 @@ const { getAllCategories } = require('./categoryController')
 const mongoose = require('mongoose')
 const { json } = require('body-parser')
 
-//addd product function 
+//add product function 
 const add_product = async (req, res) => {
     try {
         let seconaryImages = []
@@ -168,11 +168,11 @@ const update_product = async (req, res) => {
     try {
         const product = await Product.findOne({ _id: req.body.id });
         if (req.files != null) {
-            const id_secondary_img =  req.body.id_secondary_img
+            const id_secondary_img = req.body.id_secondary_img
             const primaryImage = product.primary_image
-            
+
             const primaryimagejs = req.files.primaryImage
-            if(primaryimagejs){
+            if (primaryimagejs) {
                 primaryImage[0].name = primaryimagejs[0].filename
                 primaryImage[0].path = primaryimagejs[0].path
             }
@@ -180,14 +180,14 @@ const update_product = async (req, res) => {
             const secondaryImage = product.secondary_images
             const secodaryimagejs = req.files.images
 
-            if(secodaryimagejs){
-                
-                for(let i=0; i< secodaryimagejs.length;i++){
-                    if(id_secondary_img[i] == secondaryImage[i]._id){
+            if (secodaryimagejs) {
+
+                for (let i = 0; i < secodaryimagejs.length; i++) {
+                    if (id_secondary_img[i] == secondaryImage[i]._id) {
                         secondaryImage[i].name = secodaryimagejs[i].filename;
                         secondaryImage[i].path = secodaryimagejs[i].path;
                     }
-                }  
+                }
 
             }
         }
@@ -203,10 +203,10 @@ const update_product = async (req, res) => {
         product.color = req.body.color;
         product.GST = req.body.GST;
         product.status = req.body.status;
-        
-        const productUpadate = await Product.findByIdAndUpdate({ _id: req.body.id } ,product)
+
+        const productUpadate = await Product.findByIdAndUpdate({ _id: req.body.id }, product)
         req.flash('success', 'product editted successfully')
-        res.redirect('deleteProduct')
+        res.redirect('/admin/products')
     } catch (err) {
         console.log(err)
     }
@@ -214,9 +214,9 @@ const update_product = async (req, res) => {
 }
 
 //delete product 
-const deleteProduct = async (req,res) => {
-    await Product.findByIdAndUpdate({_id:req.params.id},{delete:true});
-    req.flash('success','Poduct Deleted successfully');
+const deleteProduct = async (req, res) => {
+    await Product.findByIdAndUpdate({ _id: req.params.id }, { delete: true });
+    req.flash('success', 'Poduct Deleted successfully');
     res.redirect('/admin/products')
 }
 

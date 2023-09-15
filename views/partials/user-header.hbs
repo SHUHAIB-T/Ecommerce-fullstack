@@ -1,0 +1,75 @@
+<nav id="navbar" class="nav d-flex py-2 justify-content-between align-items-center px-5" style="">
+  <section >
+    <div id="prof-div" style="display: none;" class="divwrapper">
+      <div class="prof-div prof-div card d-flex position-absolute flex-coulumn justify-content-center align-items-center">
+      <div class="account d-flex justify-content-center align-items-center">
+        <span class="h5 px-5 py-1 text-white">
+          Account Details
+        </span>
+      </div>
+      <div class="d-flex flex-column">
+        <div class="blue-secondary px-3 py-2 mt-2">
+        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid  fa-user"><span
+              class="blue-secondary px-2">My Account</span></i></a>
+      </div>
+      <div class="blue-secondary px-3 py-2">
+        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid fa-cart-shopping"><span
+              class="blue-secondary px-2">My Cart</span></i></a>
+      </div>
+      <div class="blue-secondary px-3 py-2">
+        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid fa-bag-shopping"><span
+              class="blue-secondary px-2">Order history</span></i></a>
+      </div>
+      <div class="blue-secondary px-3 py-2 mb-2">
+        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid fa-heart"><span
+              class="blue-secondary px-2">My Wish List</span></i></a>
+      </div>
+      </div>
+      {{#if userData}}
+      <div class="account d-flex justify-content-center mb-3 align-items-center">
+        <span class="h5 px-4 py-1 text-white ">
+          <a href="/logout">Logout</a>
+        </span>
+      </div>
+      {{else}}
+      <div class="account d-flex justify-content-center mb-3 align-items-center">
+        <span class="h5 px-4 py-1 text-white ">
+          <a href="/login">Login/SignUp</a>
+        </span>
+      </div>
+      {{/if}}
+    </div>
+
+    </div>
+  </section>
+  <div style="margin-left:-100px">
+    <a href="/"><img style="width: 7rem;" src="https://drive.google.com/uc?id=18EJgrQQfFCgLUCtUCOY-6tujL8KFX0qI"
+        alt=""></a>
+  </div>
+  <div style="width: 15rem;" class="ladels d-flex justify-content-between align-items-center fw-bold">
+    <a href="#">Watches</a>
+    <a href="#">Mens</a>
+    <a href="#">Womens</a>
+  </div>
+  <div style="width: 23rem;" class=" ">
+    <form class="form-inline search d-flex justify-content-between align-items-center">
+      <a href="#"><span><i class="fa-brands fa-searchengin"></i></span></a>
+      <input class="search-box px-2 mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+  <div style="width:7rem;font-size:1.5rem" class="ladels fw-bold ">
+    <a href="#"><i class="fa-solid fa-heart"></i></a>
+    <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+    <a id="btnn" href="#"><i id="#userIcon" class="fa-solid  fa-user"></i></a>
+  </div>
+</nav>
+
+<script>
+
+  $(document).ready(function () {
+    $("#btnn").click(function () {
+      $("#prof-div").toggle();
+    });
+  });
+
+</script>

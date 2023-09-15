@@ -20,6 +20,7 @@ const adminRouter = require('./routes/adminRouter');
 const userRouter = require('./routes/userRouter');
 const categoryRouter = require('./routes/category_router')
 const productRouter = require('./routes/product_router')
+const customerRouter = require('./routes/customer_router')
 
 //connect database
 dbConnect();
@@ -65,6 +66,7 @@ app.use('/', userRouter);
 app.use('/admin',adminRouter)
 app.use('/admin/categories',categoryRouter)
 app.use('/admin/products',productRouter)
+app.use('/admin/customers',customerRouter)
 
 
 //error handling

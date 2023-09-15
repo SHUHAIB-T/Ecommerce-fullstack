@@ -1,0 +1,53 @@
+<section class="category d-flex mt-2 " style="width: 100%;">
+<div class="object-fit-contain mt-3" style="width: 98%;"> 
+  <div class="header d-flex justify-content-between">  
+          <h3 class="h3 text-second fw-bold mb-3">Customers</h3>
+        </div>
+  <table style="width: 100%;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th class="th-sm">Customer Name
+      </th>
+      <th class="th-sm">Email
+      </th>
+      <th class="th-sm">Phone
+      </th>
+      <th class="th-sm">Status
+      </th>
+      <th style="width: 10rem;" class="th-sm">Created on
+      </th>
+      <th class="th-sm">Manage
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each customer}}
+    <tr>
+      <td>{{this.user_name}}</td>
+      <td>{{this.user_email}}</td>
+      <td>{{this.user_mobile}}</td>
+      {{#if this.user_status}}
+      <td class="fw-bold" style="color: green;">Active</td>
+      {{else}}
+      <td class="fw-bold" style="color: red;">Blocked</td>
+      {{/if}}
+      <td >{{this.createdAt}}</td>
+      <td>
+        {{!-- edit category button --}}
+        {{#if this.user_status}}
+        <a href="/admin/customers/change_status/{{this._id}}" class="btn btn-danger text-white px-3 py1">Block</a>
+        {{else}}
+        <a href="/admin/customers/change_status_unblock/{{this._id}}" class="btn text-white btn-success px-3 py1">Unblock</a>
+        {{/if}}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+</section>  
+<script>
+    $(document).ready(function () {
+        new DataTable('#example');
+    })
+</script>

@@ -2,6 +2,7 @@
     --background:rgba(211, 219, 238, 1);
     --text-color: rgba(0, 102, 176, 1);
     --white:rgb(255, 255, 255);
+    --user-backhround:rgba(107, 199, 171, 1)
 }
 
 .blue-secondary{
@@ -19,4 +20,34 @@
 }
 .text-second{
     color: var(--text-color) !important;
+}
+
+.ladels a{
+    text-decoration: none;
+    color: var(--text-color);
+}
+.search a{
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+#navbar{
+    background-color: var(--white);
+}
+.search-box{
+    background-color: var(--background);
+    border-radius: 5px;
+    width: 20rem;
+    border: none;
+    padding: 5px;
+    outline: var(--text-color);
+}
+.prof-div{
+    z-index: 6;
+    right: 4.5rem;
+    top: 3rem;
+}
+.account, .account a{
+    background:var(--user-backhround);
+    color: var(--white) !important;
+    text-decoration: none !important;
 }

@@ -10,9 +10,9 @@
                 <h5 >Choose product images </h5>
                 <span class="fw-normal mb-4 text-success">file supports only: jpeg,jpg,png,webp</span>
                 <span class="fw-bold">Select the Primary Image</span>
-                <input type="file" accept=".jpg,.jpeg,.png,.webp"  class="form-control FilUploader" name="primaryImage" class="mb-3" />
+                <input type="file" accept=".jpg,.jpeg,.png,.webp,.svg"  class="form-control FilUploader" name="primaryImage" class="mb-3"required />
                 <span class="fw-bold">Select secondary images <br> <span class="fw-normal text-success">Maximum 3 images</span></span>
-                <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp" name="images" class="mb-3"  multiple/>
+                <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp,.svg" name="images" class="mb-3"  multiple required/>
                 
             </div>
             <div class="form-floating my-2 me-md-5">
@@ -26,24 +26,24 @@
         <section class="right-section col-md-6  col-md-6 p-4">
             <div class="form-group mb-4">
                 <label for="" class="fw-bold mb-2">Product Name</label>
-                <input type="text" name="product_name" class="form-control">
+                <input type="text" name="product_name" class="form-control" required>
             </div>
             <div class="row mb-2">
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Brand Name</label>
-                    <input type="text" name="brand_name" class="form-control">
+                    <input type="text" name="brand_name" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Color</label>
-                    <input type="text" name="color" class="form-control">
+                    <input type="text" name="color" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Stock</label>
-                    <input type="number" name="stock" class="form-control">
+                    <input type="number" name="stock" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6 d-flex flex-column">
                     <label for="" class="fw-bold mb-2">Category Name</label>
-                    <select class="form-select" name="category" >
+                    <select class="form-select" name="category"  required>
                        {{#each category}}
                             <option value="{{this._id}}">{{this.cat_name}}</option>
                        {{/each}}
@@ -53,15 +53,15 @@
             <div class="row mb-4">
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Actual Price</label>
-                    <input type="number" name="prod_price" class="form-control">
+                    <input type="number" name="prod_price" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Selling Price</label>
-                    <input type="number" name="sellig_price" class="form-control">
+                    <input type="number" name="sellig_price" class="form-control" required>
                 </div>
                 <div class="form-group mt-2 col-md-6">
                     <label for="" class="fw-bold ">GST(%)</label>
-                    <input type="number" name="GST" class="form-control">
+                    <input type="number" name="GST" class="form-control" required>
                 </div>
             </div>
         </section>
