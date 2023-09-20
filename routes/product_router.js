@@ -27,5 +27,4 @@ router.post('/update-product',upload.fields([{name:"images"},{name:"primaryImage
 router.get('/delete_products/:id', isAdminloggedIn, deleteProduct)
 
 
-
 module.exports = router

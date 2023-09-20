@@ -10,16 +10,14 @@ const createToken = (id) => {
 }
 
 const doLogin = async (req,res) => {
-    console.log(req.body);
-    const user = await User.findOne({user_email:req.body.email})
+    const user = await User.findOne({user_email:req.body.email,user_status:true})
     if(user){
         const checkPass = await bcrypt.compare(req.body.password,user.user_password);
-        console.log(checkPass)
         if(checkPass){
             const token = createToken(user._id)
             res.cookie("userTocken",token,{httpOnly:true,maxAge:maxAge}).redirect('/')
         }else{
-            req.session.err = {msg:"password does not match !"}
+            req.session.err = {msg:"password does not match!"}
             res.redirect('/login');
         }
     }else{

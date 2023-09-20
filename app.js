@@ -17,10 +17,13 @@ const express_fileupload = require('express-fileupload')
 
 //requiring routers
 const adminRouter = require('./routes/adminRouter');
+const categoryRouter = require('./routes/category_router');
+const productRouter = require('./routes/product_router');
+const customerRouter = require('./routes/customer_router');
+
+//user routrs 
 const userRouter = require('./routes/userRouter');
-const categoryRouter = require('./routes/category_router')
-const productRouter = require('./routes/product_router')
-const customerRouter = require('./routes/customer_router')
+const myAccountRouter = require('./routes/myAccountRouter')
 
 //connect database
 dbConnect();
@@ -61,8 +64,11 @@ app.engine('hbs', hbs.engine({
 //clearing the cache of browser
 app.use(nocache());
 
-//admin router
+//user router
 app.use('/', userRouter);
+app.use('/my-account',myAccountRouter)
+
+//admin router
 app.use('/admin',adminRouter)
 app.use('/admin/categories',categoryRouter)
 app.use('/admin/products',productRouter)

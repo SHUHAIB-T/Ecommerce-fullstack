@@ -9,12 +9,12 @@ const {render_user_login,
 
 
 const { doLogin } = require('../controller/userAuthController');
-const { isUserloggedIn,
+const { authenicateUser,
     getUserData, } = require('../middlewares/authMiddleware');
 
 router.get('/',getUserData,render_home)
 
-router.get('/login',render_user_login)
+router.get('/login',getUserData,render_user_login)
 
 router.get('/sign-up',render_SignUp);
 
@@ -24,10 +24,16 @@ router.post('/veryfy-otp', veryfy_otp);
 
 router.post('/login',doLogin)
 
-router.get('/buy_product/:id',isUserloggedIn, show_product_details)
+router.get('/view_product/:id',show_product_details)
+
+router.get('/buy_product/:id', authenicateUser,)
+
+router.get('/add_to_cart/:id',)
+
+router.get('/add_to_wishlist/:id',)
 
 router.get('/logout', (req, res) => {
-    res.clearCookie('userTocken');
+    res.cookie('userTocken','',{ maxAge:1})
     res.redirect('/')
 })
 

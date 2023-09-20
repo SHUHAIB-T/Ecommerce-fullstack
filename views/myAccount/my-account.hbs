@@ -1,0 +1,54 @@
+<div class="d-flex flex-column ">
+    <div class="h3 fw-bold mt-3 user-text text-center py-1">
+        Account details
+    </div>
+    <div class="card px-5 py-3 justify-content-center ">
+        <p class="h5 fw-bold ">
+            Name: <span class="fw-normal"> {{userData.user_name}}</span>
+        </p>
+        <p class="h5 fw-bold ">
+            Email: <span class="fw-normal"> {{userData.user_email}}</span>
+        </p>
+        <p class="h5 fw-bold ">
+            Phone: <span class="fw-normal"> {{userData.user_mobile}}</span>
+        </p>
+    </div>
+    <div class="d-flex">
+        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
+            <a  href=""><i class="fa-solid user-icon fa-box-archive fa-4x"></i></a>
+            <p class="h3 user-icon fw-bold">
+                Orders
+            </p>
+            <p class="h6 fw-normal">
+                check your orders
+            </p>
+        </div>
+        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
+            <a  href=""><i class="fa-regular user-icon fa-heart fa-4x"></i></a>
+            <p class="h3 user-icon fw-bold">
+                Wish List
+            </p>
+            <p class="h6 fw-normal">
+                check your Wish list
+            </p>
+        </div>
+        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
+            <a  href=""><i class="fa-solid user-icon fa-cart-shopping fa-4x"></i></a>
+            <p class="h3 user-icon fw-bold">
+                Cart
+            </p>
+            <p class="h6 fw-normal">
+                check your Cart
+            </p>
+        </div>
+        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
+            <a  href="/my-account/edit-details/{{userData._id}}"><i class="fa-solid user-icon fa-user-pen fa-4x"></i></a>
+            <p class="h3 user-icon fw-bold">
+                Edit
+            </p>
+            <p class="h6 fw-normal">
+                Edit your details
+            </p>
+        </div>
+    </div>
+</div>

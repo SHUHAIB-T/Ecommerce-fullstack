@@ -5,8 +5,9 @@ const phoneNumber = document.getElementById("phoneNumber");
 const Password = document.getElementById('Password');
 const Name = document.getElementById('Name');
 const showEmail = document.getElementById('Email-id');
-const clearBTN= document.getElementById('clearBTN');
+const clearBTN = document.getElementById('clearBTN');
 const verify_btn = document.getElementById('verify_btn');
+const rePass = document.getElementById('repeatePass');
 
 const OTPerr = document.getElementById('OTP-err');
 const Passerr = document.getElementById('Pass-err');
@@ -17,7 +18,7 @@ const Nameerr = document.getElementById('Name-err');
 
 
 if (gen_btn) {
-    gen_btn.addEventListener('click', async(e) => {
+    gen_btn.addEventListener('click', async (e) => {
         OTPerr.textContent = '';
         Passerr.textContent = '';
         Phoneerr.textContent = '';
@@ -26,6 +27,8 @@ if (gen_btn) {
         e.preventDefault()
         let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
         switch (true) {
+            case rePass.value != Password.value: Passerr.textContent = 'Password Missmatch!'
+                break;
             case Name.value === '': Nameerr.textContent = "this field is required"
                 break;
             case emailAddress.value === '': Emailerr.textContent = "this field is required";
@@ -40,33 +43,34 @@ if (gen_btn) {
                 emailAddress.disabled = true;
                 Name.disabled = true;
                 Password.disabled = true;
+                rePass.disabled = true;
                 phoneNumber.disabled = true;
                 otp_div.style.display = 'block';
                 gen_btn.style.display = 'none';
                 clearBTN.style.display = 'none';
                 verify_btn.style.display = 'block'
-                
 
-                try{
-                    await fetch('/get-signup-otp',{
-                        method:'POST',
-                        body: JSON.stringify({user_email:emailAddress.value}),
-                        headers: {'Content-Type': 'application/json'}
+
+                try {
+                    await fetch('/get-signup-otp', {
+                        method: 'POST',
+                        body: JSON.stringify({ user_email: emailAddress.value }),
+                        headers: { 'Content-Type': 'application/json' }
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        showEmail.textContent = data
-                    }).catch((err) => {
-                        console.log(err)
-                    })
-                }catch(err){
+                        .then(response => response.json())
+                        .then(data => {
+                            showEmail.textContent = data
+                        }).catch((err) => {
+                            console.log(err)
+                        })
+                } catch (err) {
                     console.log(err)
                 }
-            }
+        }
     })
 }
 
-if(verify_btn){
+if (verify_btn) {
     verify_btn.addEventListener('click', async (e) => {
         e.preventDefault();
         const otp = document.getElementById('Otp-input').value;
@@ -74,34 +78,34 @@ if(verify_btn){
         const user_password = Password.value;
         const user_mobile = phoneNumber.value;
         const user_name = Name.value;
-        try{
-            await fetch('/veryfy-otp',{
-                method:'POST',
-                headers:{'Content-Type': 'application/json'},
-                body:JSON.stringify({otp,user_email,user_password,user_mobile,user_name})
+        try {
+            await fetch('/veryfy-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otp, user_email, user_password, user_mobile, user_name })
             })
-            .then(response => response.json())
-            .then(data => {
-                OTPerr.textContent = data?.msg;
-                if(data.err){
-                    Emailerr.textContent = data.err;
-                    Name.disabled = false;
-                    Password.disabled = false;
-                    phoneNumber.disabled = false;
-                    emailAddress.disabled = false;
-                    otp_div.style.display = 'none';
-                    gen_btn.style.display = 'block';
-                    clearBTN.style.display = 'block';
-                    verify_btn.style.display = 'none'
+                .then(response => response.json())
+                .then(data => {
+                    OTPerr.textContent = data?.msg;
+                    if (data.err) {
+                        Emailerr.textContent = data.err;
+                        Name.disabled = false;
+                        Password.disabled = false;
+                        phoneNumber.disabled = false;
+                        emailAddress.disabled = false;
+                        rePass.disabled = false;
+                        otp_div.style.display = 'none';
+                        gen_btn.style.display = 'block';
+                        clearBTN.style.display = 'block';
+                        verify_btn.style.display = 'none'
 
-                }   
-                if(data.success){
-                    location.assign('/login')
-                }
-            })
-        }catch(err){
+                    }
+                    if (data.success) {
+                        location.assign('/login')
+                    }
+                })
+        } catch (err) {
             console.log(err)
         }
     })
 }
-

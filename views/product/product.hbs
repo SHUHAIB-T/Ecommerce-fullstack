@@ -28,7 +28,7 @@
   <tbody>
     {{#each products}}
     <tr>
-      <td >{{#each this.primary_image}}<img class="rounded mx-auto d-block" style="width: 4rem;" src="/productImages/{{this.name}}" alt="">{{/each}}</td>
+      <td ><img class="rounded mx-auto d-block" style="width: 4rem;" src="/productImages/{{this.primary_image.name}}" alt=""></td>
       <td>{{this.product_name}}</td>
       <td>{{this.brand_name}}</td>
       <td>{{this.category.cat_name}}</td>
@@ -42,7 +42,7 @@
       <td>
         {{!-- edit category button --}}
         <a href="/admin/products/edit-product/{{this._id}}" class="ms-3"><i class="fa-solid fa-pen"></i></a>
-        <a href="/admin/products/delete_products/{{this._id}}" onclick="return confirm('Are you sure want to delete {{this.product_name}}')" class="text-danger ms-2"><i class="fa-solid fa-trash"></i></a>
+        <a class="text-danger ms-2"><i style="cursor: pointer;" onclick="deleteAlert('{{this._id}}','{{this.product_name}}')" class="fa-solid fa-trash"></i></a>
       </td>
     </tr>
     {{/each}}
@@ -50,8 +50,3 @@
 </table>
 </div>
 </section>  
-<script>
-    $(document).ready(function () {
-        new DataTable('#example');
-    })
-</script>

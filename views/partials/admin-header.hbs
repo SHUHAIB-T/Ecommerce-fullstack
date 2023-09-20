@@ -4,11 +4,10 @@
   </div>
   {{#if Admin}}
   <span>{{Admin.email}}</span>
-  <a class="btn btn-warning" onclick="return confirm('Are you sure want to logout {{Admin.first_name}} {{Admin.last_name}} ?')" href="/admin/logout">
+  <a class="btn btn-warning" onclick="confirmLogout('{{Admin.first_name}}','{{Admin.last_name}}')" >
       Log Out
     </a>
   {{else}}
   <h4>Admin Pannel</h4>
    {{/if}}
 </nav>
-

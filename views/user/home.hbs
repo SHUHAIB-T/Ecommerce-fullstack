@@ -32,14 +32,14 @@
 <div class="row">
 {{#each product}}
 <div class="card ms-3 mb-3 col-md-3" >
-   {{#each this.primary_image}}<img class="card-img-top"  src="/productImages/{{this.name}}" alt="Card image cap">{{/each}}
+<img class="card-img-top"  src="/productImages/{{this.primary_image.name}}" alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{this.product_name}}</h5>
     <p class="card-text">{{this.color}} 
       <span class="fw-bold ms-4 text-success">₹{{this.actual_price}}</span>
       <span style="text-decoration: line-through;" class="fw-nomal ms-4 text-secondary">₹{{this.selling_price}}</span></p>
     <div class="ms-4">
-      <a href="/buy_product/{{this._id}}"  class="btn btn-warning">Buy Now</a>
+      <a href="/view_product/{{this._id}}"  class="btn btn-warning">Buy Now</a>
       <a href="#" class="btn btn-secondary">Add to Cart</a>
     </div>
   </div>

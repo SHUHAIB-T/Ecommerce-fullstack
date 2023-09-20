@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const Admin = require('../models//adminModel');
+const Admin = require('../models/adminModel');
 const User = require('../models/userModel')
 
 const isAdminloggedIn = async (req,res,next)=> {
@@ -27,10 +27,15 @@ const getUserData = (req,res,next)=>{
         jwt.verify(token,process.env.SECRET_KEY,async(err,decodedToken)=>{
             if(!err){
                 let id = decodedToken.id;
-                let user=await User.find({_id:id,user_status:true})
-                delete user.user_password
-                res.locals.userData = user;
-                next();
+                let user=await User.findOne({_id:id,user_status:true})
+                if(user){
+                    delete user.user_password
+                    res.locals.userData = user;
+                    next();
+                }else{
+                    res.cookie('userTocken','',{ maxAge:1})
+                    next();
+                }
             }
 
         })
@@ -39,7 +44,7 @@ const getUserData = (req,res,next)=>{
     }
 }
 
-const isUserloggedIn = async (req,res,next) => {
+const authenicateUser = async (req,res,next) => {
     const token = req.cookies.userTocken;
     if(token){
         jwt.verify(token,process.env.SECRET_KEY, async (err,decoddedToken) =>{
@@ -47,10 +52,17 @@ const isUserloggedIn = async (req,res,next) => {
                 res.redirect('/login')
             }else{
                 let id = decoddedToken.id
-                let user = await User.find({_id:id,user_status:true})
-                delete user.user_password;
-                res.locals.userData = user;
-                next()
+                let user = await User.findOne({_id:id,user_status:true})
+
+                if(user){
+                    res.locals.userData = user;
+                    next()
+                }else{
+                    console.log("cookies got")
+                    req.flash('error','access denied')
+                    res.cookie('userTocken','',{ maxAge:1})
+                    res.redirect('/login')
+                }
             }
         })
     }else{
@@ -62,5 +74,5 @@ const isUserloggedIn = async (req,res,next) => {
 module.exports = {
     isAdminloggedIn,
     getUserData,
-    isUserloggedIn
+    authenicateUser
 }

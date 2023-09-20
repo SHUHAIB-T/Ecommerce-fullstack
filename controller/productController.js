@@ -15,13 +15,15 @@ const add_product = async (req, res) => {
                 path: e.path
             })
         });
-        let PrimaryImage = []
+
+        let PrimaryImage ;
         req.files.primaryImage.forEach((e) => {
-            PrimaryImage.push({
-                name: e.filename,
-                path: e.path
-            })
+            PrimaryImage = {
+                name:e.filename,
+                path:e.path
+            }
         });
+        
         const product = new Product({
             product_name: req.body.product_name,
             brand_name: req.body.brand_name,

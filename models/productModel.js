@@ -23,7 +23,7 @@ const productShema = new Schema({
         type:Number,
         required:true
     },
-    primary_image:[{
+    primary_image:{
         name:{
             type:String,
             required:true
@@ -32,7 +32,7 @@ const productShema = new Schema({
             type:String,
             required:true
         }
-    }],
+    },
     secondary_images:[{
         name:{
             type:String,

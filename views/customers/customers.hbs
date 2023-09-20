@@ -35,9 +35,9 @@
       <td>
         {{!-- edit category button --}}
         {{#if this.user_status}}
-        <a href="/admin/customers/change_status/{{this._id}}" class="btn btn-danger text-white px-3 py1">Block</a>
+        <a onclick="blockUser('{{this.id}}','{{this.user_name}}')" class="btn btn-danger text-white px-3 py1">Block</a>
         {{else}}
-        <a href="/admin/customers/change_status_unblock/{{this._id}}" class="btn text-white btn-success px-3 py1">Unblock</a>
+        <a onclick="unblockUser('{{this.id}}','{{this.name}}')" class="btn text-white btn-success px-3 py1">Unblock</a>
         {{/if}}
       </td>
     </tr>
@@ -47,7 +47,3 @@
 </div>
 </section>  
 <script>
-    $(document).ready(function () {
-        new DataTable('#example');
-    })
-</script>
