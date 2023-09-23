@@ -11,7 +11,8 @@ const { render_my_Account,
         render_Address,
         render_edit_address,
         update_user_address,
-        delete_address} = require('../controller/myAccountController');
+        delete_address,
+        add_new_address_checkout} = require('../controller/myAccountController');
 
 router.get('/', authenicateUser, render_my_Account)
 
@@ -26,6 +27,8 @@ router.post('/upadate_pass/:id',updateNewPass);
 router.get('/my-address/',authenicateUser,render_Address)
 
 router.post('/my-address/new-address',add_new_address);
+
+router.post('/checkout/new-address',add_new_address_checkout);
 
 router.get('/my-address/edit-address/:id',authenicateUser,render_edit_address)
 

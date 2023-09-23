@@ -1,0 +1,53 @@
+<section class="category d-flex mt-2 " style="width: 100%;">
+  <div class="object-fit-contain mt-3" style="width: 98%;">
+    <div class="header d-flex justify-content-between">
+      <h3 class="h3 text-second fw-bold mb-3">Orders</h3>
+    </div>
+    <table style="width: 100%;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0"
+      width="100%">
+      <thead>
+        <tr>
+          <th class="th-sm">Product Name
+          </th>
+          <th class="th-sm">Customer Name
+          </th>
+          <th class="th-sm">Order Date
+          </th>
+          <th class="th-sm">Address
+          </th>
+          <th>Price/quantity
+          </th>
+          <th class="th-sm">Status
+          </th>
+          <th class="th-sm">Manage
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each orderDetails}}
+        <tr>
+          <td>{{this.product.product_name}}</td>
+          <td>{{this.userName.user_name}}</td>
+          <td>{{this.createdAt}}</td>
+          <td>
+            <span class="fw-bold">{{this.address.address_cust_name}}</span>,
+            {{this.address.house_name}}(H),
+            {{this.address.area_street}},
+            {{this.address.town}},
+            {{this.address.pincode}},
+            PH: {{this.address.phone}}
+          </td>
+          <td>({{this.items.quantity}}),
+            {{this.items.price}}
+          </td>
+          <td>{{this.status}}</td>
+          <td>
+            <a style="text-decoration: none;" class=" btn add-btn" href="/admin/manage-order/{{this._id}}">manage</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>
+<script>

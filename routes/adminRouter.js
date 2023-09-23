@@ -8,7 +8,10 @@ const { render_dharboard,
     send_otp,
     veryfy_otp,
     render_rest_pass,
-    update_password } = require('../controller/admincontroller')
+    update_password ,
+    get_orders,
+    render_change_order_status,
+    update_order_status} = require('../controller/admincontroller')
 
 
 //admin loign and forget password section
@@ -32,6 +35,12 @@ router.post('/verify-otp', veryfy_otp)
 router.get('/reset-pass', render_rest_pass)
 
 router.post('/upadte-pass', update_password)
+
+router.get('/orders',isAdminloggedIn,get_orders);
+
+router.get('/manage-order/:id',isAdminloggedIn,render_change_order_status);
+
+router.post('/changeStatus/:id', isAdminloggedIn, update_order_status)
 
 router.get('/logout', (req, res) => {
     res.clearCookie('adminTocken');

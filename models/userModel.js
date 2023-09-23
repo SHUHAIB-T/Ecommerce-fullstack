@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt=require('bcrypt')
-var userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
+var userSchema = new Schema({
     user_name:{
         type:String,
         required:true,
@@ -14,6 +16,22 @@ var userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    cart:[{
+        product_id:{
+            type:ObjectId,
+            required: true
+        },
+        quantity:{
+            type:Number,
+            required:true
+        }
+    }],
+    wish_list:[{
+        product_id:{
+            type:ObjectId,
+            required:true
+        }
+    }],
     user_password:{
         type:String,
         required:true,

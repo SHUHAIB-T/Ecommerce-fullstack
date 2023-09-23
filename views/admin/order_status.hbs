@@ -1,0 +1,53 @@
+<section class="container-fluid mt-5">
+
+    <div class="header d-flex justify-content-between">
+        <h3 class="h3 text-second fw-bold mb-3">Order Details</h3>
+    </div>
+    {{#each order}}
+    <form class="card px-3 py-3" action="/admin/changeStatus/{{this._id}}" method="post">
+        <div class="row">
+
+            <div class=" col-md-4">
+                <label for="form-control">Name</label>
+                <input type="text" value="{{this.userName.user_name}}" class="form-control" readonly>
+            </div>
+            <div class="col-md-8">
+                <label for="form-control">Address</label>
+                <input type="text"
+                    value="{{this.address.address_cust_name}}, {{this.address.house_name}}(H), {{this.address.town}}, {{this.address.state}}, Pin:{{this.address.pincode}},PH:{{this.address.phone}}"
+                    class="form-control" readonly>
+            </div>
+            <div class=" col-md-6">
+                <label for="form-control">Product Name</label>
+                <input type="text" value="{{this.product.product_name}}" class="form-control" readonly>
+            </div>
+            <div class=" col-md-6">
+                <label for="form-control">Quantity</label>
+                <input type="text" value="{{this.items.quantity}}" class="form-control" readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="form-control">Payment Method</label>
+                <input type="text" c value="{{this.payment_method}}" class="form-control " readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="form-control">Price</label>
+                <input type="text" c value="{{this.items.price}}" class="form-control " readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="form-control">Status</label>
+                <select name="status" class="form-select" id="">
+                    <option value="{{this.status}}">{{this.status}}</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Out for Delivery">Out for Delivery</option>
+                    <option value="Delivered">Delivered</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="form-control "></label>
+                <input type="submit" value="Update Status" class="form-control mt-2 btn add-btn ">
+            </div>
+        </div>
+        </div>
+        {{/each}}
+    </form>
+</section>

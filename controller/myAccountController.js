@@ -64,6 +64,12 @@ const add_new_address = async (req,res) =>{
     res.redirect('/my-account/my-address');
 }
 
+//add new Adress to User from ckeckout
+const add_new_address_checkout = async (req,res) =>{
+    await Address.create(req.body);
+    res.redirect('/checkout');
+}
+
 //viewAddress
 const render_Address = async (req,res) => {
     let id = res.locals.userData._id;
@@ -109,5 +115,6 @@ module.exports = {
     render_Address ,
     render_edit_address,
     update_user_address,
-    delete_address
+    delete_address,
+    add_new_address_checkout
 }

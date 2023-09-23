@@ -37,8 +37,6 @@ $(document).ready(function () {
         });
     }
 
-
-
     //update user details
     let submit = document.getElementById('update_btn');
     submit.addEventListener('click', async (e) => {

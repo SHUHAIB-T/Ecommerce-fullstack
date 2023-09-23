@@ -1,4 +1,4 @@
-<nav id="navbar" class="nav d-flex py-2 justify-content-between align-items-center px-5" style="">
+<nav id="navbar" class="nav user-nav d-flex py-2 justify-content-between align-items-center px-5" style="">
   <section >
     <div id="prof-div" style="display: none;" class="divwrapper">
       <div class="prof-div prof-div card d-flex position-absolute flex-coulumn justify-content-center align-items-center">
@@ -42,10 +42,14 @@
 
     </div>
   </section>
+ 
   <div style="margin-left:-100px">
     <a href="/"><img style="width: 7rem;" src="https://drive.google.com/uc?id=18EJgrQQfFCgLUCtUCOY-6tujL8KFX0qI"
         alt=""></a>
   </div>
+   {{#if checkout}}
+
+  {{else}}
   <div style="width: 15rem;" class="ladels d-flex justify-content-between align-items-center fw-bold">
     <a href="#">Watches</a>
     <a href="#">Mens</a>
@@ -57,11 +61,13 @@
       <input class="search-box px-2 mr-sm-2" type="search" placeholder="Search" aria-label="Search">
     </form>
   </div>
-  <div style="width:7rem;font-size:1.5rem" class="ladels fw-bold ">
+  <div style="width:9rem;font-size:1.5rem" class="ladels fw-bold ">
     <a href="#"><i class="fa-solid fa-heart ml-2"></i></a>
-    <a href="#"><i class="fa-solid fa-cart-shopping ml-2"></i></a>
+    <a href="/view-cart"><i class="fa-solid fa-cart-shopping ml-2"><span style="font-size: 0.8rem;" id="cartCount" class="badge bg-success text-white h6 badge-pill">{{cartCount}}</span></i></a>
     <a id="btnn" href="#"><i id="#userIcon" class="fa-solid  ml-2 fa-user"></i></a>
   </div>
+  {{/if}}
+
 </nav>
 
 <script>
