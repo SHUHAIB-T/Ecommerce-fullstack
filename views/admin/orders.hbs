@@ -15,7 +15,7 @@
           </th>
           <th class="th-sm">Address
           </th>
-          <th>Price/quantity
+          <th>Quantity/Price
           </th>
           <th class="th-sm">Status
           </th>
@@ -26,7 +26,7 @@
       <tbody>
         {{#each orderDetails}}
         <tr>
-          <td>{{this.product.product_name}}</td>
+          <td>{{this.products.product_name}}</td>
           <td>{{this.userName.user_name}}</td>
           <td>{{this.createdAt}}</td>
           <td>
@@ -40,9 +40,15 @@
           <td>({{this.items.quantity}}),
             {{this.items.price}}
           </td>
-          <td>{{this.status}}</td>
+          <td {{#if this.items.cancelled_on}} class="text-danger fw-bold" {{/if}}>{{this.items.status}}</td>
           <td>
-            <a style="text-decoration: none;" class=" btn add-btn" href="/admin/manage-order/{{this._id}}">manage</a>
+            {{#if this.items.cancelled_on}}
+            <a style="text-decoration: none;" class=" px-4 btn btn-danger"
+              href="/admin/manage-order/{{this.items.product_id}}">View</a>
+            {{else}}
+            <a style="text-decoration: none;" class=" btn add-btn"
+              href="/admin/manage-order/{{this.items.product_id}}">manage</a>
+            {{/if}}
           </td>
         </tr>
         {{/each}}

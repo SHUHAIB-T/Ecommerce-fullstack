@@ -4,6 +4,8 @@
     <div class="row gx-5">
       <aside class="col-lg-6">
         <div class="border rounded-4 mb-3 d-flex justify-content-center">
+          <button  onclick="addToWishlist('{{product._id}}')" style="position: absolute; border:none; background:transparent; right:2rem"
+            class="mt-2 user-text"><i class="fa-regular fa-2x fa-heart"></i></button>
           <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
             <img style="max-width: 90%; max-height: 90vh; margin: auto;" class="rounded-4 fit"
               src="/productImages/{{product.primary_image.name}}" />
@@ -76,3 +78,23 @@
   </div>
 </section>
 <!-- content -->
+
+<script>
+  $(document).ready(() => {
+    //add to wish list function
+    addToWishlist = async (id) => {
+      console.log("clicked")
+      await fetch(`add-to-wishlist/${id}`, {
+        method: 'GET'
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            swal("product added to Wishlist", "The product have added to the wishlist")
+          } else {
+            swal("Product removed from wishlist", "The product have removed from wishlist")
+          }
+        })
+    }
+
+  })
+</script>

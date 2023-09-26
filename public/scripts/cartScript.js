@@ -1,7 +1,7 @@
 $(document).ready(() => {
     addToCart = async (productID) => {
 
-        await fetch(`/add-to-cart/${productID}`, {
+        await fetch(`/cart/add-to-cart/${productID}`, {
             method: 'GET'
         }).then(response => response.json())
             .then(data => {
@@ -10,8 +10,8 @@ $(document).ready(() => {
                     if (cartCount) {
                         cartCount.innerText = data.count
                     }
-                }else{
-                    location.assign('/view-cart')
+                } else {
+                    location.assign('/cart')
                 }
             })
     },
@@ -25,12 +25,12 @@ $(document).ready(() => {
             })
                 .then(async (willDelete) => {
                     if (willDelete) {
-                        await fetch(`/remove-from-cart/${product_ID}`, {
+                        await fetch(`/cart/remove-from-cart/${product_ID}`, {
                             method: 'GET'
                         }).then(response => response.json())
                             .then(data => {
                                 if (data.status) {
-                                    location.assign('/view-cart');
+                                    location.assign('/cart');
                                 }
                             })
                     }
@@ -41,7 +41,7 @@ $(document).ready(() => {
     increaseCartQuantity = async (productID) => {
 
         try {
-            const response = await fetch(`/add-quantity/${productID}`, {
+            const response = await fetch(`/cart/add-quantity/${productID}`, {
                 method: 'GET'
             });
 
@@ -51,8 +51,8 @@ $(document).ready(() => {
                     const quantityInput = document.querySelector(`#quantityInput-${productID}`);
                     const currentQuantity = parseInt(quantityInput.value);
                     quantityInput.value = currentQuantity + 1;
-                    location.assign('/view-cart');
-                }else{
+                    location.assign('/cart');
+                } else {
                     swal("Limited Stock!", "The item you selected has only a limited quantity available.")
                 }
             } else {
@@ -74,7 +74,7 @@ $(document).ready(() => {
                 return;
             }
 
-            const response = await fetch(`/minus-quantity/${productId}`, {
+            const response = await fetch(`/cart/minus-quantity/${productId}`, {
                 method: 'GET'
             });
 
@@ -82,7 +82,7 @@ $(document).ready(() => {
                 const data = await response.json();
                 if (data.success) {
                     quantityInput.value = currentQuantity - 1;
-                    location.assign('/view-cart');
+                    location.assign('/cart');
                 }
             } else {
                 // Handle fetch errors here
@@ -91,6 +91,4 @@ $(document).ready(() => {
             console.error(error);
         }
     }
-
-
 })

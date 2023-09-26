@@ -196,7 +196,7 @@ const update_product = async (req, res) => {
 
         const categoryID = new mongoose.Types.ObjectId(req.body.category)
         product.product_name = req.body.product_name;
-        product.brand_name = req.body.brand_name;
+        product.brand_name = req.body.brand_name;   
         product.description = req.body.description;
         product.category_id = categoryID;
         product.stock = req.body.stock;
@@ -206,7 +206,7 @@ const update_product = async (req, res) => {
         product.GST = req.body.GST;
         product.status = req.body.status;
 
-        const productUpadate = await Product.findByIdAndUpdate({ _id: req.body.id }, product)
+        const productUpadate = await Product.findByIdAndUpdate({ _id: req.body.id }, product);
         req.flash('success', 'product editted successfully')
         res.redirect('/admin/products')
     } catch (err) {

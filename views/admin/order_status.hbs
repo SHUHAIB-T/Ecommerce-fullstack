@@ -3,51 +3,58 @@
     <div class="header d-flex justify-content-between">
         <h3 class="h3 text-second fw-bold mb-3">Order Details</h3>
     </div>
-    {{#each order}}
-    <form class="card px-3 py-3" action="/admin/changeStatus/{{this._id}}" method="post">
-        <div class="row">
 
+    <form class="card px-3 py-3" action="/admin/changeStatus/{{showOrder._id}}" method="post">
+        <div class="row">
             <div class=" col-md-4">
                 <label for="form-control">Name</label>
-                <input type="text" value="{{this.userName.user_name}}" class="form-control" readonly>
+                <input type="text" value="{{showOrder.userName.user_name}}" class="form-control" readonly>
             </div>
             <div class="col-md-8">
                 <label for="form-control">Address</label>
                 <input type="text"
-                    value="{{this.address.address_cust_name}}, {{this.address.house_name}}(H), {{this.address.town}}, {{this.address.state}}, Pin:{{this.address.pincode}},PH:{{this.address.phone}}"
+                    value="{{showOrder.address.address_cust_name}}, {{showOrder.address.house_name}}(H), {{showOrder.address.town}}, {{showOrder.address.state}}, Pin:{{showOrder.address.pincode}},PH:{{showOrder.address.phone}}"
                     class="form-control" readonly>
             </div>
             <div class=" col-md-6">
                 <label for="form-control">Product Name</label>
-                <input type="text" value="{{this.product.product_name}}" class="form-control" readonly>
+                <input type="text" value="{{showOrder.product.product_name}}" class="form-control" readonly>
             </div>
             <div class=" col-md-6">
                 <label for="form-control">Quantity</label>
-                <input type="text" value="{{this.items.quantity}}" class="form-control" readonly>
+                <input type="text" value="{{showOrder.items.quantity}}" class="form-control" readonly>
             </div>
             <div class="col-md-6">
                 <label for="form-control">Payment Method</label>
-                <input type="text" c value="{{this.payment_method}}" class="form-control " readonly>
+                <input type="text" c value="{{showOrder.payment_method}}" class="form-control " readonly>
             </div>
             <div class="col-md-6">
                 <label for="form-control">Price</label>
-                <input type="text" c value="{{this.items.price}}" class="form-control " readonly>
+                <input type="hidden" name="product_id" value="{{showOrder.items.product_id}}">
+                <input type="text" c value="{{showOrder.items.price}}" class="form-control " readonly>
             </div>
             <div class="col-md-6">
                 <label for="form-control">Status</label>
+                {{#if showOrder.items.cancelled_on}}
+                <input type="text" c value="{{showOrder.items.status}}" class="form-control " readonly>
+                {{else}}
                 <select name="status" class="form-select" id="">
-                    <option value="{{this.status}}">{{this.status}}</option>
+                    <option value="{{showOrder.items.status}}">{{showOrder.items.status}}</option>
                     <option value="Shipped">Shipped</option>
                     <option value="Out for Delivery">Out for Delivery</option>
                     <option value="Delivered">Delivered</option>
                 </select>
             </div>
+            {{/if}}
             <div class="col-md-6">
+                {{#if showOrder.items.cancelled_on}}
+                <a href="/admin/orders"><input type="none" value="back to orders" class="form-control mt-2 btn add-btn " readonly></a>
+                {{else}}
                 <label for="form-control "></label>
                 <input type="submit" value="Update Status" class="form-control mt-2 btn add-btn ">
+                {{/if}}
             </div>
         </div>
         </div>
-        {{/each}}
     </form>
 </section>

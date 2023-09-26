@@ -125,7 +125,7 @@
                 </div>
             </form>
 
-            <form action="/place-order" method="post">
+            <form id="orderForm">
 
                 {{#each address}}
                 <div class="address-container d-flex align-items-center">
@@ -159,18 +159,20 @@
                 <div class="payment-options">
                     <div class="user-text h6 mb-2">Payment Options</div>
                     <div class="form-check">
-                        <input class="form-check-input" value="COD" type="radio" name="payment_option" id="" checked>
-                        <label class="form-check-label"  for="flexRadioDefault1">
+                        <input class="form-check-input" value="COD" type="radio" name="payment_method" id="" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
                             Cash On Delivery
                         </label>
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="" disabled>
+                        <input class="form-check-input" value="razorpay" type="radio" name="payment_method" id="">
                         <label class="form-check-label" for="flexRadioDefault2">
                             Razorpay
                         </label>
                     </div>
-                    <button style="padding: 0.5rem 20rem;" class="btn user-btn mb-5" type="submit">Place Order</button>
+                    <input type="hidden" name="price" value="{{totalAmount}}">
+                    <button style="padding: 0.5rem 20rem;" class="btn user-btn mb-5" id="submitOrder">Place
+                        Order</button>
                 </div>
             </form>
         </div>
@@ -206,13 +208,7 @@
     </div>
 </div>
 
-{{!-- </div>
-<div class="form-check">
-    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-    <label class="form-check-label" for="flexRadioDefault2">
-        Default checked radio
-    </label>
-</div> --}}
+
 
 
 <script>
@@ -245,6 +241,33 @@
                 $('#proceedPayment').hide();
                 $('.payment-options').slideDown();
             })
+        }
+
+        //create order
+        const submitOrder = document.getElementById('submitOrder');
+        if (submitOrder) {
+            submitOrder.addEventListener('click', async (e) => {
+                e.preventDefault();
+                let form = document.getElementById('orderForm');
+                if (form) {
+                    let formData = new FormData(form);
+                    const body = Object.fromEntries(formData);
+                    await fetch('/cart/place-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    }).then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                location.assign('/cart/order-success')
+                            }
+                        })
+
+                } else {
+                    console.error('Form element not found');
+                }
+            });
+
         }
     })
 </script>

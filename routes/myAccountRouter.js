@@ -12,7 +12,8 @@ const { render_my_Account,
         render_edit_address,
         update_user_address,
         delete_address,
-        add_new_address_checkout} = require('../controller/myAccountController');
+        add_new_address_checkout,
+        show_wishlist,removefromWishlist} = require('../controller/myAccountController');
 
 router.get('/', authenicateUser, render_my_Account)
 
@@ -35,5 +36,9 @@ router.get('/my-address/edit-address/:id',authenicateUser,render_edit_address)
 router.post('/my-address/update-address/:id',authenicateUser,update_user_address);
 
 router.get('/my-address/delete-address/:id',delete_address);   
+
+router.get('/wishlist', authenicateUser, show_wishlist);
+
+router.get('/remove-from-wishlist/:id', authenicateUser,removefromWishlist)
 
 module.exports = router 

@@ -108,7 +108,7 @@ const get_orders = async (req, res) => {
         {
             $project: {
                 _id: 1,
-                customer_id: 1, // Include customer_id for later lookup
+                customer_id: 1, 
                 items: 1,
                 address: 1,
                 payment_method: 1,
@@ -124,11 +124,11 @@ const get_orders = async (req, res) => {
                 from: 'products',
                 localField: 'items.product_id',
                 foreignField: '_id',
-                as: 'product'
+                as: 'products'
             }
         },
         {
-            $unwind: { path: '$product' }
+            $unwind: { path: '$products' }
         },
         {
             $lookup: {
@@ -145,9 +145,8 @@ const get_orders = async (req, res) => {
             $project: {
                 _id: 1,
                 'userName.user_name': 1,
-                'product.product_name': 1,
-                'items.quantity': 1,
-                'items.price': 1,
+                'products.product_name': 1,
+                items:1,
                 address: 1,
                 payment_method: 1,
                 status: 1,
@@ -174,21 +173,22 @@ const get_orders = async (req, res) => {
     });
 
     const admin = res.locals.admin
-    res.render('admin/orders', { admin: true, orderDetails, Admin: admin })
+
+    console.log(orderDetails)
+    res.render('admin/orders', { admin: true, success: req.flash('success')[0], error: req.flash('error')[0], orderDetails, Admin: admin })
 }
 
 //render  manage order
 const render_change_order_status = async (req, res) => {
     let admin = res.locals.admin;
-
-    let order_id = new mongoose.Types.ObjectId(req.params.id);
+    let product_id = new mongoose.Types.ObjectId(req.params.id);
 
     let order = await Order.aggregate([
-        { $match: { _id: order_id } },
+        { $match: { 'items.product_id': product_id } },
         {
             $project: {
                 _id: 1,
-                customer_id: 1, // Include customer_id for later lookup
+                customer_id: 1,
                 items: 1,
                 address: 1,
                 payment_method: 1,
@@ -226,8 +226,7 @@ const render_change_order_status = async (req, res) => {
                 _id: 1,
                 'userName.user_name': 1,
                 'product.product_name': 1,
-                'items.quantity': 1,
-                'items.price': 1,
+                items: 1,
                 address: 1,
                 payment_method: 1,
                 status: 1,
@@ -242,41 +241,67 @@ const render_change_order_status = async (req, res) => {
         }
     });
 
-    res.render('admin/order_status', { admin: true, order, Admin: admin })
+    let productIdToFind = req.params.id
+
+    const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
+
+    res.render('admin/order_status', { admin: true, showOrder, Admin: admin })
 }
 
 //change order status
 
 const update_order_status = async (req, res) => {
+    let status = req.body.status;
     let order_id = req.params.id;
-    if (req.body.status == 'confirmed') {
-        let status = req.body;
-        const updateStatus = await Order.findByIdAndUpdate({ _id: order_id }, status, { new: true });
-        if (updateStatus) {
-            res.redirect('/admin/orders');
-        }
-    } else if (req.body.status == 'Shipped') {
-        let status = req.body;
-        let date = {shipped_on: new Date()}
+    let product_id = req.body.product_id;
 
-        const updateStatus = await Order.findByIdAndUpdate({ _id: order_id },{$set:{...status,...date}}, { new: true });
-        if (updateStatus) {
+    if (status === 'Shipped') {
+
+        //updating status if when Item shipped
+        const updateOrder = await Order.updateOne({
+            _id: order_id,
+            'items.product_id': product_id
+        }, {
+            '$set': {
+                'items.$.status': status,
+                'items.$.shipped_on': new Date()
+            }
+        });
+        if (updateOrder) {
+            req.flash('success', 'Product status Updated Successfully');
             res.redirect('/admin/orders');
         }
-    } else if (req.body.status == 'Out for Delivery') {
-        let status = req.body;
-        let date ={out_for_delivery: new Date()}
-        const updateStatus = await Order.findByIdAndUpdate({ _id: order_id },{$set:{...status,...date}}, { new: true });
-        if (updateStatus) {
+    } else if (status === 'Out for Delivery') {
+        const updateOrder = await Order.updateOne({
+            _id: order_id,
+            'items.product_id': product_id
+        }, {
+            '$set': {
+                'items.$.status': status,
+                'items.$.out_for_delivery': new Date()
+            }
+        });
+        if (updateOrder) {
+            req.flash('success', 'Product status Updated Successfully');
+            res.redirect('/admin/orders');
+        }
+    } else if (status === 'Delivered') {
+        const updateOrder = await Order.updateOne({
+            _id: order_id,
+            'items.product_id': product_id
+        }, {
+            '$set': {
+                'items.$.status': status,
+                'items.$.delivered_on': new Date()
+            }
+        });
+        if (updateOrder) {
+            req.flash('success', 'Product status Updated Successfully');
             res.redirect('/admin/orders');
         }
     } else {
-        let status = req.body;
-        let deliveryDate = { delivered_on: new Date() }
-        const updateStatus = await Order.updateOne({ _id: order_id },{$set:{...status,...deliveryDate}}, { new: true });
-        if (updateStatus) {
-            res.redirect('/admin/orders');
-        }
+        req.flash('error', 'Product status Updated Successfully');
+        res.redirect('/admin/orders');
     }
 }
 

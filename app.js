@@ -11,26 +11,29 @@ const hbs = require('express-handlebars')
 const session = require('express-session')
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const publicDirectoryPath = path.join(__dirname, '/public')
-const flash=require('connect-flash')
+const flash = require('connect-flash')
 
 const express_fileupload = require('express-fileupload')
 
-//requiring routers
+//requiring admin routes
 const adminRouter = require('./routes/adminRouter');
 const categoryRouter = require('./routes/category_router');
 const productRouter = require('./routes/product_router');
 const customerRouter = require('./routes/customer_router');
 
-//user routrs 
+//user routers 
 const userRouter = require('./routes/userRouter');
-const myAccountRouter = require('./routes/myAccountRouter')
+const myAccountRouter = require('./routes/myAccountRouter');
+const orderRouter = require('./routes/orderRouter');
+const cartRouter = require('./routes/cartRouter');
+
 
 //connect database
 dbConnect();
 
 //body-Parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // app.use(express_fileupload())
@@ -42,23 +45,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(publicDirectoryPath))
 
-app.engine('hbs', hbs.engine({ 
-    layoutsDir: __dirname + '/views/layouts',
-    extname: 'hbs',
-    defaultLayout: 'layout',
-    partialsDir:__dirname+'/views/partials',
-    runtimeOptions: {
-        allowProtoPropertiesByDefault: true,
-        allowProtoMethodsByDefault: true,
-      }
-    }));
+app.engine('hbs', hbs.engine({
+  layoutsDir: __dirname + '/views/layouts',
+  extname: 'hbs',
+  defaultLayout: 'layout',
+  partialsDir: __dirname + '/views/partials',
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  }
+}));
 
-    app.use(session({
-        secret: 'secrekeey',
-        resave: false,
-        maxAge:1000*60*60,
-        saveUninitialized: true
-      }))
+app.use(session({
+  secret: 'secrekeey',
+  resave: false,
+  maxAge: 1000 * 60 * 60,
+  saveUninitialized: true
+}))
 
 
 //clearing the cache of browser
@@ -66,13 +69,16 @@ app.use(nocache());
 
 //user router
 app.use('/', userRouter);
-app.use('/my-account',myAccountRouter)
+app.use('/my-account', myAccountRouter);
+app.use('/cart', cartRouter);
+app.use('/orders',orderRouter )
+
 
 //admin router
-app.use('/admin',adminRouter)
-app.use('/admin/categories',categoryRouter)
-app.use('/admin/products',productRouter)
-app.use('/admin/customers',customerRouter)
+app.use('/admin', adminRouter)
+app.use('/admin/categories', categoryRouter)
+app.use('/admin/products', productRouter)
+app.use('/admin/customers', customerRouter)
 
 
 //error handling
@@ -81,5 +87,5 @@ app.use(errorHandler)
 
 //server listening to the port
 app.listen(PORT, () => {
-    console.log(`serevr is running at port ${PORT}`)
+  console.log(`serevr is running at port ${PORT}`)
 })

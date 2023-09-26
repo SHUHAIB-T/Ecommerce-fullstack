@@ -1,0 +1,78 @@
+<div style="width: 100%;" class="conatiner-fluid mt-5">
+    <div class="row col-md-12">
+        {{#each orderDetails}}
+        <div class="card px-4 my-2  col-md-9">
+            <div class="img-text-wrapper p-3 d-flex">
+                <img style="width: 4rem;" src="/productImages/{{this.products.primary_image.name}}" alt="">
+                <div class="h5 fw-bold">{{this.products.product_name}}
+                    <span style="font-size: 0.9rem;" class="fw-normal"><br> Quantity:{{this.items.quantity}}</span>
+                    <span style="font-size: 0.9rem;" class="fw-bold text-success">&nbsp &nbsp &nbsp &#160 ₹
+                        {{this.items.price}}</span>
+                </div>
+                {{#if this.items.delivered}}
+                <div style="width:60%; height:1rem" class="d-flex align-items-center justify-content-end">
+                    <i class="fa-solid text-success fa-star"></i>
+                    <i class="fa-solid text-success fa-star"></i>
+                    <i class="fa-regular text-secondary fa-star"></i>
+                    <a href="#" class="text-decoration-none text-success">Rate this?</a>
+                </div>
+                
+                {{/if}}
+            </div>
+            <div style="width:100%" class="d-flex justify-content-around mb-3">
+                {{#if this.items.cancelled}}
+                <input role="button" readonly
+                    type="none" class="text-center btn bg-light text-danger py-2 px-2" value="Cancelled">
+                {{/if}}
+                {{#if this.items.ordered}}
+                <input role="button" onclick="cancelOrder('{{this.items.product_id}}','{{this._id}}')" readonly
+                    type="none" class="text-center btn bg-light text-primary py-2 px-2" value="Cancel">
+                {{/if}}
+                <input role="button" id="cancel-btn" onclick="trckOrder('{{this.items._id}}')" readonly type="none"
+                    class="text-center btn bg-light text-primary py-2 px-2" value="Track Order">
+                <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2"
+                    value="Need Help?">
+                    {{#if this.items.delivered}}
+                <button class="text-center btn bg-light text-primary py-2 px-4"> <i class="fa-solid fa-download"></i>  Download Invoice</button>
+                    {{/if}}
+            </div>
+            <div class="row d-flex align-items-center">
+                <div style="position: relative;" id="order{{this.items._id}}"
+                    class="border track-order my-2 p-2 rounded ">
+                    {{#if this.items.cancelled_on}}
+                    <div style="width:98% ; position:absolute; z-index-3;top:4rem ;height:1.5rem"
+                        class="bg-light text-center fw-bold text-danger">Cancelled on {{this.items.cancelled_on}}</div>
+                    {{/if}}
+                    <div class="d-flex justify-content-around mb-1">
+                        <div style="width: 10rem;">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">{{this.createdAt}}</p>
+                        </div>
+                        <div style="width: 10rem;">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">{{this.items.shipped_on}}</p>
+                        </div>
+                        <div style="width: 10rem;">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">{{this.items.out_for_delivery}}</p>
+                        </div>
+                        <div style="width: 10rem;">
+                            <p class="text-muted mt-1 mb-0 small ms-xl-5">{{this.items.delivered_on}}</p>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                        <div class="progress-bar" role="progressbar"
+                            style="width: {{this.items.track}}%; border-radius: 16px; {{#if this.items.cancelled_on}} background-color: #752300; {{else}} background-color: #07ae5d; {{/if}}"
+                            aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-around mb-1">
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Orderd</p>
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Shipped</p>
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                        <p class="text-muted fw-bold mt-1 mb-0 small ms-xl-5">Delivered</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>

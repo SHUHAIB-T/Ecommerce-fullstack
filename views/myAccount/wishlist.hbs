@@ -1,0 +1,54 @@
+<div class="container-fluid">
+    <div class="h3 fw-bold mt-3 user-text py-1">
+        Wish List
+    </div>
+
+    {{#each wishList}}
+    <div style="position: relative;" class="card my-3 col-md-8 p-3 d-flex flex-row align-items-center">
+        <div class="img-div">
+            <img style="width: 5rem;" src="/productImages/{{this.products.primary_image.name}}" alt="">
+        </div>
+        <div class="details-div ms-3">
+            <p class=" h5 fw-bold">{{this.products.product_name}}</p>
+            <p style="font-size: 0.8rem;">{{this.products.color}} &nbsp &nbsp
+                Brand:<span>{{this.products.brand_name}}</span></p>
+            <div style="margin-top: -15px;" class="d-flex">
+                <p class="text-success fw-bold">₹{{this.products.selling_price}}</p>
+                <p style="text-decoration: line-through;" class=" ms-5 text-muted">₹{{this.products.actual_price}}</p>
+            </div>
+        </div>
+        <div style="position: absolute; top:1.5rem;right:2rem" class="div d-flex align-items-center">
+            <input onclick="addToCart('{{this.products._id}}')" type="button" value="Add to cart" class="btn user-btn">
+            <span onclick="remove_wishlist('{{this.products._id}}')" style="cursor:pointer"> <i
+                    class="fa-regular fa-lg ms-3 fa-circle-xmark"></i></span>
+        </div>
+
+    </div>
+    {{/each}}
+</div>
+
+<script>
+    $(document).ready(() => {
+        remove_wishlist = async (id) => {
+            swal({
+                title: "Are you sure ?",
+                text: `Are you sure want to remove this product from wishlis`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then(async (willDelete) => {
+                    if (willDelete) {
+                        await fetch(`/my-account/remove-from-wishlist/${id}`, {
+                            method: 'GET'
+                        }).then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    location.assign('/my-account/wishlist');
+                                }
+                            })
+                    }
+                });
+        }
+    })
+</script>
