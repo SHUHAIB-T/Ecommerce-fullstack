@@ -108,7 +108,7 @@ const get_orders = async (req, res) => {
         {
             $project: {
                 _id: 1,
-                customer_id: 1, 
+                customer_id: 1,
                 items: 1,
                 address: 1,
                 payment_method: 1,
@@ -146,7 +146,7 @@ const get_orders = async (req, res) => {
                 _id: 1,
                 'userName.user_name': 1,
                 'products.product_name': 1,
-                items:1,
+                items: 1,
                 address: 1,
                 payment_method: 1,
                 status: 1,
@@ -172,19 +172,23 @@ const get_orders = async (req, res) => {
         }
     });
 
-    const admin = res.locals.admin
+    const admin = res.locals.admin;
 
-    console.log(orderDetails)
     res.render('admin/orders', { admin: true, success: req.flash('success')[0], error: req.flash('error')[0], orderDetails, Admin: admin })
 }
 
 //render  manage order
 const render_change_order_status = async (req, res) => {
     let admin = res.locals.admin;
-    let product_id = new mongoose.Types.ObjectId(req.params.id);
-
+    let product_id = new mongoose.Types.ObjectId(req.query.productId);
+    let order_id = new mongoose.Types.ObjectId(req.query.orderId);
     let order = await Order.aggregate([
-        { $match: { 'items.product_id': product_id } },
+        {
+            $match: {
+                _id: order_id,
+                'items.product_id': product_id
+            }
+        },
         {
             $project: {
                 _id: 1,
@@ -215,16 +219,17 @@ const render_change_order_status = async (req, res) => {
                 from: 'users',
                 localField: 'customer_id',
                 foreignField: '_id',
-                as: 'userName'
+                as: 'user'
             }
         },
         {
-            $unwind: { path: '$userName' }
+            $unwind: { path: '$user' }
         },
         {
             $project: {
                 _id: 1,
-                'userName.user_name': 1,
+                'user.user_name': 1,
+                'user._id': 1,
                 'product.product_name': 1,
                 items: 1,
                 address: 1,
@@ -241,9 +246,11 @@ const render_change_order_status = async (req, res) => {
         }
     });
 
-    let productIdToFind = req.params.id
+    let productIdToFind = req.query.productId
 
     const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
+
+    console.log(showOrder);
 
     res.render('admin/order_status', { admin: true, showOrder, Admin: admin })
 }

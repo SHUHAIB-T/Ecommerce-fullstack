@@ -44,10 +44,10 @@
           <td>
             {{#if this.items.cancelled_on}}
             <a style="text-decoration: none;" class=" px-4 btn btn-danger"
-              href="/admin/manage-order/{{this.items.product_id}}">View</a>
+              href="/admin/manage-order?productId={{this.items.product_id}}&orderId={{this._id}}">View</a>
             {{else}}
             <a style="text-decoration: none;" class=" btn add-btn"
-              href="/admin/manage-order/{{this.items.product_id}}">manage</a>
+              href="/admin/manage-order?productId={{this.items.product_id}}&orderId={{this._id}}">manage</a>
             {{/if}}
           </td>
         </tr>
@@ -56,4 +56,4 @@
     </table>
   </div>
 </section>
-<script>
+

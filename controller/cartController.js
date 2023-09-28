@@ -3,6 +3,18 @@ const Address = require('../models/addressModel');
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const User = require('../models/userModel');
+const Payment = require('../models/paymentModel');
+
+//requiring razorpay
+const Razorpay = require('razorpay');
+
+const crypto = require('crypto');
+
+//Creating Razorpay instance 
+var instance = new Razorpay({
+    key_id: 'rzp_test_I43lYVXIyrWCQF',
+    key_secret: process.env.RAZ_SECRET_KEY,
+});
 
 
 //adding item to cart
@@ -225,18 +237,99 @@ const place_order = async (req, res) => {
         payment_method: req.body.payment_method,
         total_amount: parseInt(req.body.price)
     }
+    if (req.body.payment_method === 'COD') {
+        const createOrder = await Order.create(order);
+        if (createOrder) {
 
-    const createOrder = await Order.create(order);
+            //empty the cart
+            await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } })
 
-    if (createOrder) {
+            //reduce the stock count 
+            for (let i = 0; i < items.length; i++) {
+                await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
+            }
+            req.session.order = {
+                status: true
+            }
+            res.json({
+                success: true
+            })
+        }
+    } else {
+        const createOrder = await Order.create(order);
 
+        let total = parseInt(req.body.price);
+        let orderId = createOrder._id;
+
+        let user = await User.findById(res.locals.userData._id);
+
+        //craete order for razorpay
+        const Razorder = await createRazOrder(orderId, total).then((order) => order);
+
+        const timestamp = Razorder.created_at;
+        const date = new Date(timestamp * 1000); // Convert the Unix timestamp to milliseconds
+
+        // Format the date and time
+        const formattedDate = date.toISOString();
+
+        //creating a instance for payment details
+        let payment = new Payment({
+            payment_id: Razorder.id,
+            amount: parseInt(Razorder.amount) / 100,
+            currency: Razorder.currency,
+            order_id: orderId,
+            status: Razorder.status,
+            created_at: formattedDate,
+        });
+
+        //saving in to db
+        await payment.save();
+
+        res.json({
+            status: true,
+            order: Razorder,
+            user
+        })
+    }
+}
+
+//create razorpay order 
+const createRazOrder = (orderId, total) => {
+    return new Promise((resolve, reject) => {
+        let options = {
+            amount: total * 100,  // amount in the smallest currency unit
+            currency: "INR",
+            receipt: orderId.toString()
+        };
+        instance.orders.create(options, function (err, order) {
+            if (err) {
+                console.log(err)
+            }
+            resolve(order);
+        });
+    })
+
+}
+
+//verifying payment
+const verifyPaymenet = async (req, res) => {
+    const hmac = crypto.createHmac("sha256", process.env.RAZ_SECRET_KEY);
+    hmac.update(req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id);
+    let generatedSignature = hmac.digest("hex");
+    let isSignatureValid = generatedSignature === req.body.razorpay_signature;
+
+    if (isSignatureValid) {
+
+        let customer_id = res.locals.userData._id
         //empty the cart
         await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } })
+        let paymentId = req.body.razorpay_order_id;
+        const orderID = await Payment.findOne({ payment_id: paymentId }, { _id: 0, order_id: 1 });
 
-        //reduce the stock count 
-        for (let i = 0; i < items.length; i++) {
-            await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
-        }
+        const order_id = orderID.order_id;
+
+        const updateOrder = await Order.updateOne({ _id: order_id }, { $set: { 'items.$[].status': 'confirmed' } })
+
         req.session.order = {
             status: true
         }
@@ -270,5 +363,6 @@ module.exports = {
     render_checkout,
     place_order,
     verify_order,
-    order_success
+    order_success,
+    verifyPaymenet
 }

@@ -38,7 +38,7 @@ router.post('/upadte-pass', update_password)
 
 router.get('/orders',isAdminloggedIn,get_orders);
 
-router.get('/manage-order/:id',isAdminloggedIn,render_change_order_status);
+router.get('/manage-order',isAdminloggedIn,render_change_order_status);
 
 router.post('/changeStatus/:id', isAdminloggedIn, update_order_status)
 
