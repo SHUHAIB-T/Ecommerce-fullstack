@@ -165,9 +165,9 @@
                         </label>
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" value="razorpay" type="radio" name="payment_method" id="">
+                        <input class="form-check-input" value="Online Payment" type="radio" name="payment_method" id="">
                         <label class="form-check-label" for="flexRadioDefault2">
-                            Razorpay
+                            Online Payment
                         </label>
                     </div>
                     <input type="hidden" name="price" value="{{totalAmount}}">
@@ -303,6 +303,9 @@
             rzp1.open();
             rzp1.on('payment.failed', function (response) {
                 swal.fire("Failed!", response.error.description, "error")
+                .then(() => {
+                    location.assign('/')
+                })
             });
         },
 

@@ -1,53 +1,54 @@
 <nav id="navbar" class="nav user-nav d-flex py-2 justify-content-between align-items-center px-5" style="">
-  <section >
+  <section>
     <div id="prof-div" style="display: none;" class="divwrapper">
-      <div class="prof-div prof-div card d-flex position-absolute flex-coulumn justify-content-center align-items-center">
-      <div class="account d-flex justify-content-center align-items-center">
-        <span class="h5 px-5 py-1 text-white">
-          Account Details
-        </span>
+      <div
+        class="prof-div prof-div card d-flex position-absolute flex-coulumn justify-content-center align-items-center">
+        <div class="account d-flex justify-content-center align-items-center">
+          <span class="h5 px-5 py-1 text-white">
+            Account Details
+          </span>
+        </div>
+        <div class="d-flex flex-column">
+          <div class="blue-secondary px-3 py-2 mt-2">
+            <a style="text-decoration:none; color:#0066B0" href="/my-account"><i class="fa-solid  fa-user"><span
+                  class="blue-secondary px-2">My Account</span></i></a>
+          </div>
+          <div class="blue-secondary px-3 py-2">
+            <a style="text-decoration:none; color:#0066B0" href="/cart"><i class="fa-solid fa-cart-shopping"><span
+                  class="blue-secondary px-2">My Cart</span></i></a>
+          </div>
+          <div class="blue-secondary px-3 py-2">
+            <a style="text-decoration:none; color:#0066B0" href="/orders"><i class="fa-solid fa-bag-shopping"><span
+                  class="blue-secondary px-2">Order history</span></i></a>
+          </div>
+          <div class="blue-secondary px-3 py-2 mb-2">
+            <a style="text-decoration:none; color:#0066B0" href="/my-account/wishlist"><i
+                class="fa-solid fa-heart"><span class="blue-secondary px-2">My Wish List</span></i></a>
+          </div>
+        </div>
+        {{#if userData}}
+        <div class="account d-flex justify-content-center mb-3 align-items-center">
+          <span class="h5 px-4 py-1 text-white ">
+            <a href="/logout">Logout</a>
+          </span>
+        </div>
+        {{else}}
+        <div class="account d-flex justify-content-center mb-3 align-items-center">
+          <span class="h5 px-4 py-1 text-white ">
+            <a href="/login">Login/SignUp</a>
+          </span>
+        </div>
+        {{/if}}
       </div>
-      <div class="d-flex flex-column">
-        <div class="blue-secondary px-3 py-2 mt-2">
-        <a style="text-decoration:none; color:#0066B0" href="/my-account"><i class="fa-solid  fa-user"><span
-              class="blue-secondary px-2">My Account</span></i></a>
-      </div>
-      <div class="blue-secondary px-3 py-2">
-        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid fa-cart-shopping"><span
-              class="blue-secondary px-2">My Cart</span></i></a>
-      </div>
-      <div class="blue-secondary px-3 py-2">
-        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid fa-bag-shopping"><span
-              class="blue-secondary px-2">Order history</span></i></a>
-      </div>
-      <div class="blue-secondary px-3 py-2 mb-2">
-        <a style="text-decoration:none; color:#0066B0" href="#"><i class="fa-solid fa-heart"><span
-              class="blue-secondary px-2">My Wish List</span></i></a>
-      </div>
-      </div>
-      {{#if userData}}
-      <div class="account d-flex justify-content-center mb-3 align-items-center">
-        <span class="h5 px-4 py-1 text-white ">
-          <a href="/logout">Logout</a>
-        </span>
-      </div>
-      {{else}}
-      <div class="account d-flex justify-content-center mb-3 align-items-center">
-        <span class="h5 px-4 py-1 text-white ">
-          <a href="/login">Login/SignUp</a>
-        </span>
-      </div>
-      {{/if}}
-    </div>
 
     </div>
   </section>
- 
+
   <div style="margin-left:-100px">
     <a href="/"><img style="width: 7rem;" src="https://drive.google.com/uc?id=18EJgrQQfFCgLUCtUCOY-6tujL8KFX0qI"
         alt=""></a>
   </div>
-   {{#if checkout}}
+  {{#if checkout}}
 
   {{else}}
   <div style="width: 15rem;" class="ladels d-flex justify-content-between align-items-center fw-bold">
@@ -63,7 +64,8 @@
   </div>
   <div style="width:9rem;font-size:1.5rem" class="ladels fw-bold ">
     <a href="/my-account/wishlist"><i class="fa-solid fa-heart ml-2"></i></a>
-    <a href="/cart"><i class="fa-solid fa-cart-shopping ml-2"><span style="font-size: 0.8rem;" id="cartCount" class="badge bg-success text-white h6 badge-pill">{{cartCount}}</span></i></a>
+    <a href="/cart"><i class="fa-solid fa-cart-shopping ml-2"><span style="font-size: 0.8rem;" id="cartCount"
+          class="badge bg-success text-white h6 badge-pill">{{cartCount}}</span></i></a>
     <a id="btnn" href="#"><i id="#userIcon" class="fa-solid  ml-2 fa-user"></i></a>
   </div>
   {{/if}}

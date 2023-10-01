@@ -1,24 +1,34 @@
-<section class="new-product p-md-5">
+<section style="position: relative;" class="new-product p-md-5">
     <div class="h3 fw-bold text-second px-4">
-        <a class="text-second h6" style="text-decoration: none;" href="/admin/products"><i class="fa-solid fa-left-long"></i><span>Product</span></a>
+        <a class="text-second h6" style="text-decoration: none;" href="/admin/products"><i
+                class="fa-solid fa-left-long"></i><span>Product</span></a>
         <br><span>New Product</span>
     </div>
-    <form method="post" class="row d-flex justify-content-center" enctype="multipart/form-data"  action="/admin/products/add-product">
+    <form id="addProductForm" class="row d-flex justify-content-center">
         <section class="left-secton col-md-6 p-3">
-            
+
             <div class="card p-md-5 p-2 me-md-5">
-                <h5 >Choose product images </h5>
+
+                <h5>Choose product images </h5>
                 <span class="fw-normal mb-4 text-success">file supports only: jpeg,jpg,png,webp</span>
                 <span class="fw-bold">Select the Primary Image</span>
-                <input type="file" accept=".jpg,.jpeg,.png,.webp,.svg"  class="form-control FilUploader" name="primaryImage" class="mb-3"required />
-                <span class="fw-bold">Select secondary images <br> <span class="fw-normal text-success">Maximum 3 images</span></span>
-                <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp,.svg" name="images" class="mb-3"  multiple required/>
-                
+
+                <div class="d-flex align-items-center justify-content-center">
+                    <img id="prev" class="border my-1 rounded" width="100rem" height="100rem" src="" alt="">
+                </div>
+
+                <input id="primaryIMG" type="file" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-control FilUploader" class="mb-3" required />
+                <input id="result" type="hidden" name="" value="">
+                <span class="fw-bold">Select secondary images <br> <span class="fw-normal text-success">Maximum 3
+                        images</span></span>
+                <input type="file" id="image" class="form-control FilUploader" accept=".jpg,.jpeg,.png,.webp,.svg"
+                    name="images" class="mb-3" multiple required />
+
             </div>
             <div class="form-floating my-2 me-md-5">
                 <label class="form-label fw-bold" for="form4Example3">Description</label>
                 <br>
-                <textarea class="form-control mt-4 text-area" rows="5"  name="description"
+                <textarea class="form-control mt-4 text-area" rows="5" name="description"
                     style="min-height:150px !important; " required></textarea>
             </div>
 
@@ -39,43 +49,57 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Stock</label>
-                    <input type="number" name="stock" class="form-control" required>
+                    <input type="text" name="stock" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6 d-flex flex-column">
                     <label for="" class="fw-bold mb-2">Category Name</label>
-                    <select class="form-select" name="category"  required>
-                       {{#each category}}
-                            <option value="{{this._id}}">{{this.cat_name}}</option>
-                       {{/each}}
+                    <select class="form-select" name="category" required>
+                        {{#each category}}
+                        <option value="{{this._id}}">{{this.cat_name}}</option>
+                        {{/each}}
                     </select>
                 </div>
             </div>
             <div class="row mb-4">
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Actual Price</label>
-                    <input type="number" name="prod_price" class="form-control" required>
+                    <input type="text" name="prod_price" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="" class="fw-bold mb-2">Selling Price</label>
-                    <input type="number" name="sellig_price" class="form-control" required>
+                    <input type="text" name="sellig_price" class="form-control" required>
                 </div>
                 <div class="form-group mt-2 col-md-6">
                     <label for="" class="fw-bold ">GST(%)</label>
-                    <input type="number" name="GST" class="form-control" required>
+                    <input type="text" name="GST" class="form-control" required>
                 </div>
             </div>
         </section>
-        <button type="submit" class=" btn add-btn py-3 " style="width:20vw;">submit</button>
-        <button type="reset" class=" btn button-cancel ms-2 py-3 " style="width:20vw;">Clear</button>
+        <div class="btn-group">
+            <button type="submit" class=" btn add-btn py-3 " style="width:20vw;">submit</button>
+            <button type="reset" class=" btn button-cancel ms-2 py-3 " style="width:20vw;">Clear</button>
+        </div>
 
     </form>
+    <div style="display: none;" class="crop-product card p-2 shadow " id="crp-container">
+        <div class="d-flex flex-column">
+            <img src="" id="images" style="object-fit: cover;">
+            <button id="cropImageBtn" class="btn btn-primary mt-3">Crop Image</button>
+        </div>
+    </div>
 </section>
+<style>
+    .crop-product {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        width: 30rem;
 
-<script>
-    $("#image").on("change", function() {
-    if ($("#image")[0].files.length > 3) {
-        alert("You can select only 3 images");
-        $(this).val('')
-    } 
-    });
-</script>
+    }
+
+    .error {
+        color: rgb(255, 0, 0);
+    }
+</style>

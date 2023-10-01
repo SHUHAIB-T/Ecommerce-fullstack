@@ -1,4 +1,7 @@
-<div style="width: 100%;" class="conatiner-fluid mt-5">
+<div style="width: 100%;" class="conatiner-fluid mt-3">
+    <div class="h3 fw-bold user-text">
+        Your Orders
+    </div>
     <div class="row col-md-12">
         {{#each orderDetails}}
         <div class="card px-4 my-2  col-md-9">
@@ -16,13 +19,13 @@
                     <i class="fa-regular text-secondary fa-star"></i>
                     <a href="#" class="text-decoration-none text-success">Rate this?</a>
                 </div>
-                
+
                 {{/if}}
             </div>
             <div style="width:100%" class="d-flex justify-content-around mb-3">
                 {{#if this.items.cancelled}}
-                <input role="button" readonly
-                    type="none" class="text-center btn bg-light text-danger py-2 px-2" value="Cancelled">
+                <input role="button" readonly type="none" class="text-center btn bg-light text-danger py-2 px-2"
+                    value="Cancelled">
                 {{/if}}
                 {{#if this.items.ordered}}
                 <input role="button" onclick="cancelOrder('{{this.items.product_id}}','{{this._id}}')" readonly
@@ -32,9 +35,10 @@
                     class="text-center btn bg-light text-primary py-2 px-2" value="Track Order">
                 <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2"
                     value="Need Help?">
-                    {{#if this.items.delivered}}
-                <button class="text-center btn bg-light text-primary py-2 px-4"> <i class="fa-solid fa-download"></i>  Download Invoice</button>
-                    {{/if}}
+                {{#if this.items.delivered}}
+                <button class="text-center btn bg-light text-primary py-2 px-4"> <i class="fa-solid fa-download"></i>
+                    Download Invoice</button>
+                {{/if}}
             </div>
             <div class="row d-flex align-items-center">
                 <div style="position: relative;" id="order{{this.items._id}}"

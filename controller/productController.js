@@ -39,7 +39,9 @@ const add_product = async (req, res) => {
         })
         const saved = await product.save()
         req.flash('success', 'New product Added Sucessfully');
-        res.redirect('/admin/products')
+        res.json({
+            success:true
+        })
     } catch (error) {
         res.status(400).send(error)
     }

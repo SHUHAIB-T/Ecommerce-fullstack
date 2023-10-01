@@ -16,25 +16,26 @@ $(document).ready(() => {
             })
     },
         removeFromCart = async (product_ID) => {
-            swal({
-                title: "Are you sure ?",
+            Swal.fire({
+                title: 'Are you sure?',
                 text: `Are you sure want to remove this product from cart`,
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Remove it!'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await fetch(`/cart/remove-from-cart/${product_ID}`, {
+                        method: 'GET'
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.status) {
+                                location.assign('/cart');
+                            }
+                        })
+                }
             })
-                .then(async (willDelete) => {
-                    if (willDelete) {
-                        await fetch(`/cart/remove-from-cart/${product_ID}`, {
-                            method: 'GET'
-                        }).then(response => response.json())
-                            .then(data => {
-                                if (data.status) {
-                                    location.assign('/cart');
-                                }
-                            })
-                    }
-                });
         }
 
     // Increase quantity
@@ -53,7 +54,11 @@ $(document).ready(() => {
                     quantityInput.value = currentQuantity + 1;
                     location.assign('/cart');
                 } else {
-                    swal("Limited Stock!", "The item you selected has only a limited quantity available.")
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Limited Stock!',
+                        text: 'The item you selected has only a limited quantity available.'
+                    })
                 }
             } else {
                 // Handle fetch errors here
