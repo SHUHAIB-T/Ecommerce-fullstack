@@ -21,6 +21,7 @@ const categoryRouter = require('./routes/category_router');
 const productRouter = require('./routes/product_router');
 const customerRouter = require('./routes/customer_router');
 const salesRoute = require('./routes/sales_route');
+const coupensRoute = require('./routes/coupen_route')
 
 //user routers 
 const userRouter = require('./routes/userRouter');
@@ -71,16 +72,17 @@ app.use(nocache());
 //user router
 app.use('/', userRouter);
 app.use('/my-account', myAccountRouter);
-app.use('/cart', cartRouter);
-app.use('/orders',orderRouter )
+app.use('/cart', cartRouter);;
+app.use('/orders', orderRouter);
 
 
 //admin router
-app.use('/admin', adminRouter)
-app.use('/admin/categories', categoryRouter)
-app.use('/admin/products', productRouter)
-app.use('/admin/customers', customerRouter)
-app.use('/admin/sales-report', salesRoute)
+app.use('/admin', adminRouter);
+app.use('/admin/categories', categoryRouter);
+app.use('/admin/products', productRouter);
+app.use('/admin/customers', customerRouter);
+app.use('/admin/sales-report', salesRoute);
+app.use('/admin/coupens', coupensRoute);
 
 
 //error handling

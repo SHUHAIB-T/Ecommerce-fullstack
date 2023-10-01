@@ -1,0 +1,66 @@
+<style>
+    .error{
+        color:rgb(255, 0, 0)
+    }
+</style>
+
+<div class="container py-5 w mb-5 new-category">
+
+    <h3 class="mb-3 text-second fw-bold">New Coupon</h3>
+    <form class="p-md-5 border rounded-3 bg-body-tertiary" id="new-coupon">
+
+        <!-- Name input -->
+        <div class="err mb-3 text-danger"></div>
+        <div class="row mb-3">
+            <div class="form-group col-6">
+                <label for="">Coupon Code</label>
+                <input type="text" class="form-control " name="coupon_code">
+            </div>
+            <div class="form-group col-6">
+                <label for="">Discount</label>
+                <input type="number" class="form-control " name="discount">
+            </div>
+            <div class="form-group col-6">
+                <label for="">starting date</label>
+                <input type="date" id="start_date" class="form-control " name="start_date">
+            </div>
+            <div class="form-group col-6">
+                <label for="">exp. date</label>
+                <input type="date" id="exp_date" class="form-control " name="exp_date">
+            </div>
+            <div class="form-group col-6">
+                <label for="">Maximum count</label>
+                <input type="text" class="form-control " name="max_count">
+            </div>
+        </div>
+
+
+        <!-- discription input -->
+
+        <div class="form-floating mb-3">
+
+            <textarea class="form-control text-area" id="exampleFormControlTextarea1" name="discription"
+                rows="3"></textarea>
+
+            <label class="form-label" for="form4Example3">Discription</label>
+
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-lg add-btn px-5">Submit</button>
+        <button type="reset" class="btn btn-lg clear-btn px-5">Clear</button>
+
+    </form>
+
+
+</div>
+<script>
+    // Get the current date in "YYYY-MM-DD" format
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    // Set the minimum date for the input element to the current date
+    document.getElementById('exp_date').setAttribute('min', currentDate);
+    document.getElementById('start_date').setAttribute('min', currentDate);
+
+
+</script>

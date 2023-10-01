@@ -110,8 +110,8 @@ $("#addProductForm").validate({
             text: "You want to add new product?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "#0061bc",
+            cancelButtonColor: "rgb(128, 128, 128)",
             confirmButtonText: "Yes",
         }).then(async (result) => {
             if (result.isConfirmed) {

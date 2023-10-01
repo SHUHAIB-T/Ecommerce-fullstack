@@ -1,0 +1,56 @@
+<style>
+    .error{
+        color:rgb(255, 0, 0)
+    }
+</style>
+
+<div class="container py-5 w mb-5 new-category">
+
+    <h3 class="mb-3 text-second fw-bold">Edit Coupen</h3>
+    <form class="p-md-5 border rounded-3 bg-body-tertiary" id="edit-coupon">
+
+        <!-- Name input -->
+        <div class="err mb-3 text-danger"></div>
+        <div class="row mb-3">
+            <div class="form-group col-6">
+                <label for="">Coupon Code</label>
+                <input type="text" class="form-control" value="{{coupon.coupon_code}}" name="coupon_code">
+            </div>
+            <div class="form-group col-6">
+                <label for="">Discount</label>
+                <input type="number" class="form-control" value="{{coupon.discount}}" name="discount">
+            </div>
+            <div class="form-group col-6">
+                <label for="">starting date</label>
+                <input type="date" id="start_date" class="form-control" value="{{coupon.start_date}}" name="start_date">
+            </div>
+            <div class="form-group col-6">
+                <label for="">exp. date</label>
+                <input type="date" id="exp_date" class="form-control " value="{{coupon.exp_date}}" name="exp_date">
+            </div>
+            <div class="form-group col-6">
+                <label for="">Maximum count</label>
+                <input type="text" class="form-control " value="{{coupon.max_count}}" name="max_count">
+            </div>
+        </div>
+
+
+        <!-- discription input -->
+
+        <div class="form-floating mb-3">
+
+            <textarea class="form-control text-area" id="exampleFormControlTextarea1" name="discription"
+                rows="3">{{coupon.discription}}</textarea>
+
+            <label class="form-label" for="form4Example3">Discription</label>
+
+        </div>
+
+        <!-- Submit button -->
+        <input onclick="editCoupen('{{coupon._id}}')" class="btn btn-lg add-btn px-5" value="Submit" style="width: 10rem;" readonly>
+        <button type="reset" class="btn btn-lg clear-btn px-5">Clear</button>
+
+    </form>
+
+
+</div>
