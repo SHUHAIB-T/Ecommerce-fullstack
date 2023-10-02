@@ -16,8 +16,6 @@ const render_home = async (req, res) => {
         cartCount = userData.cart.length
     }
     let banners = await Banner.find({ banner_status: true });
-    console.log(banners);
-
     banners[0] = {
         new: "active",
         image: {

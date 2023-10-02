@@ -1,7 +1,10 @@
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const mongoose = require('mongoose');
-const User = require('../models/userModel')
+const User = require('../models/userModel');
+const pdf = require("pdf-creator-node");
+const fs = require("fs");
+const path = require('path');
 
 //showing user's all orders
 const render_user_orders = async (req, res) => {
@@ -205,7 +208,123 @@ const cancel_order = async (req, res) => {
 
 }
 
+// get invoice and download
+const get_invoice = async (req, res) => {
+
+    let product_id = new mongoose.Types.ObjectId(req.query.productId);
+    let order_id = new mongoose.Types.ObjectId(req.query.orderId);
+    let order = await Order.aggregate([
+        {
+            $match: {
+                _id: order_id,
+                'items.product_id': product_id
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                customer_id: 1,
+                items: 1,
+                address: 1,
+                payment_method: 1,
+                status: 1,
+                createdAt: 1
+            }
+        },
+        {
+            $unwind: { path: '$items' }
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'items.product_id',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: { path: '$product' }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'customer_id',
+                foreignField: '_id',
+                as: 'user'
+            }
+        },
+        {
+            $unwind: { path: '$user' }
+        },
+        {
+            $project: {
+                _id: 1,
+                'user.user_name': 1,
+                'user._id': 1,
+                'user.user_email': 1,
+                'user.user_mobile': 1,
+                'product.product_name': 1,
+                items: 1,
+                address: 1,
+                payment_method: 1,
+                status: 1,
+                createdAt: 1
+            }
+        }
+    ]);
+    order.forEach(obj => {
+        if (obj.items && obj.items.quantity && obj.items.price) {
+            obj.items.price = obj.items.quantity * obj.items.price;
+        }
+    });
+    order.forEach(obj => {
+        if (obj?.createdAt) {
+            obj.createdAt = formatDate(obj.createdAt);
+        }
+    });
+
+    function formatDate(date) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        return new Date(date).toLocaleDateString(undefined, options);
+    }
+
+    let productIdToFind = req.query.productId
+
+    const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
+
+    // download pdf
+    const html = fs.readFileSync('./views/pdf/invoice.hbs', "utf8");
+    const options = {
+        format: "A4",
+        orientation: "portrait",
+        border: "10mm",
+        header: {
+            height: "5mm",
+            contents: '<div style="text-align: center;">INVOICE</div>'
+        },
+    };
+    const document = {
+        html: html,
+        data: {
+            showOrder
+        },
+        path: "./invoice.pdf",
+        type: "",
+    };
+
+    pdf.create(document, options).then((data) => {
+        const pdfStream = fs.createReadStream("invoice.pdf");
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename=invoice.pdf`);
+        pdfStream.pipe(res);
+    }).catch((error) => {
+        console.error(error);
+        res.status(500).send("Error generating the PDF");
+    });
+}
+
 module.exports = {
     render_user_orders,
-    cancel_order
+    cancel_order,
+    get_invoice
 }

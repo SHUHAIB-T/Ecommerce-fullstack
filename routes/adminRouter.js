@@ -11,7 +11,8 @@ const { render_dharboard,
     update_password ,
     get_orders,
     render_change_order_status,
-    update_order_status} = require('../controller/admincontroller')
+    update_order_status,
+    get_invoice} = require('../controller/admincontroller')
 
 
 //admin loign and forget password section
@@ -37,6 +38,8 @@ router.get('/reset-pass', render_rest_pass)
 router.post('/upadte-pass', update_password)
 
 router.get('/orders',isAdminloggedIn,get_orders);
+
+router.get('/orders/view-invoice',isAdminloggedIn,get_invoice);
 
 router.get('/manage-order',isAdminloggedIn,render_change_order_status);
 

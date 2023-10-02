@@ -6,7 +6,7 @@
         {{#each orderDetails}}
         <div class="card px-4 my-2  col-md-9">
             <div class="img-text-wrapper p-3 d-flex">
-                <img style="width: 4rem;" src="/productImages/{{this.products.primary_image.name}}" alt="">
+                <img style="width: 5rem;" src="/productImages/{{this.products.primary_image.name}}" alt="">
                 <div class="h5 fw-bold">{{this.products.product_name}}
                     <span style="font-size: 0.9rem;" class="fw-normal"><br> Quantity:{{this.items.quantity}}</span>
                     <span style="font-size: 0.9rem;" class="fw-bold text-success">&nbsp &nbsp &nbsp &#160 ₹
@@ -35,8 +35,8 @@
                     class="text-center btn bg-light text-primary py-2 px-2" value="Track Order">
                 <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2"
                     value="Need Help?">
-                {{#if this.items.delivered}}
-                <button class="text-center btn bg-light text-primary py-2 px-4"> <i class="fa-solid fa-download"></i>
+                {{#if this.items.delivered}}<button onclick="downloadInvoice('{{this.items.product_id}}','{{this._id}}')" class="text-center btn bg-light text-primary py-2 px-4"> <i
+                        class="fa-solid fa-download"></i>
                     Download Invoice</button>
                 {{/if}}
             </div>

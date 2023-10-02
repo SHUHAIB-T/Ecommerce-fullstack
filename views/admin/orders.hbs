@@ -19,6 +19,8 @@
           </th>
           <th class="th-sm">Status
           </th>
+          <th class="th-sm">Invoice
+          </th>
           <th class="th-sm">Manage
           </th>
         </tr>
@@ -41,6 +43,7 @@
             {{this.items.price}}
           </td>
           <td {{#if this.items.cancelled_on}} class="text-danger fw-bold" {{/if}}>{{this.items.status}}</td>
+          <td><a href="/admin/orders/view-invoice?productId={{this.items.product_id}}&orderId={{this._id}}">view</a></td>
           <td>
             {{#if this.items.cancelled_on}}
             <a style="text-decoration: none;" class=" px-4 btn btn-danger"

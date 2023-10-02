@@ -20,7 +20,7 @@ const isAdminloggedIn = async (req,res,next)=> {
     }
 }
 
-
+// get user details 
 const getUserData = (req,res,next)=>{
     let token = req.cookies.userTocken;
     if(token){

@@ -250,8 +250,6 @@ const render_change_order_status = async (req, res) => {
 
     const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
 
-    console.log(showOrder);
-
     res.render('admin/order_status', { admin: true, showOrder, Admin: admin })
 }
 
@@ -312,7 +310,93 @@ const update_order_status = async (req, res) => {
     }
 }
 
+//get invoice
+const get_invoice = async (req, res) => {
+    let admin = res.locals.admin;
+    let product_id = new mongoose.Types.ObjectId(req.query.productId);
+    let order_id = new mongoose.Types.ObjectId(req.query.orderId);
+    let order = await Order.aggregate([
+        {
+            $match: {
+                _id: order_id,
+                'items.product_id': product_id
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                customer_id: 1,
+                items: 1,
+                address: 1,
+                payment_method: 1,
+                status: 1,
+                createdAt: 1
+            }
+        },
+        {
+            $unwind: { path: '$items' }
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'items.product_id',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: { path: '$product' }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'customer_id',
+                foreignField: '_id',
+                as: 'user'
+            }
+        },
+        {
+            $unwind: { path: '$user' }
+        },
+        {
+            $project: {
+                _id: 1,
+                'user.user_name': 1,
+                'user._id': 1,
+                'user.user_email':1,
+                'user.user_mobile':1,
+                'product.product_name': 1,
+                items: 1,
+                address: 1,
+                payment_method: 1,
+                status: 1,
+                createdAt: 1
+            }
+        }
+    ]);
 
+    order.forEach(obj => {
+        if (obj.items && obj.items.quantity && obj.items.price) {
+            obj.items.price = obj.items.quantity * obj.items.price;
+        }
+    });
+    order.forEach(obj => {
+        if (obj?.createdAt) {
+            obj.createdAt = formatDate(obj.createdAt);
+        }
+    });
+
+    function formatDate(date) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        return new Date(date).toLocaleDateString(undefined, options);
+    }
+
+    let productIdToFind = req.query.productId
+
+    const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
+
+    res.render('pdf/invoice', { admin: true, showOrder, Admin: admin })
+}
 
 module.exports = {
     render_login,
@@ -325,5 +409,6 @@ module.exports = {
     update_password,
     get_orders,
     render_change_order_status,
-    update_order_status
+    update_order_status,
+    get_invoice
 }
