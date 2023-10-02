@@ -118,8 +118,7 @@ $("#addProductForm").validate({
                 const form = document.getElementById("addProductForm");
                 try {
                     const formData = new FormData(form);
-                    const base64String =
-                        document.getElementById("result").value;
+                    const base64String = document.getElementById("result").value;
                     const base64Data = base64String.split(",")[1];
                     const binaryData = atob(base64Data);
                     const uint8Array = new Uint8Array(
@@ -134,8 +133,8 @@ $("#addProductForm").validate({
                     const file = new File([blob], "image.png", {
                         type: "image/png",
                     });
-                    
                     formData.append("primaryImage", file);
+
                     let res = await fetch(
                         "/admin/products/add-product",
                         {

@@ -2,16 +2,23 @@
     <div class="h3 fw-bold mt-3 user-text text-center py-1">
         Account details
     </div>
-    <div class="card px-5 py-3 justify-content-center ">
-        <p class="h5 fw-bold ">
-            Name: <span class="fw-normal"> {{userData.user_name}}</span>
-        </p>
-        <p class="h5 fw-bold ">
-            Email: <span class="fw-normal"> {{userData.user_email}}</span>
-        </p>
-        <p class="h5 fw-bold ">
-            Phone: <span class="fw-normal"> {{userData.user_mobile}}</span>
-        </p>
+    <div class="card d-flex flex-row px-5 py-3 justify-content-between ">
+        <div class="div">
+            <p class="h5 fw-bold ">
+                Name: <span class="fw-normal"> {{userData.user_name}}</span>
+            </p>
+            <p class="h5 fw-bold ">
+                Email: <span class="fw-normal"> {{userData.user_email}}</span>
+            </p>
+            <p class="h5 fw-bold ">
+                Phone: <span class="fw-normal"> {{userData.user_mobile}}</span>
+            </p>
+        </div>
+        <div class="userWallet card add-btn px-3 py-1 d-flex flex-column align-items-center  justify-content-center">
+            <p style="line-height:1rem; margin-bottom:1px; " class="text-white mt-2 text-center">My Wallet</p>
+            <i class="fa-solid text-warning fa-2x fa-money-check-dollar"></i>
+            <div class="h3 fw-bold text-white ">₹{{userData.user_wallet}}.00</div>
+        </div>
     </div>
     <div class="d-flex">
         <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">

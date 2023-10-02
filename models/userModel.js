@@ -41,6 +41,11 @@ var userSchema = new Schema({
         required:true,
         default:0,
     },
+    user_wallet:{
+        type:Number,
+        required:true,
+        default:0,
+    },
     user_status:{
         type:Boolean,
         required:true,

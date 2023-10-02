@@ -4,35 +4,36 @@ $(document).ready(() => {
         $(`#order${id}`).slideToggle();
     }
 
-    cancelOrder = (product_id, order_id) => {
-        swal({
-            title: "Are you sure ?",
-            text: `Are you sure want to cancel this order ?`,
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then(async (willDelete) => {
-                if (willDelete) {
-                    await fetch(`/orders/cancel_order/${product_id}/${order_id}`, {
-                        method: 'GET'
-                    }).then(response => response.json())
-                        .then(data => {
-                            if(data.success){
-                                
-                                swal({
-                                    icon: "success",
-                                    title: "Order Cancelled",
-                                    text: "Your order has been cancelled",
-                                })
 
-                                setTimeout(() => {
-                                    location.assign('/orders')
-                                },1500)
-                            }
-                        })
-                }
-            });
+
+    cancelOrder = (product_id, order_id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "are you sure want to cancel this Order",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#0061bc",
+            cancelButtonColor: "rgb(128, 128, 128)",
+            confirmButtonText: "Yes Cancel it!",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await fetch(`/orders/cancel_order/${product_id}/${order_id}`, {
+                    method: 'GET',
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                'Cancelled!',
+                                'Product cancelled successfully',
+                                'success'
+                            ).then(() => {
+                                location.assign('/orders');
+                            })
+                        }
+                    })
+
+            }
+        });
     }
 
 })

@@ -164,6 +164,14 @@
                             Cash On Delivery
                         </label>
                     </div>
+                    {{#if wallet}}
+                    <div class="form-check">
+                        <input class="form-check-input" value="wallet" type="radio" name="payment_method" id="" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Times Cart Wallet (₹{{user.user_wallet}})
+                        </label>
+                    </div>
+                    {{/if}}
                     <div class="form-check mb-3">
                         <input class="form-check-input" value="Online Payment" type="radio" name="payment_method" id="">
                         <label class="form-check-label" for="flexRadioDefault2">

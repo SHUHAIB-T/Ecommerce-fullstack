@@ -21,7 +21,8 @@ const categoryRouter = require('./routes/category_router');
 const productRouter = require('./routes/product_router');
 const customerRouter = require('./routes/customer_router');
 const salesRoute = require('./routes/sales_route');
-const coupensRoute = require('./routes/coupen_route')
+const coupensRoute = require('./routes/coupen_route');
+const bannerRoute = require('./routes/banner_route');
 
 //user routers 
 const userRouter = require('./routes/userRouter');
@@ -83,6 +84,7 @@ app.use('/admin/products', productRouter);
 app.use('/admin/customers', customerRouter);
 app.use('/admin/sales-report', salesRoute);
 app.use('/admin/coupens', coupensRoute);
+app.use('/admin/banners', bannerRoute);
 
 
 //error handling

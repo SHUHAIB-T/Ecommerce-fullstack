@@ -1,6 +1,7 @@
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const mongoose = require('mongoose');
+const User = require('../models/userModel')
 
 //showing user's all orders
 const render_user_orders = async (req, res) => {
@@ -138,6 +139,37 @@ const cancel_order = async (req, res) => {
 
     if (updateOrder) {
 
+        let order = await Order.findById({ _id: order_id });
+
+        //adding money to wallet if it is online payment
+        if (order.payment_method === 'Online Payment' || order.payment_method === 'wallet') {
+            let price = await Order.aggregate([
+                {
+                    $match: {
+                        _id: new mongoose.Types.ObjectId(order_id),
+                        'items.product_id': new mongoose.Types.ObjectId(product_id)
+                    }
+                },
+                {
+                    $unwind: { path: '$items' }
+                },
+                {
+                    $match: {
+                        'items.product_id': new mongoose.Types.ObjectId(product_id)
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        price: '$items.price'
+                    }
+                }
+            ]);
+
+            const wallet = price[0].price;
+            const updateWallet = await User.updateOne({ _id: user_id }, { $inc: { user_wallet: wallet } });
+
+        }
         let quantity = await Order.aggregate([
             {
                 $match: {
@@ -159,7 +191,7 @@ const cancel_order = async (req, res) => {
                     quantity: '$items.quantity'
                 }
             }
-        ])
+        ]);
 
         let count = quantity[0].quantity
 
@@ -168,6 +200,7 @@ const cancel_order = async (req, res) => {
         res.json({
             success: true,
         })
+
     }
 
 }

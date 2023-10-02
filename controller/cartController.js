@@ -181,7 +181,14 @@ const render_checkout = async (req, res) => {
     for (let i = 0; i < cart.length; i++) {
         totalAmount = totalAmount + (parseInt(selling[i].selling_price) * cart[i].quantity)
     }
-    res.render('user/checkout', { user: true, address, cart, totalAmount, checkout: true });
+    let user = res.locals.userData
+    let wallet;
+    if (totalAmount <= user.user_wallet) {
+        wallet = true;
+    } else {
+        wallet: false;
+    }
+    res.render('user/checkout', { user: true, wallet, user, address, cart, totalAmount, checkout: true });
 
 
 }
@@ -190,7 +197,7 @@ const render_checkout = async (req, res) => {
 const place_order = async (req, res) => {
     let customer_id = res.locals.userData._id;
     let status;
-    if (req.body.payment_method === 'COD') {
+    if (req.body.payment_method === 'COD' || req.body.payment_method === 'wallet') {
         status = 'confirmed'
     } else {
         status = 'pending'
@@ -255,6 +262,27 @@ const place_order = async (req, res) => {
                 success: true
             })
         }
+    } else if (req.body.payment_method === 'wallet') {
+        const createOrder = await Order.create(order);
+        if (createOrder) {
+            const user = res.locals.userData;
+            // empty cart
+            await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } });
+
+            // decreasing the wallet amount
+            await User.updateOne({ _id: customer_id }, { $set: { user_wallet: parseInt(req.body.price) - parseInt(user.user_wallet) } });
+
+            //reduce the stock count 
+            for (let i = 0; i < items.length; i++) {
+                await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
+            }
+            req.session.order = {
+                status: true
+            }
+            res.json({
+                success: true
+            })
+        }
     } else {
         const createOrder = await Order.create(order);
 
@@ -268,7 +296,7 @@ const place_order = async (req, res) => {
 
         const timestamp = Razorder.created_at;
         const date = new Date(timestamp * 1000); // Convert the Unix timestamp to milliseconds
-        
+
         // Format the date and time
         const formattedDate = date.toISOString();
 

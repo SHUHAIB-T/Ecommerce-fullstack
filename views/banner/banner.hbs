@@ -1,0 +1,43 @@
+<section class="category d-flex mt-2">
+    <div class="object-fit-contain mt-3" style="width: 98%;">
+        <div class="header d-flex justify-content-between">
+            <h3 class="h3 text-second fw-bold mb-3">Banners</h3>
+            <a href="/admin/coupens/new-coupen" class="btn add-btn" style="height:40px;">New Banner</a>
+        </div>
+        <table style="width: 100rem;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0"
+            width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm">Image/th>
+                    <th class="th-sm">Name</th>
+                    <th class="th-sm">Status </th>
+                    <th class="th-sm">Referense</th>
+                    <th class="th-sm">Delete/Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each banners}}
+                <tr>
+                    <td>{{this.banner_name}}</td>
+                    <td>{{this.image}}</td>
+                    <td>{{this.discount}}</td>
+                    <td>{{this.start_date}}</td>
+                    <td>{{this.exp_date}}</td>
+                    <td>{{this.used_count}}</td>
+                    <td>
+                        {{!-- edit category button --}}
+                        <a href="/admin/coupens/edit_coupen/{{this._id}}" class="ms-3"><i
+                                class="fa-solid fa-pen"></i></a>
+
+                        <a class="text-danger ms-2">
+                            <i style="cursor: pointer;" onclick="deleteCoupen('{{this._id}}')"
+                                class="fa-solid fa-trash"></i>
+                        </a>
+
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
