@@ -16,9 +16,9 @@ var bannerSchema = new mongoose.Schema(
             required: true,
         },
         banner_status: {
-            type: String,
+            type: Boolean,
             required: true,
-            default: true,
+            default:true
         }
     },
     {

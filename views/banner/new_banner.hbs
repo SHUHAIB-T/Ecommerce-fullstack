@@ -1,0 +1,63 @@
+<div style="position:relative;" class="container py-5 w mb-5 new-category">
+    <h3 class="mb-3 text-second fw-bold">New Banner</h3>
+    <form class="p-md-5 border rounded-3 bg-body-tertiary" id="new-banner">
+        <!-- Name input -->
+        <div class="err mb-3 text-danger"></div>
+        <div class="row mb-3">
+            <div class="form-group col-6">
+                <label for="">Banner Name</label>
+                <input type="text" class="form-control " name="banner_name">
+            </div>
+            <div class="form-group col-6">
+                <label for="">Referense Link</label>
+                <input type="text" id="start_date" class="form-control " name="reference">
+            </div>
+            <div class="form-group col-6">
+                <div class="d-flex justify-content-between">
+                    <label for="">Banner Image</label>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img id="banner_prev" class="border my-1 rounded" width="120rem" src="" alt="">
+                    </div>
+                </div>
+                <input id="banner_image" type="file" accept=".jpg,.jpeg,.png,.webp,.svg"
+                    class="form-control FilUploader" class="mb-3" required />
+                <input id="cropped_banner" type="hidden" name="" value="">
+            </div>
+            {{!-- <div class="form-group col-6">
+                <label for="">Status</label>
+                <select class="form-select" name="status" aria-label="Default select example">
+                    <option value="true">List</option>
+                    <option value="false">Unlist</option>
+                </select>
+            </div> --}}
+        </div>
+        <!-- Submit button -->
+        <div class="button-grp">
+            <button type="submit" class="btn btn-lg add-btn px-5">Submit</button>
+            <button type="reset" class="btn btn-lg clear-btn px-5">Clear</button>
+        </div>
+    </form>
+    <div style="display: none;" class="crop-banner card p-2 shadow " id="banner-crp-container">
+        <div class="d-flex flex-column">
+            <img src="" id="bannerIMG" style="object-fit: cover;">
+            <button id="cropImageBtn" class="btn btn-primary mt-3">Crop Image</button>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .error {
+        color: rgb(255, 0, 0)
+    }
+
+    .crop-banner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        width: 30rem;
+
+    }
+</style>
