@@ -8,8 +8,9 @@ const {render_user_login,
     show_product_details,
     add_wishlist} = require('../controller/userController');
 
-
 const { doLogin } = require('../controller/userAuthController');
+
+// user authentication
 const { authenicateUser,
     getUserData, } = require('../middlewares/authMiddleware');
 

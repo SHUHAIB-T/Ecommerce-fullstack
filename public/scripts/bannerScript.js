@@ -27,7 +27,8 @@ $('#banner_image').on('change', (e) => {
                     cropedImg = cropedImg.toDataURL('image/png')
                     document.getElementById('banner_prev').src = cropedImg
                     document.getElementById('cropped_banner').value = cropedImg
-                    container.style.display = "none"
+                    container.style.display = "none";
+                    document.getElementById('bannerIMG').src = "";
                     $('.button-grp').show()
                 }
                 cropper.destroy();

@@ -4,6 +4,7 @@ const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const Product = require('../models/productModel');
 const jwt = require('jsonwebtoken');
+const Banner = require('../models/bannerModel');
 
 
 //render home
@@ -14,7 +15,17 @@ const render_home = async (req, res) => {
     if (userData) {
         cartCount = userData.cart.length
     }
-    res.render('user/home', { user: true, userData, cartCount, product, footer: true });
+    let banners = await Banner.find({ banner_status: true });
+    console.log(banners);
+
+    banners[0] = {
+        new: "active",
+        image: {
+            filename: banners[0].image.filename
+        },
+        reference: banners[0].reference
+    }
+    res.render('user/home', { user: true, userData, banners, cartCount, product, footer: true });
     delete req.session.order;
 }
 
