@@ -3,19 +3,15 @@
   <div class="container">
     <div class="row gx-5">
       <aside class="col-lg-6">
-        <div class="border rounded-4 mb-3 d-flex justify-content-center">
-          <button onclick="addToWishlist('{{product._id}}')"
-            style="position: absolute; border:none; background:transparent; right:2rem" class="mt-2 user-text"><i
-              class="fa-regular fa-2x fa-heart"></i></button>
-          <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
-            <img style="max-width: 90%; max-height: 90vh; margin: auto;" class="rounded-4 fit"
-              src="/productImages/{{product.primary_image.name}}" />
-          </a>
+        <div id="image-container" class="border image-container rounded-4 mb-3 d-flex justify-content-center">
+          <i class="fa-regular add-to-wish-list-btn fa-2x fa-heart" onclick="addToWishlist('{{product._id}}')"></i>
+          <img style="max-width: 80%; max-height: 90vh;" id="primary-img-view" class="rounded-4 fit primaryIMG"
+            src="/productImages/{{product.primary_image.name}}" />
         </div>
         <div class="d-flex justify-content-center mb-3">
-          {{#each product.secondary_images}}<a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank"
-            data-type="image" href="" class="item-thumb">
-            <img width="60" height="60" class="rounded-2" src="/productImages/{{this.name}}" />{{/each}}</a>
+          {{#each product.secondary_images}}
+          <img width="60" height="60" id="secondary_img{{this._id}}" onclick="changeImage('{{this._id}}')"
+            class="border m-1 rounded-2" src="/productImages/{{this.name}}" />{{/each}}
         </div>
       </aside>
       <main class="col-lg-6">
@@ -51,23 +47,25 @@
           </div>
           <hr />
 
-        <a href="/buy_product/{{product._id}}" class="btn btn-warning shadow-0"> Buy now </a>
-        <a href="/add_to_cart/{{product._id}}" class="btn btn-primary shadow-0"> <i
-            class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
-        <a href="/add_to_wishlist/{{product._id}}" class="btn btn-light border border-secondary py-2 icon-hover px-3">
-          <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+          <a onclick="addToCart('{{product._id}}')" class="btn btn-warning shadow-0"> Buy now </a>
+          <a onclick="addToCart('{{product._id}}')" class="btn btn-primary shadow-0"> <i
+              class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+          <a onclick="addToWishlist('{{product._id}}')"
+            class="btn btn-light border border-secondary py-2 icon-hover px-3">
+            <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+        </div>
+      </main>
     </div>
-    </main>
-  </div>
   </div>
 </section>
 <!-- content -->
 
 <script>
   $(document).ready(() => {
+
+
     //add to wish list function
     addToWishlist = async (id) => {
-      console.log("clicked")
       await fetch(`add-to-wishlist/${id}`, {
         method: 'GET'
       }).then(response => response.json())
@@ -91,6 +89,34 @@
           }
         })
     }
+    let zoom_area = document.getElementById('image-container')
+    let zoom_img = document.getElementById('primary-img-view');
+    zoom_area.addEventListener('mousemove', (event) => {
+      clientX = event.clientX - zoom_area.offsetLeft
+      clientY = event.clientY - zoom_area.offsetTop
+      mWidth = zoom_area.offsetWidth
+      mHeight = zoom_area.offsetHeight
+      clientX = clientX / mWidth * 100
+      clientY = clientY / mHeight * 100
+      zoom_img.style.transform = 'translate(-' + clientX + '%,-' + clientY + '%) scale(2)'
+    })
+    zoom_area.addEventListener('mouseleave', () => {
+      zoom_img.style.transform = 'translate(-50%,-50%) scale(1)'
+    });
 
-  })
+
+    //change image function
+    changeImage = (img) => {
+      let secondary_image = document.getElementById(`secondary_img${img}`);
+      let temp = secondary_image.src;
+      secondary_image.src = zoom_img.src;
+      zoom_img.src = temp
+
+    }
+
+
+
+
+
+  });
 </script>

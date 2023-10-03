@@ -1,61 +1,85 @@
-:root{
-    --background:rgba(211, 219, 238, 1);
-    --text-color: rgba(0, 102, 176, 1);
-    --white:rgb(255, 255, 255);
-    --user-backhround:rgba(107, 199, 171, 1)
+:root {
+  --background: rgba(211, 219, 238, 1);
+  --text-color: rgba(0, 102, 176, 1);
+  --white: rgb(255, 255, 255);
+  --user-backhround: rgba(107, 199, 171, 1);
 }
 
-.blue-secondary{
-    color: var(--text-color);
-    font-size: 1.2rem;
-    font-family: Roboto;
+.blue-secondary {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  font-family: Roboto;
 }
-.button-cancel{
-    background-color: var(--background) !important
-}
-
-.add-btn{
-    background-color: var(--text-color) !important;
-    color: var(--white) !important;
-    cursor: pointer !important;
-}
-.text-second{
-    color: var(--text-color) !important;
+.button-cancel {
+  background-color: var(--background) !important;
 }
 
-.ladels a{
-    text-decoration: none;
-    color: var(--text-color);
+.add-btn {
+  background-color: var(--text-color) !important;
+  color: var(--white) !important;
+  cursor: pointer !important;
 }
-.search a{
-    color: var(--text-color);
-    font-size: 1.5rem;
+.text-second {
+  color: var(--text-color) !important;
 }
 
-body{
-    position: relative;
+.ladels a {
+  text-decoration: none;
+  color: var(--text-color);
 }
-.user-nav{
-    position: sticky;
-    top: 0;
-    z-index: 4;
-    background-color: var(--white);
+.search a {
+  color: var(--text-color);
+  font-size: 1.5rem;
 }
-.search-box{
-    background-color: var(--background);
-    border-radius: 5px;
-    width: 20rem;
-    border: none;
-    padding: 5px;
-    outline: var(--text-color);
+
+body {
+  position: relative;
 }
-.prof-div{
-    z-index: 6;
-    right: 4.5rem;
-    top: 3rem;
+.user-nav {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background-color: var(--white);
 }
-.account, .account a{
-    background:var(--user-backhround);
-    color: var(--white) !important;
-    text-decoration: none !important;
+.search-box {
+  background-color: var(--background);
+  border-radius: 5px;
+  width: 20rem;
+  border: none;
+  padding: 5px;
+  outline: var(--text-color);
+}
+.prof-div {
+  z-index: 6;
+  right: 4.5rem;
+  top: 3rem;
+}
+.account,
+.account a {
+  background: var(--user-backhround);
+  color: var(--white) !important;
+  text-decoration: none !important;
+}
+
+.image-container {
+  width: 500px;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
+}
+#primary-img-view {
+  width: fit-content;
+  min-width: 200px;
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.add-to-wish-list-btn {
+  position: absolute;
+  right: 25px;
+  font-size: 25px;
+  z-index: 6;
 }

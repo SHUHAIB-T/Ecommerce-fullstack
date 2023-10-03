@@ -47,6 +47,10 @@
                     <div style="width:98% ; position:absolute; z-index-3;top:4rem ;height:1.5rem"
                         class="bg-light text-center fw-bold text-danger">Cancelled on {{this.items.cancelled_on}}</div>
                     {{/if}}
+                    {{#if this.items.pending}}
+                    <div style="width:98% ; position:absolute; z-index-3;top:4rem ;height:1.5rem"
+                        class="bg-light text-center fw-bold text-danger">Payment Failled</div>
+                    {{/if}}
                     <div class="d-flex justify-content-around mb-1">
                         <div style="width: 10rem;">
                             <p class="text-muted mt-1 mb-0 small ms-xl-5">{{this.createdAt}}</p>

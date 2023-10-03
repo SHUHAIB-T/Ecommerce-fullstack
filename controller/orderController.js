@@ -118,6 +118,7 @@ const render_user_orders = async (req, res) => {
                 break;
             default:
                 order.items.track = 0;
+                order.items.pending = true;
         }
     }
     orderDetails = orderDetails.reverse();

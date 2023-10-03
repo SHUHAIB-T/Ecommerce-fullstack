@@ -269,7 +269,7 @@ const place_order = async (req, res) => {
             await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } });
 
             // decreasing the wallet amount
-            await User.updateOne({ _id: customer_id }, { $set: { user_wallet: parseInt(req.body.price) - parseInt(user.user_wallet) } });
+            await User.updateOne({ _id: customer_id }, { $set: { user_wallet: parseInt(user.user_wallet) - parseInt(req.body.price) } });
 
             //reduce the stock count 
             for (let i = 0; i < items.length; i++) {
