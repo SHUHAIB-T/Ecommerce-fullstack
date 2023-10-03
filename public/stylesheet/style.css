@@ -17,6 +17,7 @@
 .add-btn{
     background-color: var(--text-color) !important;
     color: var(--white) !important;
+    cursor: pointer !important;
 }
 .text-second{
     color: var(--text-color) !important;

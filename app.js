@@ -29,6 +29,7 @@ const userRouter = require('./routes/userRouter');
 const myAccountRouter = require('./routes/myAccountRouter');
 const orderRouter = require('./routes/orderRouter');
 const cartRouter = require('./routes/cartRouter');
+const productSearchRouter = require('./routes/productSearchRoute')
 
 
 //connect database
@@ -75,6 +76,7 @@ app.use('/', userRouter);
 app.use('/my-account', myAccountRouter);
 app.use('/cart', cartRouter);;
 app.use('/orders', orderRouter);
+app.use('/products', productSearchRouter);
 
 
 //admin router

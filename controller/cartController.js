@@ -40,7 +40,6 @@ const addProductToCart = async (userID, productId) => {
 
 //adding product to cart
 const add_product_to_cart = async (req, res) => {
-    console.log("entered to cart");
     let productId = req.params.id;
     let userID = res.locals.userData._id;
     let updatedUser = await addProductToCart(userID, productId);

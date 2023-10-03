@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        {{#each Products}}
+        <div class="col-md-3">
+            <div class="card mt-3">
+                <img class="card-img" src="/productImages/{{this.primary_image.name}}" alt="Vans">
+                <div class="card-img-overlay d-flex justify-content-end">
+                    <a href="#" class="card-link user-text like">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{this.product_name}}</h4>
+                    <h6 style="font-size: 0.8rem;" class="card-subtitle mb-2 text-muted">Color: {{this.color}} &#160;
+                        &#160; &#160; &#160;
+                        Brand: {{this.brand_name}}
+                    </h6>
+                    <div class="buy d-flex justify-content-between align-items-center">
+                        <div class="price text-success">
+                            <h5 class="mt-4">₹{{this.selling_price}}</h5>
+                        </div>
+                        <input onclick="
+                        addToCart('{{this._id}}')" type="button" value="add to cart" class="btn add-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

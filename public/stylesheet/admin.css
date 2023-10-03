@@ -23,9 +23,11 @@
 .user-btn{
     background-color: var(--buttonColor) !important;
     color: #FFF !important;
+    cursor: pointer !important;
 }
 .clear-btn{
     background-color: var(--background) !important;
+    cursor: pointer !important;
 }
 .user-text{
     color: var(--buttonColor) !important;

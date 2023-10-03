@@ -1,6 +1,5 @@
 $(document).ready(() => {
     addToCart = async (productID) => {
-
         await fetch(`/cart/add-to-cart/${productID}`, {
             method: 'GET'
         }).then(response => response.json())

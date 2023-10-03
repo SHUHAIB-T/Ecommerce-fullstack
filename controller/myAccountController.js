@@ -122,7 +122,6 @@ const show_wishlist = async (req, res) => {
         },
         { $unwind: { path: '$products' } }
     ])
-    console.log(wishList)
     res.render('myAccount/wishlist', { user: true, User: true, wishList, footer: true })
 }
 
