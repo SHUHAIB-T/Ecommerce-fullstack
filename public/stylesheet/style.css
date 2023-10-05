@@ -79,7 +79,8 @@ body {
 }
 .add-to-wish-list-btn {
   position: absolute;
-  right: 25px;
+  right: 20px;
+  top:20px;
   font-size: 25px;
-  z-index: 6;
+  z-index: 2;
 }

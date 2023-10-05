@@ -5,11 +5,12 @@ const bcrypt = require('bcrypt')
 const Product = require('../models/productModel');
 const jwt = require('jsonwebtoken');
 const Banner = require('../models/bannerModel');
+const mongoose = require('mongoose');
 
 
 //render home
 const render_home = async (req, res) => {
-    const product = await Product.find({ stock: { $gt: 0 } });
+    const products = await Product.find({ stock: { $gt: 0 } });
     const userData = res.locals.userData;
     let cartCount;
     if (userData) {
@@ -23,7 +24,21 @@ const render_home = async (req, res) => {
         },
         reference: banners[0].reference
     }
-    res.render('user/home', { user: true, userData, banners, cartCount, product, footer: true });
+
+    let product;
+    if (req.query.page) {
+        let page = parseInt(req.query.page);
+        let skip = (page - 1) * 6;
+        product = products.slice(skip, skip + 6);
+    } else {
+        product = products.slice(0, 6);
+    }
+
+    let arr = [];
+    for (let i = 1; i < products.length / 6 + 1; i++) {
+        arr.push(i)
+    }
+    res.render('user/home', { user: true, userData, arr, banners, cartCount, product, footer: true });
     delete req.session.order;
 }
 
@@ -101,13 +116,22 @@ const veryfy_otp = async (req, res) => {
 
 //show product details
 const show_product_details = async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    let product = await Product.findById(req.params.id);
 
     const userData = res.locals.userData;
     let cartCount;
     if (userData) {
         cartCount = userData.cart.length
     }
+    let product_id = new mongoose.Types.ObjectId(product._id);
+    let user = await User.findOne({ _id: userData, 'wish_list.product_id': product_id })
+
+    if (user) {
+        product.wish = false
+    } else {
+        product.wish = true
+    }
+
     res.render('user/product-deatils', { user: true, fullscreen: true, cartCount, product, footer: true })
 }
 

@@ -3,14 +3,21 @@
   <div class="container">
     <div class="row gx-5">
       <aside class="col-lg-6">
-        <div id="image-container" class="border image-container rounded-4 mb-3 d-flex justify-content-center">
-          <i class="fa-regular add-to-wish-list-btn fa-2x fa-heart" onclick="addToWishlist('{{product._id}}')"></i>
+        <div id="image-container" role="button"
+          class="border image-container rounded-4 mb-3 d-flex justify-content-center">
+          {{#if product.wish}}
+          <i id="heart" class="fa-regular add-to-wish-list-btn fa-2x fa-heart"
+            onclick="addToWishlist('{{product._id}}')"></i>
+          {{else}}
+          <i id="heart" class="fa-solid text-danger add-to-wish-list-btn fa-2x fa-heart"
+            onclick="addToWishlist('{{product._id}}')"></i>
+          {{/if}}
           <img style="max-width: 80%; max-height: 90vh;" id="primary-img-view" class="rounded-4 fit primaryIMG"
             src="/productImages/{{product.primary_image.name}}" />
         </div>
         <div class="d-flex justify-content-center mb-3">
           {{#each product.secondary_images}}
-          <img width="60" height="60" id="secondary_img{{this._id}}" onclick="changeImage('{{this._id}}')"
+          <img width="60" height="60" role="button" id="secondary_img{{this._id}}" onclick="changeImage('{{this._id}}')"
             class="border m-1 rounded-2" src="/productImages/{{this.name}}" />{{/each}}
         </div>
       </aside>
@@ -66,26 +73,21 @@
 
     //add to wish list function
     addToWishlist = async (id) => {
+      const heart = document.getElementById('heart');
       await fetch(`add-to-wishlist/${id}`, {
         method: 'GET'
       }).then(response => response.json())
         .then(data => {
           if (data.success) {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Your work has been added to the wish list',
-              showConfirmButton: false,
-              timer: 1500
-            })
+            heart.classList.remove("fa-regular")
+            heart.classList.add("fa-solid")
+            heart.classList.add("text-danger")
+
           } else {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Product removed has been from wishlist',
-              showConfirmButton: false,
-              timer: 1500
-            })
+            heart.classList.remove("fa-solid")
+            heart.classList.remove("text-danger")
+            heart.classList.add("fa-regular")
+
           }
         })
     }
