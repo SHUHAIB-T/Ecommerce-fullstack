@@ -38,7 +38,8 @@ const render_home = async (req, res) => {
     for (let i = 1; i < products.length / 6 + 1; i++) {
         arr.push(i)
     }
-    res.render('user/home', { user: true, userData, arr, banners, cartCount, product, footer: true });
+    let last = arr[arr.length - 1]
+    res.render('user/home', { user: true, last, userData, arr, banners, cartCount, product, footer: true });
     delete req.session.order;
 }
 

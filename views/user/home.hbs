@@ -65,6 +65,7 @@
           <li class="page-item">
             <a class="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
+              <input id="last" type="hidden" value="{{last}}">
               <span class="sr-only">Next</span>
             </a>
           </li>
@@ -75,9 +76,37 @@
 </div>
 
 <script>
-  const ancorElemnt = document.getElementById('href');
-  let href = ancorElemnt.getAttribute.href;
-  const queryParams = new URLSearchParams(href);
-  let page = queryParams.get('page');
-  console.log(page);
+
+
+  // Add event listeners for "Next" and "Previous" buttons
+  document.addEventListener('DOMContentLoaded', function () {
+    const nextPageButton = document.querySelector('a[aria-label="Next"]');
+    const prevPageButton = document.querySelector('a[aria-label="Previous"]');
+    let last = document.getElementById('last').value;
+    last = parseInt(last);
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const qParamValue = urlSearchParams.get('page');
+    let page = parseInt(qParamValue);
+    if (page !== NaN) {
+      nextPageButton.addEventListener('click', function (event) {
+        if (page >=1 && page < last) {
+          page = page + 1;
+        }
+        location.assign(`/?page=${page}`);
+      });
+
+      prevPageButton.addEventListener('click', function (event) {
+        if(page >1 && page <= last) {
+          page = page - 1;
+        }
+        location.assign(`/?page=${page}`);
+      });
+    } else{
+      location.assign(`/?page=1`);
+    }
+  });
+
+
+
+
 </script>

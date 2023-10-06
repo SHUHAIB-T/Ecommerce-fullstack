@@ -122,7 +122,19 @@ const render_user_orders = async (req, res) => {
         }
     }
     orderDetails = orderDetails.reverse();
-    res.render('user/order', { user: true, User: true, orderDetails, footer: true })
+    let arr = [];
+    for (let i = 1; i < orderDetails.length / 4 + 1; i++) {
+        arr.push(i);
+    }
+    let page = parseInt(req.query.page);
+    let skip = (page - 1) * 4
+    if (req.query.page) {
+        orderDetails = orderDetails.slice(skip, skip + 4);
+    } else {
+        orderDetails = orderDetails.slice(0, 4);
+    }
+    let last = arr[arr.length - 1]
+    res.render('user/order', { user: true, arr, last, User: true, orderDetails, footer: true })
 }
 
 //cancel order function
