@@ -1,0 +1,44 @@
+<style>
+    .error{
+        color: rgb(255, 0, 0);
+    }
+</style>
+
+<div class="container">
+    <div class="h3 fw-bold mt-3 user-text">
+        Rate Product
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-8">
+            <div class="well well-sm">
+                <div class="row" id="post-review-box">
+                    <div class="col-md-12">
+                        <form id="rating-form">
+                            <fieldset class="rating mb-3">
+                                <input type="hidden" id="rating" name="rating" value="" required>
+                                <i id="str1" class="fa-regular text-warning fa-lg fa-star" role="button"></i>
+                                <i id="str2" class="fa-regular text-warning fa-lg fa-star" role="button"></i>
+                                <i id="str3" class="fa-regular fa-lg text-warning fa-star" role="button"></i>
+                                <i id="str4" class="fa-regular text-warning fa-lg fa-star" role="button"></i>
+                                <i id="str5" class="fa-regular text-warning fa-lg fa-star" role="button"></i>
+                            </fieldset>
+                            <input type="hidden" name="product_id" value="{{product_id}}">
+                            <textarea class="form-control animated" cols="50" id="new-review" name="comment"
+                                placeholder="Enter your review here..." rows="5"></textarea>
+                            <div class="container">
+                                <span id="rateMe2" class="empty-stars"></span>
+                            </div>
+
+
+                            <div class="text-right mt-3">
+                                <input type="reset" class="btn btn-lg  clear-btn" value="clear">
+                                <button class="btn user-btn btn-lg" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

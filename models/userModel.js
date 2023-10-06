@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt=require('bcrypt')
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
-var userSchema = new Schema({
+let userSchema = new Schema({
     user_name:{
         type:String,
         required:true,

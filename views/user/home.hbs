@@ -87,7 +87,7 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const qParamValue = urlSearchParams.get('page');
     let page = parseInt(qParamValue);
-    if (page !== NaN) {
+    if (page) {
       nextPageButton.addEventListener('click', function (event) {
         if (page >=1 && page < last) {
           page = page + 1;
@@ -105,8 +105,5 @@
       location.assign(`/?page=1`);
     }
   });
-
-
-
-
+  
 </script>
