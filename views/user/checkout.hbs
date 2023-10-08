@@ -1,4 +1,5 @@
-<div style="background-color: rgb(243, 243, 243);" class="outer-container vw-100 d-flex">
+<div style="background-color: rgb(243, 243, 243); position:relative"
+    class="outer-container conatiner-fluid vw-100 d-flex">
     <div style="width: 50rem;" class="container-fluid mt-3 ms-5">
 
         <div class="header d-flex align-items-center justify-content-between">
@@ -178,16 +179,20 @@
                             Online Payment
                         </label>
                     </div>
-                    <input type="hidden" name="price" value="{{totalAmount}}">
+                    <input type="hidden" id="price" name="price" value="{{totalAmount}}">
+                    <input type="hidden" id="discount" name="discount" value="">
+                    <input type="hidden" id="coupen" name="coupen" value="">
                     <button style="padding: 0.5rem 20rem;" class="btn user-btn mb-5" id="submitOrder">Place
                         Order</button>
                 </div>
             </form>
         </div>
     </div>
-
     <div class="col-md-4 mt-3 ms-3">
-        <div class="card mb-4">
+        <div role="button" id="checkCoupen" class=" card user-text p-2 bg-light">
+            <h4 class="mt-1"><i class="fa-solid ms-3 fa-tags"></i> Check Coupen?</h4>
+        </div>
+        <div class="card mt-3 mb-4">
             <div class="card-header py-3">
                 <h5 class="mb-0">Summary</h5>
             </div>
@@ -214,121 +219,33 @@
             </div>
         </div>
     </div>
+    <div class="coupenss bg-light p-3 card">
+        <i style="margin-left: 26rem;" id="back" role="button" class="fa-regular fa-circle-xmark mb-2 text-danger"></i>
+        {{#each coupens}}
+        <div class="card p-2 mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <input type="button" value="{{this.coupon_code}}" class=" btn btn-sm bg-warning" role="button">
+                <a class="text-decoraton-none fw-bold text-primary" role="button"
+                    onclick="applayCoupen('{{this._id}}')">Applay</a>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="text-success fw-bold">Discount: {{this.discount}}% </p>
+                <p class="fw-bold text-secondary">EXP: {{this.exp_date}}</p>
+            </div>
+            <p class="text-secondary fw-normal">{{this.discription}} </p>
+        </div>
+        {{/each}}
+    </div>
 </div>
 
-
-
-
-<script>
-    $(document).ready(() => {
-        $('.add-form').hide();
-        $('.payment-options').hide();
-
-        //add new Address form display
-        const addAddress = document.getElementById('addAddress');
-        if (addAddress) {
-            addAddress.addEventListener('click', (e) => {
-                e.preventDefault();
-                $('.add-form').slideDown();
-
-            })
-        }
-        //go up address
-        const upButton = document.getElementById('upButton');
-        if (upButton) {
-            upButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                $('.add-form').slideUp();
-            })
-        }
-
-        const proceedPayment = document.getElementById('proceedPayment');
-        if (proceedPayment) {
-            proceedPayment.addEventListener('click', (e) => {
-                e.preventDefault;
-                $('#proceedPayment').hide();
-                $('.payment-options').slideDown();
-            })
-        }
-
-        //create order
-        const submitOrder = document.getElementById('submitOrder');
-        if (submitOrder) {
-            submitOrder.addEventListener('click', async (e) => {
-                e.preventDefault();
-                let form = document.getElementById('orderForm');
-                if (form) {
-                    let formData = new FormData(form);
-                    const body = Object.fromEntries(formData);
-                    console.log(body)
-                    await fetch('/cart/place-order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(body)
-                    }).then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                location.assign('/cart/order-success')
-                            }
-                            if (data.status) {
-                                showRazorpay(data.order, data.user);
-                            }
-                        })
-
-                } else {
-                    console.error('Form element not found');
-                }
-            });
-        }
-
-        //payment interface function 
-        showRazorpay = (order, user) => {
-            var options = {
-                "key": "rzp_test_I43lYVXIyrWCQF", // Enter the Key ID generated from the Dashboard
-                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Times Cart",
-                "description": "Test Transaction",
-                "image": "https://drive.google.com/uc?id=18EJgrQQfFCgLUCtUCOY-6tujL8KFX0qI",
-                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                "handler": function (response) {
-                    verifyPayment(response)
-                },
-                "prefill": {
-                    "name": user.user_name,
-                    "email": user.user_email,
-                    "contact": user.user_mobile
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#2ade99"
-                }
-            };
-
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-            rzp1.on('payment.failed', function (response) {
-                swal.fire("Failed!", response.error.description, "error")
-                .then(() => {
-                    location.assign('/')
-                })
-            });
-        },
-
-            verifyPayment = async (response) => {
-
-                await fetch('/cart/verify-payment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(response)
-                }).then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            location.assign('/cart/order-success')
-                        }
-                    })
-            }
-    })
-</script>
+<style>
+    .coupenss {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 4;
+        width: 30rem;
+        box-shadow: 0px 0px 20px #ccc;
+    }
+</style>

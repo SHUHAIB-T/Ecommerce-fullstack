@@ -134,7 +134,7 @@ const render_user_orders = async (req, res) => {
     } else {
         orderDetails = orderDetails.slice(0, 4);
     }
-    let last = arr[arr.length - 1]
+    let last = arr[arr.length - 1];
     res.render('user/order', { user: true, arr, last, User: true, orderDetails, footer: true })
 }
 

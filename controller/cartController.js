@@ -4,6 +4,8 @@ const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const User = require('../models/userModel');
 const Payment = require('../models/paymentModel');
+const Coupen = require('../models/coupenSchema');
+const mongoose = require('mongoose');
 
 //requiring razorpay
 const Razorpay = require('razorpay');
@@ -187,7 +189,52 @@ const render_checkout = async (req, res) => {
     } else {
         wallet: false;
     }
-    res.render('user/checkout', { user: true, wallet, user, address, cart, totalAmount, checkout: true });
+    let user_id = user._id;
+
+    // fetching all availabe coupens from db
+    let coupens = await Coupen.aggregate([{
+        $match: {
+            start_date: { $lte: new Date() },
+            exp_date: { $gte: new Date() },
+            is_delete: false,
+            $expr: {
+                $and: [
+                    { $ne: ["$max_count", "$used_count"] },
+                    { $not: { $in: [user_id, "$user_list"] } }
+
+                ],
+            }
+        }
+    }]);
+    function formatDateString(inputDateString) {
+        const dateObject = new Date(inputDateString);
+
+        const year = dateObject.getUTCFullYear();
+        const month = String(dateObject.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(dateObject.getUTCDate()).padStart(2, '0');
+
+        const formattedDate = `${day}-${month}-${year}`;
+        return formattedDate;
+    }
+    coupens.forEach((e) => {
+        e.exp_date = formatDateString(e.exp_date);
+    })
+
+    if (req.query.coupen) {
+        const coupen = await Coupen.findOne({ _id: req.query.coupen });
+        let dicount = coupen.discount;
+        totalAmount = totalAmount - (totalAmount * dicount / 100);
+        res.json({
+            success: true,
+            total: totalAmount,
+            coupen_id: coupen._id,
+            discount: coupen.discount
+        })
+    }
+
+
+    // rendering to checkout page
+    res.render('user/checkout', { user: true, coupens, wallet, user, address, cart, totalAmount, checkout: true });
 
 
 }
@@ -201,6 +248,7 @@ const place_order = async (req, res) => {
     } else {
         status = 'pending'
     }
+    let order;
 
     let cartList = await User.aggregate([
         { $match: { _id: customer_id } },
@@ -225,24 +273,59 @@ const place_order = async (req, res) => {
     ])
 
     let items = [];
-    for (let i = 0; i < cartList.length; i++) {
-        items.push({
-            product_id: cartList[i].cart.product_id,
-            quantity: cartList[i].cart.quantity,
-            price: parseInt(cartList[i].prod_detail.selling_price),
-            status: status
-        });
-    }
-
     const address = await Address.findOne({ _id: req.body.address });
+    if (req.body.coupen != '') {
+        const couponId = new mongoose.Types.ObjectId(req.body.coupon);
+        const userId = res.locals.userData._id;
+        let coupon = await Coupen.findByIdAndUpdate(
+            { _id: couponId },
+            {
+                $inc: { used_count: 1 },
+                $push: { user_list: userId },
+            },
+            {
+                new: true
+            }
+        );
+        let dicount = req.body.discount
+        for (let i = 0; i < cartList.length; i++) {
+            items.push({
+                product_id: cartList[i].cart.product_id,
+                quantity: cartList[i].cart.quantity,
+                price: (parseInt(cartList[i].prod_detail.selling_price)) - (parseInt(cartList[i].prod_detail.selling_price) * dicount / 100),
+                status: status
+            });
+        }
+        order = {
+            customer_id: customer_id,
+            items: items,
+            address: address,
+            payment_method: req.body.payment_method,
+            total_amount: parseInt(req.body.price),
+            coupon: {
+                coupon_id: couponId,
+                discount: dicount
+            }
+        }
 
-    let order = {
-        customer_id: customer_id,
-        items: items,
-        address: address,
-        payment_method: req.body.payment_method,
-        total_amount: parseInt(req.body.price)
+    } else {
+        for (let i = 0; i < cartList.length; i++) {
+            items.push({
+                product_id: cartList[i].cart.product_id,
+                quantity: cartList[i].cart.quantity,
+                price: parseInt(cartList[i].prod_detail.selling_price),
+                status: status
+            });
+        }
+        order = {
+            customer_id: customer_id,
+            items: items,
+            address: address,
+            payment_method: req.body.payment_method,
+            total_amount: parseInt(req.body.price)
+        }
     }
+
     if (req.body.payment_method === 'COD') {
         const createOrder = await Order.create(order);
         if (createOrder) {

@@ -161,7 +161,7 @@ const show_product_details = async (req, res) => {
         sum = sum + parseInt(rating.rating)
     }
 
-    let avarage = sum / 5;
+    let avarage = sum / (ratings.length);
 
     res.render('user/product-deatils', { user: true, ratings, avarage, fullscreen: true, cartCount, product, footer: true });
 }

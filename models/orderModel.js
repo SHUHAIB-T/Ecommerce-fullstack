@@ -34,8 +34,8 @@ const order_schema = new Schema({
             delivered_on: {
                 type: Date
             },
-            cancelled_on:{
-                type:Date
+            cancelled_on: {
+                type: Date
             }
         }
     ],
@@ -50,6 +50,15 @@ const order_schema = new Schema({
     total_amount: {
         type: Number,
         required: true
+    },
+    coupon: {
+        coupon_id: {
+            type: ObjectId,
+            ref: 'Coupon',
+        },
+        discount: {
+            type: Number
+        }
     }
 },
     {

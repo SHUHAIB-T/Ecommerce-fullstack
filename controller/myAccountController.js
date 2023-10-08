@@ -67,7 +67,7 @@ const add_new_address = async (req, res) => {
 //add new Adress to User from ckeckout
 const add_new_address_checkout = async (req, res) => {
     await Address.create(req.body);
-    res.redirect('/checkout');
+    res.redirect('/cart/checkout');
 }
 
 //viewAddress
