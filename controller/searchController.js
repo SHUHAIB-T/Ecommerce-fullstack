@@ -1,4 +1,6 @@
 const Product = require('../models/productModel');
+const User = require('../models/userModel');
+const Category = require('../models/categoryModel');
 
 
 const get_searchedProducts = async (req, res) => {
@@ -23,10 +25,9 @@ const get_searchedProducts = async (req, res) => {
         }
     ]);
 
-    let query = req.query.q;
+    let query = req.query.search;
 
     if (query) {
-
         // searching
         Products = Products.filter((product) => {
             query = query.toLowerCase().replace(/\s/g, '');
@@ -64,13 +65,64 @@ const get_searchedProducts = async (req, res) => {
         });
     }
 
+    // category filtering
+    let category = req.query.category;
+    if (category) {
+        Products = Products.filter((product) => {
+            return category.includes(product.category.cat_name);
+        })
+    }
+    // brand filtering
+    let brand = req.query.brand;
+    if (brand) {
+        Products = Products.filter((product) => {
+            return brand.includes(product.brand_name);
+        })
+    }
+
+    // color filtering
+    let color = req.query.color;
+    if (color) {
+        Products = Products.filter((product) => {
+            return color.includes(product.color);
+        })
+    }
+
     const userData = res.locals.userData;
     let cartCount;
     if (userData) {
         cartCount = userData.cart.length
     }
+    let user_id = userData._id;
+    for (const product of Products) {
+        let product_id = product._id;
+        let user = await User.findOne({ _id: user_id, 'wish_list.product_id': product_id });
 
-    res.render('user/products', { user: true, cartCount, Products, footer: true })
+        if (user) {
+            product.wish = false;
+        } else {
+            product.wish = true;
+        }
+    }
+    // finding all categories 
+    const categories = await Category.find({ delete: false });
+
+    // finding all brands
+    const brands = await Product.find({ delete: false }, { _id: 0, brand_name: 1 });
+    const uniqueSet = new Set();
+    for (const brand of brands) {
+        uniqueSet.add(brand.brand_name);
+    }
+    const Brands = Array.from(uniqueSet);
+
+    const colors = await Product.find({ delete: false }, { _id: 0, color: 1 });
+    const uniqueSet1 = new Set();
+    for (const color of colors) {
+        uniqueSet1.add(color.color);
+    }
+    const Colors = Array.from(uniqueSet1);
+
+    res.render('user/products', { user: true, Colors,Brands, categories, cartCount, Products, footer: true })
 }
 
 module.exports = {

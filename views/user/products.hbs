@@ -1,30 +1,82 @@
-<div class="container">
-    <div class="row">
+<div class="row">
+    <div class="col-md-3" style="width: 90vw;">
+        <div role="button" class="all-product bg-light border rounded px-3 py-2 h5"><a href="/products"
+                class="text-secondary text-decoration-none">All Products</a></div>
+        <div role="button" class="border Showcategory rounded px-3 py-2 d-flex justify-content-between h5">Category
+            <i role="button" class="fa-solid fa-caret-down"></i>
+        </div>
+        <div class="p-2 category rounded border">
+
+            {{#each categories}}
+            <div class="ms-2 form-check">
+                <input role="button" class="filter-button" type="checkbox" value="category={{this.cat_name}}"
+                    id="category={{this.cat_name}}">
+                <label role="button" class="form-check-label" for="category={{this.cat_name}}">
+                    {{this.cat_name}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+        <div role="button" class="border Showbrand rounded mt-2 px-3 py-2 d-flex justify-content-between h5">Brand
+            <i role="button" class="fa-solid fa-caret-down"></i>
+        </div>
+        <div class="p-2 brand rounded border">
+
+            {{#each Brands}}
+            <div class="ms-2 form-check">
+                <input role="button" class="filter-brand" type="checkbox" value="brand={{this}}"
+                    id="brand={{this}}">
+                <label role="button" class="form-check-label" for="brand={{this}}">
+                    {{this}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+        <div role="button" class="border Showcolor rounded mt-2 px-3 py-2 d-flex justify-content-between h5">Color
+            <i role="button" class="fa-solid fa-caret-down"></i>
+        </div>
+        <div class="p-2 color rounded border">
+
+            {{#each Colors}}
+            <div class="ms-2 form-check">
+                <input role="button" class="filter-color" type="checkbox" value="color={{this}}"
+                    id="color={{this}}">
+                <label role="button" class="form-check-label" for="color={{this}}">
+                    {{this}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <div class="col-md-9">
         {{#each Products}}
-        <div class="col-md-3">
-            <div class="card mt-3">
-                <img class="card-img" src="/productImages/{{this.primary_image.name}}" alt="Vans">
-                <div class="card-img-overlay d-flex justify-content-end">
-                    <a href="#" class="card-link user-text like">
-                        <i class="fa-regular fa-heart"></i>
-                    </a>
-                </div>
+        <section style="width: 70vw;" class="card py-2 mb-2">
+            <div class="img-wrapper d-flex">
+                <img style="width: 12rem;" class="card-img" src="/productImages/{{this.primary_image.name}}" alt="">
                 <div class="card-body">
                     <h4 class="card-title">{{this.product_name}}</h4>
                     <h6 style="font-size: 0.8rem;" class="card-subtitle mb-2 text-muted">Color: {{this.color}} &#160;
                         &#160; &#160; &#160;
                         Brand: {{this.brand_name}}
                     </h6>
-                    <div class="buy d-flex justify-content-between align-items-center">
-                        <div class="price text-success">
-                            <h5 class="mt-4">₹{{this.selling_price}}</h5>
-                        </div>
-                        <input onclick="
-                        addToCart('{{this._id}}')" type="button" value="add to cart" class="btn add-btn">
+                    <div class="price text-success">
+                        <h5 class="mt-4">₹{{this.selling_price}}</h5>
                     </div>
+                    <button onclick="addToCart('{{this._id}}')" role="button" type="button" class="btn add-btn">add
+                        to cart</button>
+
                 </div>
             </div>
-        </div>
+
+            {{#if this.wish}}
+            <i id="heart{{this._id}}" class="fa-regular add-to-wish-list-btn fa-2x fa-heart"
+                onclick="addToWishlist('{{this._id}}')" role="button"></i>
+            {{else}}
+            <i id="heart{{this._id}}" class="fa-solid text-danger add-to-wish-list-btn fa-2x fa-heart"
+                onclick="addToWishlist('{{this._id}}')" role="button"></i>
+            {{/if}}
+
+        </section>
         {{/each}}
     </div>
 </div>

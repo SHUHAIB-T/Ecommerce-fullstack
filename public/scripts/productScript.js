@@ -166,5 +166,5 @@ $("#addProductForm").validate({
 const searchProduct = async () => {
     let search = document.getElementById("searchInput").value;
     let queryLink = document.getElementById('querry');
-    queryLink.href = "/products/search?q=" + encodeURIComponent(search);
+    queryLink.href = "/products/?search=" + encodeURIComponent(search);
 }

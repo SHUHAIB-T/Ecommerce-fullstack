@@ -52,13 +52,13 @@
 
   {{else}}
   <div style="width: 15rem;" class="ladels d-flex justify-content-between align-items-center fw-bold">
-    <a href="#">Watches</a>
-    <a href="#">Mens</a>
-    <a href="#">Womens</a>
+    <a href="/products">Watches</a>
+    <a href="/products/?&category=Men%20Watches">Mens</a>
+    <a href="/products/?&category=Womens%20Watches">Womens</a>
   </div>
   <div style="width: 23rem;" class=" ">
     <form class="form-inline search d-flex justify-content-between align-items-center">
-      <a id="querry" href="/products/search?q="><i onclick="searchProduct()" class="fa-brands fa-searchengin"></i></a>
+      <a id="querry" href="/products/?search="><i onclick="searchProduct()" class="fa-brands fa-searchengin"></i></a>
       <input id="searchInput" class="search-box px-2 mr-sm-2" type="search" placeholder="Search" aria-label="Search">
     </form>
   </div>

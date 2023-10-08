@@ -18,11 +18,11 @@
         <div id="image-container" role="button"
           class="border image-container rounded-4 mb-3 d-flex justify-content-center">
           {{#if product.wish}}
-          <i id="heart" class="fa-regular add-to-wish-list-btn fa-2x fa-heart"
-            onclick="addToWishlist('{{product._id}}')"></i>
+          <i id="heart{{product._id}}" class="fa-regular add-to-wish-list-btn fa-2x fa-heart"
+            onclick="addToWishlist('{{product._id}}')" role="button"></i>
           {{else}}
-          <i id="heart" class="fa-solid text-danger add-to-wish-list-btn fa-2x fa-heart"
-            onclick="addToWishlist('{{product._id}}')"></i>
+          <i id="heart{{product._id}}" class="fa-solid text-danger add-to-wish-list-btn fa-2x fa-heart"
+            onclick="addToWishlist('{{product._id}}')" role="button"></i>
           {{/if}}
           <img style="max-width: 80%; max-height: 90vh;" id="primary-img-view" class="rounded-4 fit primaryIMG"
             src="/productImages/{{product.primary_image.name}}" />
@@ -91,26 +91,6 @@
   $(document).ready(() => {
 
 
-    //add to wish list function
-    addToWishlist = async (id) => {
-      const heart = document.getElementById('heart');
-      await fetch(`add-to-wishlist/${id}`, {
-        method: 'GET'
-      }).then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            heart.classList.remove("fa-regular")
-            heart.classList.add("fa-solid")
-            heart.classList.add("text-danger")
-
-          } else {
-            heart.classList.remove("fa-solid")
-            heart.classList.remove("text-danger")
-            heart.classList.add("fa-regular")
-
-          }
-        })
-    }
     let zoom_area = document.getElementById('image-container')
     let zoom_img = document.getElementById('primary-img-view');
     zoom_area.addEventListener('mousemove', (event) => {

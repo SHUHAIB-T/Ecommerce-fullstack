@@ -4,6 +4,6 @@ const router = express.Router();
 
 const {get_searchedProducts} = require('../controller/searchController')
 
-router.get('/search',authenicateUser, get_searchedProducts);
+router.get('/',authenicateUser, get_searchedProducts);
 
 module.exports = router;

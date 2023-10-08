@@ -95,4 +95,25 @@ $(document).ready(() => {
             console.error(error);
         }
     }
+
+    //add to wish list function
+    addToWishlist = async (id) => {
+        const heart = document.getElementById(`heart${id}`);
+        await fetch(`/view_product/add-to-wishlist/${id}`, {
+            method: 'GET'
+        }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    heart.classList.remove("fa-regular")
+                    heart.classList.add("fa-solid")
+                    heart.classList.add("text-danger")
+
+                } else {
+                    heart.classList.remove("fa-solid")
+                    heart.classList.remove("text-danger")
+                    heart.classList.add("fa-regular")
+
+                }
+            })
+    }
 })
