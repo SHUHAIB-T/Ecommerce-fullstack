@@ -1,95 +1,19 @@
-const star1 = document.getElementById('str1');
-const star2 = document.getElementById('str2');
-const star3 = document.getElementById('str3');
-const star4 = document.getElementById('str4');
-const star5 = document.getElementById('str5');
-let rating = document.getElementById('rating');
+$('.star').on('click', (e) => {
+    const rating = e.target.id;
+    $('.star').removeClass('fa-solid')
+    $('.star').addClass('fa-regular');
+    for (let i = 0; i <= rating; i++) {
+        $('#' + i).removeClass('fa-regular');
+        $('#' + i).addClass('fa-solid');
+    }
+    $('#rating').val(e.target.id)
+})
 
-// star 1
-star1.addEventListener('click', (e) => {
-    e.preventDefault();
-    star1.classList.remove('fa-regular');
-    star1.classList.add('fa-solid');
-    star2.classList.remove('fa-solid');
-    star3.classList.remove('fa-solid');
-    star4.classList.remove('fa-solid');
-    star5.classList.remove('fa-solid');
-
-    star2.classList.add('fa-regular');
-    star3.classList.add('fa-regular');
-    star4.classList.add('fa-regular');
-    star5.classList.add('fa-regular');
-    rating.value = 1;
-});
-
-// star 2
-star2.addEventListener('click', (e) => {
-    e.preventDefault();
-    star1.classList.remove('fa-regular');
-    star2.classList.remove('fa-regular');
-    star1.classList.add('fa-solid');
-    star2.classList.add('fa-solid');
-
-    star3.classList.remove('fa-solid');
-    star4.classList.remove('fa-solid');
-    star5.classList.remove('fa-solid');
-    star3.classList.add('fa-regular');
-    star4.classList.add('fa-regular');
-    star5.classList.add('fa-regular');
-    rating.value = 2;
-});
-
-// star 3
-star3.addEventListener('click', (e) => {
-    e.preventDefault();
-    star1.classList.remove('fa-regular');
-    star2.classList.remove('fa-regular');
-    star3.classList.remove('fa-regular');
-    star1.classList.add('fa-solid');
-    star2.classList.add('fa-solid');
-    star3.classList.add('fa-solid');
-
-    star4.classList.remove('fa-solid');
-    star5.classList.remove('fa-solid');
-    star4.classList.add('fa-regular');
-    star5.classList.add('fa-regular');
-    rating.value = 3;
-});
-
-// star 4
-star4.addEventListener('click', (e) => {
-    e.preventDefault();
-    star1.classList.remove('fa-regular');
-    star2.classList.remove('fa-regular');
-    star3.classList.remove('fa-regular');
-    star4.classList.remove('fa-regular');
-    star1.classList.add('fa-solid');
-    star2.classList.add('fa-solid');
-    star3.classList.add('fa-solid');
-    star4.classList.add('fa-solid');
-
-
-    star5.classList.remove('fa-solid');
-    star5.classList.add('fa-regular');
-    rating.value = 4;
-});
-
-// star 5
-star5.addEventListener('click', (e) => {
-    e.preventDefault();
-    star1.classList.remove('fa-regular');
-    star2.classList.remove('fa-regular');
-    star3.classList.remove('fa-regular');
-    star4.classList.remove('fa-regular');
-    star5.classList.remove('fa-regular');
-    star1.classList.add('fa-solid');
-    star2.classList.add('fa-solid');
-    star3.classList.add('fa-solid');
-    star4.classList.add('fa-solid');
-    star5.classList.add('fa-solid');
-
-    rating.value = 5;
-});
+let ratingg = $("#rating").val();
+for (let i = 0; i <= ratingg; i++) {
+    $('#' + i).removeClass('fa-regular');
+    $('#' + i).addClass('fa-solid');
+}
 
 // rating form
 $('#rating-form').validate({
@@ -138,4 +62,79 @@ $('#rating-form').validate({
     }
 })
 
+// edit form
+$('#edit-rating-form').validate({
+    rules: {
+        rating: {
+            required: true
+        },
+        comment: {
+            required: true
+        }
+    },
+    submitHandler: async (form) => {
+        if (rating.value !== '') {
+            const formn = document.getElementById('edit-rating-form');
+            const formData = new FormData(formn);
+            const payload = Object.fromEntries(formData);
+            await fetch(`/reviews/edit_review`, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Your rating has been editted',
+                        }).then(() => {
+                            location.assign('/reviews');
+                        })
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
 
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please select a rating',
+            })
+        }
+    }
+})
+
+// delete review
+// /reviews/delete-reivew/{{this._id}}
+const deleteReview = async (id) => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `Are you sure want to delete`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#1d4391',
+        cancelButtonColor: 'rgb(107, 119, 136)',
+        confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await fetch(`/reviews/delete-reivew/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Your rating has been deleted',
+                        }).then(() => {
+                            location.assign('/reviews');
+                        })
+                    }
+                })
+        }
+    })
+}

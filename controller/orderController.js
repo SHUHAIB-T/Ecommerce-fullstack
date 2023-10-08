@@ -46,6 +46,7 @@ const render_user_orders = async (req, res) => {
                 _id: 1,
                 'products.product_name': 1,
                 'products.primary_image': 1,
+                'products._id': 1,
                 items: 1,
                 address: 1,
                 payment_method: 1,

@@ -6,7 +6,7 @@ const Product = require('../models/productModel');
 const jwt = require('jsonwebtoken');
 const Banner = require('../models/bannerModel');
 const mongoose = require('mongoose');
-
+const Rating = require('../models/reviewRatingmodel');
 
 //render home
 const render_home = async (req, res) => {
@@ -133,7 +133,37 @@ const show_product_details = async (req, res) => {
         product.wish = true
     }
 
-    res.render('user/product-deatils', { user: true, fullscreen: true, cartCount, product, footer: true })
+    let ratings = await Rating.aggregate([
+        { $match: { product_id: product_id } },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'user_id',
+                foreignField: '_id',
+                as: 'user'
+            }
+        },
+        {
+            $unwind: "$user"
+        },
+        {
+            $project: {
+                _id: 0,
+                comment: 1,
+                rating: 1,
+                'user.user_name': 1
+            }
+        }
+    ]);
+
+    let sum = 0
+    for (const rating of ratings) {
+        sum = sum + parseInt(rating.rating)
+    }
+
+    let avarage = sum / 5;
+
+    res.render('user/product-deatils', { user: true, ratings, avarage, fullscreen: true, cartCount, product, footer: true });
 }
 
 

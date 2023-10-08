@@ -1,3 +1,15 @@
+<style>
+  ::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: #d9d9d9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #8fd4ff;
+    -webkit-border-radius: 1ex;
+  }
+</style>
 <!-- content -->
 <section class="py-5">
   <div class="container">
@@ -24,19 +36,10 @@
       <main class="col-lg-6">
         <div class="ps-lg-3">
           <h4 class="title text-dark">
-            {{product.product_name}}
+            {{product.product_name}} ({{avarage}}<i class="fa-solid fa-star text-warning"></i>)
           </h4>
           <div class="d-flex flex-row my-3">
-            <div class="text-warning mb-1 me-2">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-              <span class="ms-1">
-                4.5
-              </span>
-            </div>
+
             <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i> Only {{product.stock}}
               left</span>
             <span class="text-success ms-2">In stock</span>
@@ -60,6 +63,23 @@
           <a onclick="addToWishlist('{{product._id}}')"
             class="btn btn-light border border-secondary py-2 icon-hover px-3">
             <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+        </div>
+        <div class="col-lg-12 d-flex justify-content-between align-items-center bg-light border mt-3 rounded">
+          <h6 class="mt-1">Reviews & rating</h6>
+          <i role="button" class="fa-solid reviewDown fa-caret-down"></i>
+          <i role="button" class="fa-solid reviewup fa-caret-up"></i>
+        </div>
+        <div class="reviews p-2 bg-light border rounded mt-2" style="height:150px;overflow-y:auto">
+          {{#each ratings}}
+          <div class="card px-2 py-1 mt-2 ">
+            <div class="card-title d-flex align-items-center  ">
+              <p class="h5 me-3 ">{{this.user.user_name}}</p>
+              <div class="h5 mt-1 me-2">{{this.rating}}</div>
+              <i class="fa-solid fa-sm text-warning fa-star"></i>
+            </div>
+            <p style="margin-top:-20px;">{{this.comment}}</p>
+          </div>
+          {{/each}}
         </div>
       </main>
     </div>
@@ -116,6 +136,19 @@
 
     }
 
+    $('.reviewup').hide();
+    $('.reviews').hide();
+
+    $('.reviewDown').on('click', () => {
+      $('.reviewup').show();
+      $('.reviews').slideDown();
+      $('.reviewDown').hide();
+    })
+    $('.reviewup').on('click', () => {
+      $('.reviewup').hide();
+      $('.reviewDown').show();
+      $('.reviews').slideUp();
+    })
 
 
 

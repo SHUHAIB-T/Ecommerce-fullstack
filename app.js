@@ -75,7 +75,7 @@ app.use(nocache());
 //user router
 app.use('/', userRouter);
 app.use('/my-account', myAccountRouter);
-app.use('/cart', cartRouter);;
+app.use('/cart', cartRouter);
 app.use('/orders', orderRouter);
 app.use('/products', productSearchRouter);
 app.use('/reviews', reviewRouter);
@@ -89,7 +89,6 @@ app.use('/admin/customers', customerRouter);
 app.use('/admin/sales-report', salesRoute);
 app.use('/admin/coupens', coupensRoute);
 app.use('/admin/banners', bannerRoute);
-
 
 //error handling
 app.use(notFound);

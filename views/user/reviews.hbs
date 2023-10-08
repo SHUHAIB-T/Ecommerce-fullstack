@@ -1,1 +1,29 @@
-<h1>here the reviews will come</h1>
+<div class="container">
+    <div class="row col-md-8">
+        <div class="">
+            <div class="h3 fw-bold user-text">Reviews & Ratings</div>
+        </div>
+        {{#each reviews}}
+        <div class="card p-2">
+            <div class="d-flex justify-content-between">
+                <div class="img-wrapper d-flex">
+                    <img width="100rem" src="/productImages/{{this.product.primary_image.name}}" alt="">
+                    <span class="h5 fw-bold">{{this.product.product_name}}
+                        <span class="h6 fw-normal text-secondary"> <br>Brand: {{this.product.brand_name}}</span></span>
+
+                </div>
+               
+                <div class="">
+                    <span class="h6">{{this.rating}}</span>
+                    <i id="s1" class="fa-solid text-warning fa-lg fa-star"></i>
+                </div>
+                <div class="edit">
+                    <a href="/reviews/edit-reivew/{{this._id}}"><i class="fa-solid me-2 fa-pen-to-square" role="button"></i></a>
+                    <a onclick="deleteReview('{{this._id}}')"><i class="fa-solid me-2 fa-trash" role="button"></i></a>
+                </div>
+            </div>
+
+        </div>
+        {{/each}}
+    </div>
+</div>
