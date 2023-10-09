@@ -155,14 +155,14 @@ const show_product_details = async (req, res) => {
             }
         }
     ]);
-
+    let avarage = 0
     let sum = 0
     for (const rating of ratings) {
         sum = sum + parseInt(rating.rating)
     }
-
-    let avarage = sum / (ratings.length);
-
+    if (ratings.length > 0) {
+        avarage = sum / (ratings.length);
+    }
     res.render('user/product-deatils', { user: true, ratings, avarage, fullscreen: true, cartCount, product, footer: true });
 }
 

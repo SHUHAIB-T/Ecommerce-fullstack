@@ -88,4 +88,20 @@ $(document).ready(() => {
         }
         location.assign(link)
     })
+
+    // filtering by price
+    sorting = (sortQuery) => {
+        let link = window.location.href;
+        link = decodeURIComponent(link);
+        if (link.includes("sort")) {
+            link = link.replace(/sort=[^&]+/, sortQuery);
+        } else {
+            if (link.includes('?')) {
+                link = link + '&' + sortQuery;
+            } else {
+                link = link + '?' + sortQuery;
+            }
+        }
+        location.assign(link);
+    }
 })

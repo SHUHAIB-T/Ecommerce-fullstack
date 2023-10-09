@@ -24,8 +24,7 @@
 
             {{#each Brands}}
             <div class="ms-2 form-check">
-                <input role="button" class="filter-brand" type="checkbox" value="brand={{this}}"
-                    id="brand={{this}}">
+                <input role="button" class="filter-brand" type="checkbox" value="brand={{this}}" id="brand={{this}}">
                 <label role="button" class="form-check-label" for="brand={{this}}">
                     {{this}}
                 </label>
@@ -39,8 +38,7 @@
 
             {{#each Colors}}
             <div class="ms-2 form-check">
-                <input role="button" class="filter-color" type="checkbox" value="color={{this}}"
-                    id="color={{this}}">
+                <input role="button" class="filter-color" type="checkbox" value="color={{this}}" id="color={{this}}">
                 <label role="button" class="form-check-label" for="color={{this}}">
                     {{this}}
                 </label>
@@ -49,6 +47,18 @@
         </div>
     </div>
     <div class="col-md-9">
+        <div style="width: 30rem;" class="sort-container d-flex justify-content-between aligh-items-center">
+            <p class="h5 fw-bold">Sort: </p>
+            <div>
+                <p role="button" onclick="sorting('sort=low-high')" class="h6 mt-1">Price low-high</p>
+            </div>
+            <div>
+                <p role="button" onclick="sorting('sort=high-low')" class="h6 mt-1">Price high-low</p>
+            </div>
+            <div>
+                <p role="button" onclick="sorting('sort=new-first')" class="h6 mt-1">New First</p>
+            </div>
+        </div>
         {{#each Products}}
         <section style="width: 70vw;" class="card py-2 mb-2">
             <div class="img-wrapper d-flex">

@@ -1,0 +1,94 @@
+<div class="container mt-4" style="max-width:57rem; max-height:500rem">
+    <div class="header d-flex justify-content-between">
+        <h3 class="h3 text-second fw-bold mb-3">Dash Board</h3>
+        <div class="wrap-year d-flex">
+            <p class="fw-bold h6 mt-2 me-1">Year</p>
+            <select role="button" class="form-select" style="width: 10rem; height:2rem" name="year" id="changeYear">
+                {{#each yearsArray}}
+                <option id="year" value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <canvas id="myChart" style="width:100%;margin-right:3rem;margin-top:-1.5rem"></canvas>
+
+    <div class="details d-flex justify-content-around ">
+        <div class="d-flex rounded flex-column align-items-center px-4 justify-content-center bg-success fw-bold">
+            <p class="text-white mt-4" style="margin-bottom:-10px;">Total Revenue</p>
+            <p class="text-white fw-bold fa-2x">₹{{totalRevenew}}/-</p>
+        </div>
+        <div class="d-flex rounded flex-column align-items-center px-4 justify-content-center add-btn fw-bold">
+            <p class="text-white mt-4" style="margin-bottom:-10px;">Total Customers</p>
+            <p class="text-white fw-bold fa-2x">{{custommers}}</p>
+        </div>
+        <div class="d-flex rounded flex-column align-items-center px-4 justify-content-center bg-danger fw-bold">
+            <p class="text-white mt-4" style="margin-bottom:-10px;">Total Products</p>
+            <p class="text-white fw-bold fa-2x">{{products}}</p>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(async () => {
+        try {
+            await fetch('/admin/get-sales')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showGraph(data.data)
+                    }
+                })
+        } catch (err) {
+            console.log(err)
+        }
+
+        $('#changeYear').on('change', async () => {
+            let year = $('#changeYear').val();
+            try {
+                await fetch(`/admin/get-sales?year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showGraph(data.data)
+                        }
+                    })
+            } catch (err) {
+                console.log(err)
+            }
+        })
+
+        function showGraph(sales) {
+            var chartExist = Chart.getChart("myChart");
+            if (chartExist != undefined) {
+                chartExist.destroy();
+            }
+
+            const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            const ctx = document.getElementById('myChart');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: sales,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+
+</script>

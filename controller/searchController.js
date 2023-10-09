@@ -88,6 +88,47 @@ const get_searchedProducts = async (req, res) => {
         })
     }
 
+    // price sorting 
+    const sortQuery = req.query.sort;
+    if (sortQuery === 'low-high') {
+        Products.sort((a, b) => {
+            const sellingPriceA = parseFloat(a.selling_price);
+            const sellingPriceB = parseFloat(b.selling_price);
+
+            if (sellingPriceA < sellingPriceB) {
+                return -1;
+            } else if (sellingPriceA > sellingPriceB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    } else if (sortQuery === 'high-low') {
+        Products.sort((a, b) => {
+            const sellingPriceA = parseFloat(a.selling_price);
+            const sellingPriceB = parseFloat(b.selling_price);
+
+            if (sellingPriceA < sellingPriceB) {
+                return 1;
+            } else if (sellingPriceA > sellingPriceB) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+    } else if (sortQuery === 'new-first') {
+        Products.sort((a, b) => {
+            const createdAtA = new Date(a.createdAt);
+            const createdAtB = new Date(b.createdAt);
+
+            if (createdAtA > createdAtB) {
+                return -1; 
+            } else if (createdAtA < createdAtB) {
+                return 1; 
+            }
+        });
+    }
+
     const userData = res.locals.userData;
     let cartCount;
     if (userData) {
@@ -122,7 +163,7 @@ const get_searchedProducts = async (req, res) => {
     }
     const Colors = Array.from(uniqueSet1);
 
-    res.render('user/products', { user: true, Colors,Brands, categories, cartCount, Products, footer: true })
+    res.render('user/products', { user: true, Colors, Brands, categories, cartCount, Products, footer: true })
 }
 
 module.exports = {

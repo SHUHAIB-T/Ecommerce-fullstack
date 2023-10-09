@@ -122,5 +122,6 @@ const filter_data = async (req, res) => {
 
 module.exports = {
     render_sales_report,
-    filter_data
+    filter_data,
+    sales_report
 }

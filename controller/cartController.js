@@ -275,7 +275,7 @@ const place_order = async (req, res) => {
     let items = [];
     const address = await Address.findOne({ _id: req.body.address });
     if (req.body.coupen != '') {
-        const couponId = new mongoose.Types.ObjectId(req.body.coupon);
+        const couponId = new mongoose.Types.ObjectId(req.body.coupen);
         const userId = res.locals.userData._id;
         let coupon = await Coupen.findByIdAndUpdate(
             { _id: couponId },
@@ -287,24 +287,26 @@ const place_order = async (req, res) => {
                 new: true
             }
         );
-        let dicount = req.body.discount
-        for (let i = 0; i < cartList.length; i++) {
-            items.push({
-                product_id: cartList[i].cart.product_id,
-                quantity: cartList[i].cart.quantity,
-                price: (parseInt(cartList[i].prod_detail.selling_price)) - (parseInt(cartList[i].prod_detail.selling_price) * dicount / 100),
-                status: status
-            });
-        }
-        order = {
-            customer_id: customer_id,
-            items: items,
-            address: address,
-            payment_method: req.body.payment_method,
-            total_amount: parseInt(req.body.price),
-            coupon: {
-                coupon_id: couponId,
-                discount: dicount
+        if (coupon) {
+            let dicount = req.body.discount
+            for (let i = 0; i < cartList.length; i++) {
+                items.push({
+                    product_id: cartList[i].cart.product_id,
+                    quantity: cartList[i].cart.quantity,
+                    price: (parseInt(cartList[i].prod_detail.selling_price)) - (parseInt(cartList[i].prod_detail.selling_price) * dicount / 100),
+                    status: status
+                });
+            }
+            order = {
+                customer_id: customer_id,
+                items: items,
+                address: address,
+                payment_method: req.body.payment_method,
+                total_amount: parseInt(req.body.price),
+                coupon: {
+                    coupon_id: couponId,
+                    discount: dicount
+                }
             }
         }
 

@@ -6,13 +6,74 @@ const bcrypt = require('bcrypt')
 const Admin = require('../models/adminModel');
 const Order = require('../models/orderModel');
 const mongoose = require('mongoose');
+const User = require('../models/userModel');
+const Product = require('../models/productModel');
 
 
 //render dashboard
-const render_dharboard = (req, res) => {
-    const admin = res.locals.admin
-    res.status(500).render('admin/admin-dash', { Admin: admin })
+const render_dharboard = async (req, res) => {
+    const admin = res.locals.admin;
+    let sales = await Order.aggregate([
+        {
+            $match: {
+                "items.status": "Delivered"
+            }
+        }
+    ]);
+    let totalRevenew = 0;
+    sales.forEach((sale) => {
+        totalRevenew += sale.total_amount;
+    });
+    const currentYear = new Date().getFullYear();
+
+    let yearsArray = [];
+    for (let year = currentYear; year >= 2022; year--) {
+        yearsArray.push(year);
+    }
+
+    const custommers = (await User.find({ is_delete: false })).length;
+    const products = (await Product.find({ delete: false })).length
+
+    res.render('admin/admin-dash', { custommers, products, totalRevenew, yearsArray, Admin: admin, footer: true })
 }
+
+// get dashboard Items
+const getGraphDetails = async (req, res) => {
+
+    const sales = await Order.aggregate([
+        {
+            $match: {
+                "items.status": "Delivered"
+            }
+        }
+    ]);
+    const monthlyRevenue = Array(12).fill(0);
+    let year = req.query.year;
+    if (year) {
+        year = parseInt(year);
+    } else {
+        year = new Date().getFullYear();
+    }
+
+    sales.forEach((sale) => {
+        if (sale.items && sale.items.length > 0) {
+            const saleYear = new Date(sale.createdAt).getFullYear();
+            if (year === saleYear) {
+                sale.items.forEach((item) => {
+                    const deliveredOn = new Date(item.delivered_on);
+                    const month = deliveredOn.getMonth();
+                    const totalAmount = sale.total_amount;
+                    monthlyRevenue[month] += totalAmount;
+                });
+            }
+        }
+    });
+    res.json({
+        success: true,
+        data: monthlyRevenue
+    });
+}
+
 //redirect to dash board
 const redirect_dash = (req, res) => {
     res.redirect('/admin/dash')
@@ -363,8 +424,8 @@ const get_invoice = async (req, res) => {
                 _id: 1,
                 'user.user_name': 1,
                 'user._id': 1,
-                'user.user_email':1,
-                'user.user_mobile':1,
+                'user.user_email': 1,
+                'user.user_mobile': 1,
                 'product.product_name': 1,
                 items: 1,
                 address: 1,
@@ -401,6 +462,7 @@ const get_invoice = async (req, res) => {
 module.exports = {
     render_login,
     render_dharboard,
+    getGraphDetails,
     redirect_dash,
     render_forget_pass,
     send_otp,
@@ -410,5 +472,5 @@ module.exports = {
     get_orders,
     render_change_order_status,
     update_order_status,
-    get_invoice
+    get_invoice,
 }

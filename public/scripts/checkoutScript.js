@@ -118,7 +118,6 @@ $(document).ready(() => {
                 "error"
             )
         } else {
-            console.log(total)
             $('.coupenss').show();
             $('#proceedPayment').hide();
             $('#submitOrder').hide();
@@ -148,7 +147,6 @@ $(document).ready(() => {
                     price.value = newTotalAmount
                     let coupen = document.getElementById('coupen');
                     coupen.value = id;
-
                     let discount = document.getElementById('discount');
                     discount.value = data.discount
                     productsElement.textContent = `₹${newTotalAmount}`;

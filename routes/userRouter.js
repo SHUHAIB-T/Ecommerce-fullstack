@@ -34,7 +34,7 @@ router.get('/view_product/add-to-wishlist/:id',authenicateUser, add_wishlist)
 
 router.get('/logout', (req, res) => {
     res.cookie('userTocken','',{ maxAge:1})
-    res.redirect('/')
+    res.redirect('/');
 })
 
 module.exports = router
