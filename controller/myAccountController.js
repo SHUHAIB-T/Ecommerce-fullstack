@@ -2,15 +2,20 @@ const User = require('../models/userModel')
 const bcrypt = require('bcrypt');
 const Address = require('../models/addressModel');
 
+
 //render my account
 const render_my_Account = async (req, res) => {
-    let userData = res.locals.userData
+    let userData = res.locals.userData;
+    if (userData.wallet_history.length > 0) {
+        userData.wallet_history.reverse();
+    }
     res.render('myAccount/my-account', { user: true, User: true, userData, success: req.flash('success')[0], footer: true })
 }
 
 //render edit user deatails
 const render_edit_page = async (req, res) => {
-    let userData = await User.findById(req.params.id)
+    let userData = await User.findById(req.params.id);
+
     res.render('myAccount/edit-user', { user: true, User: true, userData, footer: true })
 }
 

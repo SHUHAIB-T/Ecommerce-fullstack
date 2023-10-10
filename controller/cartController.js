@@ -344,7 +344,7 @@ const place_order = async (req, res) => {
             }
             res.json({
                 success: true
-            })
+            });
         }
     } else if (req.body.payment_method === 'wallet') {
         const createOrder = await Order.create(order);
@@ -355,6 +355,21 @@ const place_order = async (req, res) => {
 
             // decreasing the wallet amount
             await User.updateOne({ _id: customer_id }, { $set: { user_wallet: parseInt(user.user_wallet) - parseInt(req.body.price) } });
+
+            // Marking in wallet history
+            const newHistoryItem = {
+                amount: parseInt(req.body.price),
+                status: "Debit",
+                time: Date.now()
+            };
+
+
+            const updatedUser = await User.findByIdAndUpdate(
+                { _id: customer_id },
+                { $push: { wallet_history: newHistoryItem } },
+                { new: true }
+            );
+
 
             //reduce the stock count 
             for (let i = 0; i < items.length; i++) {

@@ -186,6 +186,19 @@ const cancel_order = async (req, res) => {
             const wallet = price[0].price;
             const updateWallet = await User.updateOne({ _id: user_id }, { $inc: { user_wallet: wallet } });
 
+            // Marking in wallet history
+            const newHistoryItem = {
+                amount: parseInt(wallet),
+                status: "Credit",
+                time: Date.now()
+            };
+
+            const updatedUser = await User.findByIdAndUpdate(
+                { _id: user_id },
+                { $push: { wallet_history: newHistoryItem } },
+                { new: true }
+            );
+
         }
         let quantity = await Order.aggregate([
             {

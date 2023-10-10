@@ -7,7 +7,8 @@ const dotenv = require('dotenv').config();
 const path = require('path')
 const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 4000;
-const hbs = require('express-handlebars')
+const hbs = require('express-handlebars');
+const handlebars = require('handlebars');
 const session = require('express-session')
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 const publicDirectoryPath = path.join(__dirname, '/public')
@@ -50,16 +51,56 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(express.static(publicDirectoryPath))
 
-app.engine('hbs', hbs.engine({
+const xhbs = hbs.create({
   layoutsDir: __dirname + '/views/layouts',
   extname: 'hbs',
-  defaultLayout: 'layout',
-  partialsDir: __dirname + '/views/partials',
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true,
+  },
+  defaultLayout: 'layout',
+  partialsDir: __dirname + '/views/partials/'
+});
+
+app.engine('hbs', xhbs.engine);
+
+// app.engine('hbs', hbs.engine({
+//   layoutsDir: __dirname + '/views/layouts',
+//   extname: 'hbs',
+//   defaultLayout: 'layout',
+//   partialsDir: __dirname + '/views/partials',
+//   runtimeOptions: {
+//     allowProtoPropertiesByDefault: true,
+//     allowProtoMethodsByDefault: true,
+//   }
+// }));
+
+handlebars.registerHelper('toDateAndTime', function (date) {
+  date = new Date(date);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // Months are zero-based, so add 1
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  const timeString = date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false
+  });
+
+  return `${year}-${month}-${day} ${timeString}`;
+});
+
+handlebars.registerHelper('checkSatatus', function (status, options) {
+  if (status == "Debit") {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
   }
-}));
+})
 
 app.use(session({
   secret: 'secrekeey',

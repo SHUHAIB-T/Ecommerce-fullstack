@@ -20,6 +20,22 @@
             <div class="h3 fw-bold text-white ">₹{{userData.user_wallet}}.00</div>
         </div>
     </div>
+    <div style=" max-height:200px;overflow:auto" class="card wallet-history mt-2">
+        <div class="card-title h5 mt-2 user-text text-center fw-bold">Wallet History</div>
+        <div style="width: 100%; height: 2px;" class="bg-secondary"></div>
+        {{#each userData.wallet_history}}
+        <div class="card bg-light px-5 py-2 mt-2 d-flex flex-row justify-content-between align-items-center">
+            <div class="fw-normal">{{toDateAndTime this.time}}</div>
+            {{#checkSatatus this.status}}
+            <div class="fw-bold text-danger">{{this.status}}</div>
+            <div class="fw-bold text-danger">₹{{this.amount}}</div>
+            {{else}}
+            <div class="fw-bold text-success">{{this.status}}</div>
+            <div class="fw-bold text-success ">₹{{this.amount}}</div>
+            {{/checkSatatus}}
+        </div>
+        {{/each}}
+    </div>
     <div class="d-flex">
         <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
             <a href="/orders"
@@ -71,3 +87,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.wallet-history').hide();
+        $('.userWallet').on('click', () => {
+            $('.wallet-history').slideToggle();
+        })
+    })
+</script>
