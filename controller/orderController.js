@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const pdf = require("pdf-creator-node");
 const fs = require("fs");
-const path = require('path');
 
 //showing user's all orders
 const render_user_orders = async (req, res) => {
@@ -132,30 +131,79 @@ const render_order_details = async (req, res) => {
 //cancel order function
 const cancel_order = async (req, res) => {
     let user_id = res.locals.userData._id;
-    let product_id = req.params.product_id;
-    let order_id = req.params.order_id;
+    let product_id = new mongoose.Types.ObjectId(req.params.product_id);
+    let order_id = new mongoose.Types.ObjectId(req.params.order_id);
 
-    const updateOrder = await Order.updateOne({
-        _id: order_id,
-        'items.product_id': product_id
-    }, {
-        '$set': {
-            'items.$.status': 'cancelled',
-            'items.$.cancelled_on': new Date()
+    const checkCoupen = await Order.aggregate([
+        {
+            $match: {
+                "coupon": { $exists: true },
+                _id: order_id,
+                'items.product_id': product_id
+            }
         }
-    });
+    ]);
+    if (checkCoupen.length > 0) {
+        res.json({
+            success: false
+        })
+    } else {
 
-    if (updateOrder) {
+        const updateOrder = await Order.updateOne({
+            _id: order_id,
+            'items.product_id': product_id
+        }, {
+            '$set': {
+                'items.$.status': 'cancelled',
+                'items.$.cancelled_on': new Date()
+            }
+        });
 
-        let order = await Order.findById({ _id: order_id });
+        if (updateOrder) {
 
-        //adding money to wallet if it is online payment
-        if (order.payment_method === 'Online Payment' || order.payment_method === 'wallet') {
-            let price = await Order.aggregate([
+            let order = await Order.findById({ _id: order_id });
+
+            //adding money to wallet if it is online payment
+            if (order.payment_method === 'Online Payment' || order.payment_method === 'wallet') {
+                let price = await Order.aggregate([
+                    {
+                        $match: {
+                            _id: order_id,
+                            'items.product_id': product_id
+                        }
+                    },
+                    {
+                        $unwind: { path: '$items' }
+                    },
+                    {
+                        $match: {
+                            'items.product_id': new mongoose.Types.ObjectId(product_id)
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            price: '$items.price'
+                        }
+                    }
+                ]);
+
+                const wallet = price[0].price;
+
+                // Marking in wallet history
+                const newHistoryItem = {
+                    amount: parseInt(wallet),
+                    status: "Credit",
+                    time: Date.now()
+                };
+
+
+            }
+            let quantity = await Order.aggregate([
                 {
                     $match: {
-                        _id: new mongoose.Types.ObjectId(order_id),
-                        'items.product_id': new mongoose.Types.ObjectId(product_id)
+                        _id: order_id,
+                        'items.product_id': product_id
                     }
                 },
                 {
@@ -163,67 +211,32 @@ const cancel_order = async (req, res) => {
                 },
                 {
                     $match: {
-                        'items.product_id': new mongoose.Types.ObjectId(product_id)
+                        'items.product_id': product_id
                     }
                 },
                 {
                     $project: {
                         _id: 0,
-                        price: '$items.price'
+                        quantity: '$items.quantity'
                     }
                 }
             ]);
 
-            const wallet = price[0].price;
-            const updateWallet = await User.updateOne({ _id: user_id }, { $inc: { user_wallet: wallet } });
+            let count = quantity[0].quantity
 
-            // Marking in wallet history
-            const newHistoryItem = {
-                amount: parseInt(wallet),
-                status: "Credit",
-                time: Date.now()
-            };
 
-            const updatedUser = await User.findByIdAndUpdate(
-                { _id: user_id },
-                { $push: { wallet_history: newHistoryItem } },
-                { new: true }
-            );
+            res.json({
+                success: true,
+            })
 
         }
-        let quantity = await Order.aggregate([
-            {
-                $match: {
-                    _id: new mongoose.Types.ObjectId(order_id),
-                    'items.product_id': new mongoose.Types.ObjectId(product_id)
-                }
-            },
-            {
-                $unwind: { path: '$items' }
-            },
-            {
-                $match: {
-                    'items.product_id': new mongoose.Types.ObjectId(product_id)
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    quantity: '$items.quantity'
-                }
-            }
-        ]);
-
-        let count = quantity[0].quantity
-
-        const updateStock = await Product.updateOne({ _id: product_id }, { $inc: { stock: count } })
-
-        res.json({
-            success: true,
-        })
-
     }
 
+}
+
+// cancel all prodcts
+const cancel_all_order = async (req,res) => {
+    console.log("here it is");
 }
 
 // get invoice and download
@@ -330,7 +343,7 @@ const get_invoice = async (req, res) => {
         type: "",
     };
 
-    pdf.create(document, options).then((data) => {
+    pdf.create(document, options).then(() => {
         const pdfStream = fs.createReadStream("invoice.pdf");
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", `attachment; filename=invoice.pdf`);
@@ -345,5 +358,6 @@ module.exports = {
     render_user_orders,
     cancel_order,
     get_invoice,
-    render_order_details
+    render_order_details,
+    cancel_all_order
 }
