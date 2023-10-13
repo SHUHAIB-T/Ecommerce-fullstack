@@ -17,7 +17,7 @@ router.get('/order-details/:id', authenicateUser, render_order_details);
 
 router.get('/cancel_order/:product_id/:order_id', authenicateUser, cancel_order);
 
-router.get('/orders/cancel_all_order/:product_id/:order_id', authenicateUser, cancel_all_order);
+router.get('/cancel_all_order/:order_id', authenicateUser, cancel_all_order);
 
 router.get('/get-invoice', authenicateUser, get_invoice);
 

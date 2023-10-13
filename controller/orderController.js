@@ -224,7 +224,10 @@ const cancel_order = async (req, res) => {
 
             let count = quantity[0].quantity
 
-
+            //reduce the stock count 
+            for (let i = 0; i < items.length; i++) {
+                await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: items[i].quantity } })
+            }
             res.json({
                 success: true,
             })
@@ -235,8 +238,76 @@ const cancel_order = async (req, res) => {
 }
 
 // cancel all prodcts
-const cancel_all_order = async (req,res) => {
-    console.log("here it is");
+const cancel_all_order = async (req, res) => {
+    const order_id = req.params.order_id;
+
+    const updateOrder = await Order.updateOne(
+        { _id: order_id },
+        {
+            $set: {
+                'items.$[elem].status': 'cancelled',
+                'items.$[elem].cancelled_on': new Date(),
+                status: 'cancelled'
+            }
+        },
+        {
+            arrayFilters: [{ 'elem.status': { $ne: 'cancelled' } }]
+        }
+    );
+    if (updateOrder) {
+
+        let order = await Order.findById({ _id: order_id });
+
+        //adding money to wallet if it is online payment
+        if (order.payment_method === 'Online Payment' || order.payment_method === 'wallet') {
+            let price = await Order.aggregate([
+                {
+                    $match: {
+                        _id: order_id
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        total_amount: 1
+                    }
+                }
+            ]);
+
+            const wallet = price[0].price;
+
+            // Marking in wallet history
+            const newHistoryItem = {
+                amount: parseInt(wallet),
+                status: "Credit",
+                time: Date.now()
+            };
+
+
+        }
+        let quantity = await Order.aggregate([
+            {
+                $match: {
+                    _id: order_id
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    quantity: '$items.quantity'
+                }
+            }
+        ]);
+
+        let count = quantity[0].quantity
+
+
+        res.json({
+            success: true,
+        })
+
+    }
+
 }
 
 // get invoice and download

@@ -40,7 +40,7 @@ $(document).ready(() => {
                                 confirmButtonText: "Yes Cancel it!",
                             }).then(async (result) => {
                                 if (result.isConfirmed) {
-                                    await fetch(`/orders/cancel_all_order/${product_id}/${order_id}`)
+                                    await fetch(`/orders/cancel_all_order/${order_id}`)
                                         .then((response) => response.json())
                                         .then(data => {
                                             if (data.success) {
