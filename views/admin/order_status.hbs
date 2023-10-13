@@ -37,18 +37,36 @@
                 <label for="form-control">Status</label>
                 {{#if showOrder.items.cancelled_on}}
                 <input type="text" c value="{{showOrder.items.status}}" class="form-control " readonly>
+                {{/if}}
+                {{#if showOrder.items.pending}}
+                <input type="text" c value="{{showOrder.items.status}}" class="form-control " readonly>
                 {{else}}
                 <select name="status" class="form-select" id="">
-                    <option value="{{showOrder.items.status}}">{{showOrder.items.status}}</option>
+                    {{!-- showOrder.items.delivered = false;
+                    showOrder.items.pending = false;
+                    showOrder.items.out_forDelivery = true;
+                    showOrder.items.shipped = false;
+                    showOrder.items.confirmed = false; --}}
+                    {{#if showOrder.items.confirmed}}
                     <option value="Shipped">Shipped</option>
+                    {{/if}}
+                    {{#if showOrder.items.shipped}}
                     <option value="Out for Delivery">Out for Delivery</option>
+                    {{/if}}
+                    {{#if showOrder.items.out_forDelivery}}
                     <option value="Delivered">Delivered</option>
+                    {{/if}}
                 </select>
             </div>
             {{/if}}
             <div class="col-md-6">
                 {{#if showOrder.items.cancelled_on}}
-                <a href="/admin/orders"><input type="none" value="back to orders" class="form-control mt-2 btn add-btn " readonly></a>
+                <a href="/admin/orders"><input type="none" value="back to orders" class="form-control mt-2 btn add-btn "
+                        readonly></a>
+                {{/if}}
+                {{#if showOrder.items.pending}}
+                <a href="/admin/orders"><input type="none" value="back to orders" class="form-control mt-2 btn add-btn "
+                        readonly></a>
                 {{else}}
                 <label for="form-control "></label>
                 <input type="submit" value="Update Status" class="form-control mt-2 btn add-btn ">

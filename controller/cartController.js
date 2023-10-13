@@ -228,7 +228,8 @@ const render_checkout = async (req, res) => {
             success: true,
             total: totalAmount,
             coupen_id: coupen._id,
-            discount: coupen.discount
+            discount: coupen.discount,
+            coupen_code: coupen.coupon_code
         })
     }
 
@@ -289,6 +290,7 @@ const place_order = async (req, res) => {
         );
         if (coupon) {
             let dicount = req.body.discount
+            let coupen_code = req.body.coupen_code
             for (let i = 0; i < cartList.length; i++) {
                 items.push({
                     product_id: cartList[i].cart.product_id,
@@ -303,9 +305,11 @@ const place_order = async (req, res) => {
                 address: address,
                 payment_method: req.body.payment_method,
                 total_amount: parseInt(req.body.price),
+                status: status,
                 coupon: {
                     coupon_id: couponId,
-                    discount: dicount
+                    discount: dicount,
+                    code: coupen_code
                 }
             }
         }
@@ -323,6 +327,7 @@ const place_order = async (req, res) => {
             customer_id: customer_id,
             items: items,
             address: address,
+            status: status,
             payment_method: req.body.payment_method,
             total_amount: parseInt(req.body.price)
         }

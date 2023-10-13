@@ -16,14 +16,14 @@ const add_product = async (req, res) => {
             })
         });
 
-        let PrimaryImage ;
+        let PrimaryImage;
         req.files.primaryImage.forEach((e) => {
             PrimaryImage = {
-                name:e.filename,
-                path:e.path
+                name: e.filename,
+                path: e.path
             }
         });
-        
+
         const product = new Product({
             product_name: req.body.product_name,
             brand_name: req.body.brand_name,
@@ -40,7 +40,7 @@ const add_product = async (req, res) => {
         const saved = await product.save()
         req.flash('success', 'New product Added Sucessfully');
         res.json({
-            success:true
+            success: true
         })
     } catch (error) {
         res.status(400).send(error)
@@ -185,7 +185,6 @@ const update_product = async (req, res) => {
             const secodaryimagejs = req.files.images
 
             if (secodaryimagejs) {
-
                 for (let i = 0; i < secodaryimagejs.length; i++) {
                     if (id_secondary_img[i] == secondaryImage[i]._id) {
                         secondaryImage[i].name = secodaryimagejs[i].filename;
@@ -198,7 +197,7 @@ const update_product = async (req, res) => {
 
         const categoryID = new mongoose.Types.ObjectId(req.body.category)
         product.product_name = req.body.product_name;
-        product.brand_name = req.body.brand_name;   
+        product.brand_name = req.body.brand_name;
         product.description = req.body.description;
         product.category_id = categoryID;
         product.stock = req.body.stock;

@@ -19,109 +19,15 @@ const render_user_orders = async (req, res) => {
         {
             $project: {
                 _id: 1,
-                customer_id: 1,
                 items: 1,
                 address: 1,
                 payment_method: 1,
                 status: 1,
-                createdAt: 1
-            }
-        },
-        {
-            $unwind: { path: '$items' }
-        },
-        {
-            $lookup: {
-                from: 'products',
-                localField: 'items.product_id',
-                foreignField: '_id',
-                as: 'products'
-            }
-        },
-        {
-            $unwind: { path: '$products' }
-        },
-        {
-            $project: {
-                _id: 1,
-                'products.product_name': 1,
-                'products.primary_image': 1,
-                'products._id': 1,
-                items: 1,
-                address: 1,
-                payment_method: 1,
-                status: 1,
-                createdAt: 1
+                createdAt: 1,
+                coupon: 1
             }
         }
     ]);
-
-    // Function to format a date to a desired string format
-    function formatDate(date) {
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true // Include AM/PM
-        });
-    }
-
-    // Loop through the array and format the dates
-    for (const order of orderDetails) {
-        order.createdAt = formatDate(order.createdAt);
-
-        if (order.items.shipped_on) {
-            order.items.shipped_on = formatDate(order.items.shipped_on);
-        }
-        if (order.items.out_for_delivery) {
-            order.items.out_for_delivery = formatDate(order.items.out_for_delivery);
-        }
-        if (order.items.delivered_on) {
-            order.items.delivered_on = formatDate(order.items.delivered_on);
-        }
-        if (order.items.cancelled_on) {
-            order.items.cancelled_on = formatDate(order.items.cancelled_on);
-        }
-
-        switch (order.items.status) {
-            case 'confirmed':
-                order.items.track = 15;
-                order.items.ordered = true;
-                order.items.delivered = false;
-                order.items.cancelled = false;
-                break;
-            case 'Shipped':
-                order.items.track = 38;
-                order.items.ordered = true;
-                order.items.delivered = false;
-                order.items.cancelled = false;
-                break;
-            case 'Out for Delivery':
-                order.items.track = 65;
-                order.items.ordered = true;
-                order.items.delivered = false;
-                order.items.cancelled = false;
-                break;
-            case 'Delivered':
-                order.items.track = 100;
-                order.items.ordered = false;
-                order.items.cancelled = false;
-                order.items.delivered = true;
-                break;
-            case 'cancelled':
-                order.items.track = 0;
-                order.items.ordered = false;
-                order.items.cancelled = true;
-                order.items.delivered = false;
-                break;
-            default:
-                order.items.track = 0;
-                order.items.pending = true;
-        }
-    }
     orderDetails = orderDetails.reverse();
     let arr = [];
     for (let i = 1; i < orderDetails.length / 4 + 1; i++) {
@@ -135,7 +41,92 @@ const render_user_orders = async (req, res) => {
         orderDetails = orderDetails.slice(0, 4);
     }
     let last = arr[arr.length - 1];
+
+
     res.render('user/order', { user: true, arr, last, User: true, orderDetails, footer: true })
+}
+
+const render_order_details = async (req, res) => {
+    let order_id = new mongoose.Types.ObjectId(req.params.id);
+    let orderDetails = await Order.aggregate([
+        {
+            $match: {
+                _id: order_id
+            }
+        },
+        {
+            $unwind: "$items"
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'items.product_id',
+                foreignField: '_id',
+                as: "products"
+            }
+        },
+        {
+            $unwind: "$products"
+        }
+    ]);
+
+    // Loop through the array and format the dates
+    for (const order of orderDetails) {
+        switch (order.items.status) {
+            case 'confirmed':
+                order.items.track = 15;
+                order.items.ordered = true;
+                order.items.delivered = false;
+                order.items.cancelled = false;
+                order.items.shipped = false;
+                order.items.outdelivery = false;
+                order.items.return = false;
+                break;
+            case 'Shipped':
+                order.items.track = 38;
+                order.items.ordered = true;
+                order.items.delivered = false;
+                order.items.cancelled = false;
+                order.items.shipped = true;
+                order.items.outdelivery = false;
+                order.items.return = false;
+
+                break;
+            case 'Out for Delivery':
+                order.items.track = 65;
+                order.items.ordered = true;
+                order.items.delivered = false;
+                order.items.cancelled = false;
+                order.items.shipped = false;
+                order.items.outdelivery = true;
+                order.items.return = false;
+                break;
+            case 'Delivered':
+                order.items.track = 100;
+                order.items.ordered = false;
+                order.items.cancelled = false;
+                order.items.shipped = false;
+                order.items.delivered = true;
+                order.items.outdelivery = false;
+                order.items.return = true;
+                break;
+            case 'cancelled':
+                order.items.track = 0;
+                order.items.ordered = false;
+                order.items.cancelled = true;
+                order.items.delivered = false;
+                order.items.shipped = false;
+                order.items.outdelivery = false;
+                order.items.return = false;
+                break;
+            default:
+                order.items.track = 0;
+                order.items.pending = true;
+        }
+    }
+
+
+    res.render('user/order-details', { User: true, orderDetails, footer: true, user: true });
 }
 
 //cancel order function
@@ -353,5 +344,6 @@ const get_invoice = async (req, res) => {
 module.exports = {
     render_user_orders,
     cancel_order,
-    get_invoice
+    get_invoice,
+    render_order_details
 }

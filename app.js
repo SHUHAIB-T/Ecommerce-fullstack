@@ -64,25 +64,11 @@ const xhbs = hbs.create({
 
 app.engine('hbs', xhbs.engine);
 
-// app.engine('hbs', hbs.engine({
-//   layoutsDir: __dirname + '/views/layouts',
-//   extname: 'hbs',
-//   defaultLayout: 'layout',
-//   partialsDir: __dirname + '/views/partials',
-//   runtimeOptions: {
-//     allowProtoPropertiesByDefault: true,
-//     allowProtoMethodsByDefault: true,
-//   }
-// }));
-
 handlebars.registerHelper('toDateAndTime', function (date) {
   date = new Date(date);
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // Months are zero-based, so add 1
   const day = date.getDate();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
 
   const timeString = date.toLocaleTimeString('en-US', {
     hour: 'numeric',
@@ -91,7 +77,7 @@ handlebars.registerHelper('toDateAndTime', function (date) {
     hour12: false
   });
 
-  return `${year}-${month}-${day} ${timeString}`;
+  return `${day}-${month}-${year} ${timeString}`;
 });
 
 handlebars.registerHelper('checkSatatus', function (status, options) {

@@ -46,30 +46,33 @@ $(document).ready(function () {
             let _id = document.getElementById('user_id').value;
 
             let name = document.getElementById('user_name').value;
-            let email = document.getElementById('user_email').value;
             let mobile = document.getElementById('user_mobile').value;
 
             let namerr = document.getElementById('name-Err');
-            let mailerr = document.getElementById('mail-Err');
             let phonerr = document.getElementById('phone-Err');
 
             namerr.textContent = '';
-            mailerr.textContent = '';
-            mailerr.textContent = '';
+            function isValidPhoneNumber(phoneNumber) {
+                if (!/^\d{10}$/.test(phoneNumber)) {
+                    return false;
+                }
+                const firstDigit = phoneNumber.charAt(0);
+                if(phoneNumber.split('').every(digit => digit === firstDigit)){
+                    return false;
+                }
+                return true;
+            }
 
-            let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
 
             switch (true) {
                 case name === '': namerr.textContent = 'this Field is required';
                     break;
-                case regex.test(email) != true: mailerr.textContent = 'Enter a Valid mail Id';
-                    break;
-                case mobile.length != 10: phonerr.textContent = 'Enter a valid Number';
+                    ;
+                case !isValidPhoneNumber(mobile): phonerr.textContent = 'Enter a valid Number';
                     break;
                 default:
                     let payload = {
                         user_name: name,
-                        user_email: email,
                         user_mobile: mobile
                     }
                     await fetch(`/my-account/update-detail/${_id}`, {

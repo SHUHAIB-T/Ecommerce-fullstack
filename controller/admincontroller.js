@@ -233,6 +233,24 @@ const get_orders = async (req, res) => {
         }
     });
 
+    console.log(orderDetails)
+    orderDetails.forEach((e) => {
+        if (e.items.status === "cancelled") {
+            e.items.cancelled = true;
+            e.items.delivered = false;
+            e.items.all = false;
+        } else if (e.items.status === "Delivered") {
+            e.items.cancelled = false;
+            e.items.delivered = true;
+            e.items.all = false;
+        } else {
+            e.items.all = true;
+            e.items.cancelled = false;
+            e.items.delivered = false;
+        }
+    });
+    console.log(orderDetails)
+
     const admin = res.locals.admin;
 
     res.render('admin/orders', { admin: true, success: req.flash('success')[0], error: req.flash('error')[0], orderDetails, Admin: admin })
@@ -311,6 +329,39 @@ const render_change_order_status = async (req, res) => {
 
     const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
 
+    if (showOrder.items.status === "Delivered") {
+        showOrder.items.delivered = true;
+        showOrder.items.pending = false;
+        showOrder.items.out_forDelivery = false;
+        showOrder.items.shipped = false;
+        showOrder.items.confirmed = false;
+    } else if (showOrder.items.status === "pending") {
+        showOrder.items.delivered = false;
+        showOrder.items.pending = true;
+        showOrder.items.out_forDelivery = false;
+        showOrder.items.shipped = false;
+        showOrder.items.confirmed = false;
+    } else if (showOrder.items.status === "confirmed") {
+        showOrder.items.delivered = false;
+        showOrder.items.pending = false;
+        showOrder.items.out_forDelivery = false;
+        showOrder.items.shipped = false;
+        showOrder.items.confirmed = true;
+    } else if (showOrder.items.status === "Shipped") {
+        showOrder.items.delivered = false;
+        showOrder.items.pending = false;
+        showOrder.items.out_forDelivery = false;
+        showOrder.items.shipped = true;
+        showOrder.items.confirmed = false;
+    } else if (showOrder.items.status === "Out for Delivery") {
+        showOrder.items.delivered = false;
+        showOrder.items.pending = false;
+        showOrder.items.out_forDelivery = true;
+        showOrder.items.shipped = false;
+        showOrder.items.confirmed = false;
+    }
+
+    console.log(showOrder)
     res.render('admin/order_status', { admin: true, showOrder, Admin: admin })
 }
 

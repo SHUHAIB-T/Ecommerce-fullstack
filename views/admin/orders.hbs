@@ -43,12 +43,16 @@
             {{this.items.price}}
           </td>
           <td {{#if this.items.cancelled_on}} class="text-danger fw-bold" {{/if}}>{{this.items.status}}</td>
-          <td><a href="/admin/orders/view-invoice?productId={{this.items.product_id}}&orderId={{this._id}}">view</a></td>
+          <td><a href="/admin/orders/view-invoice?productId={{this.items.product_id}}&orderId={{this._id}}">view</a>
+          </td>
           <td>
-            {{#if this.items.cancelled_on}}
-            <a style="text-decoration: none;" class=" px-4 btn btn-danger"
-              href="/admin/manage-order?productId={{this.items.product_id}}&orderId={{this._id}}">View</a>
-            {{else}}
+            {{#if this.items.delivered}}
+            <p>delivered</p>
+            {{/if}}
+            {{#if this.items.cancelled}}
+            <p>Cancelled</p>
+            {{/if}}
+            {{#if this.items.all}}
             <a style="text-decoration: none;" class=" btn add-btn"
               href="/admin/manage-order?productId={{this.items.product_id}}&orderId={{this._id}}">manage</a>
             {{/if}}
@@ -59,4 +63,3 @@
     </table>
   </div>
 </section>
-

@@ -8,19 +8,14 @@
         <form>
             <div class="row col-md-8">
                 <div id="name-Err" class=" text-danger"></div>
-                <input id="user_name" type="text" value="{{userData.user_name}}" class="form-control" >
+                <input id="user_name" type="text" value="{{userData.user_name}}" class="form-control">
                 <label for="form">Name</label>
             </div>
-            {{!-- <div class="row col-md-8">
-                <div id="mail-Err" class=" text-danger"></div>
-                <input id="user_email" type="Email" autocomplete="on" value="{{userData.user_email}}"
-                    class="form-control ">
-                <input id="user_id" type="hidden" autocomplete="on" value="{{userData._id}}" class="form-control ">
-                <label for="form">Email</label>
-            </div> --}}
+            
+            <input id="user_id" type="hidden" autocomplete="on" value="{{userData._id}}" class="form-control ">
             <div class="row col-md-8">
                 <div id="phone-Err" class=" text-danger"></div>
-                <input id="user_mobile" type="text" autocomplete="on" value="{{userData.user_mobile}}"
+                <input id="user_mobile" type="number" autocomplete="on" value="{{userData.user_mobile}}"
                     class="form-control ">
                 <label for="form">Phone</label>
             </div>
@@ -34,14 +29,14 @@
                 <label class="pass" for="form">Enter your Current Password</label>
             </div>
 
-            <div  class="row confirm_new_pass col-md-8">
+            <div class="row confirm_new_pass col-md-8">
                 <div id="new_pass_err" class=" text-danger"></div>
-                <input id="new_password_id" type="password" value="" class="new_password form-control" >
+                <input id="new_password_id" type="password" value="" class="new_password form-control">
                 <label for="form">Enter Password</label>
             </div>
             <div class="row confirm_new_pass col-md-8">
                 <div id="confim_pass_err" class=" text-danger"></div>
-                <input id="confirm_new_pass_id" type="password" value="" class="confirm_new_pass form-control" >
+                <input id="confirm_new_pass_id" type="password" value="" class="confirm_new_pass form-control">
                 <label for="form">Confirm Password</label>
             </div>
             <div class="row ms-1 d-flex">

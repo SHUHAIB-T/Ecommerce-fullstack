@@ -58,7 +58,14 @@ const order_schema = new Schema({
         },
         discount: {
             type: Number
+        },
+        code: {
+            type: String
         }
+    },
+    status: {
+        type: String,
+        required: true
     }
 },
     {
