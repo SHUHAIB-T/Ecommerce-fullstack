@@ -31,6 +31,11 @@ $("#new-coupon").validate({
         exp_date: {
             required: true,
         },
+        min_amount: {
+            required: true,
+            number: true,
+            positive: true,
+        },
         max_count: {
             required: true,
             number: true,

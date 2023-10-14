@@ -2,6 +2,20 @@ $(document).ready(() => {
     $('.add-form').hide();
     $('.payment-options').hide();
 
+    $('.description').hide();
+    $('.know-less').hide();
+    $('.know-more').on('click', () => {
+        $('.description').show();
+        $('.know-more').hide();
+        $('.know-less').show();
+    });
+    $('.know-less').on('click', () => {
+        $('.description').hide();
+        $('.know-more').show();
+        $('.know-less').hide();
+    })
+
+
     //add new Address form display
     const addAddress = document.getElementById('addAddress');
     if (addAddress) {
@@ -110,18 +124,10 @@ $(document).ready(() => {
 
     $('.coupenss').hide();
     $('#checkCoupen').on('click', () => {
-        let total = document.getElementById('price').value;
-        if (total < 15000) {
-            Swal.fire(
-                "Oops!",
-                "coupen Available only above 15000",
-                "error"
-            )
-        } else {
-            $('.coupenss').show();
-            $('#proceedPayment').hide();
-            $('#submitOrder').hide();
-        }
+
+        $('.coupenss').show();
+        $('#proceedPayment').hide();
+        $('#submitOrder').hide();
 
     });
     $('#back').on('click', () => {
@@ -135,7 +141,8 @@ $(document).ready(() => {
     // apply coupen 
     applayCoupen = async (id) => {
         // /cart/checkout
-        await fetch(`/cart/checkout?coupen=${id}`)
+        let total = document.getElementById('price').value;
+        await fetch(`/cart/checkout?coupen=${id}&total=${total}`)
             .then((response) => response.json())
             .then(data => {
                 if (data.success) {
@@ -157,6 +164,12 @@ $(document).ready(() => {
                     $('.coupenss').hide();
                     $('#proceedPayment').show();
                     $('#submitOrder').show();
+                } else {
+                    Swal.fire(
+                        'Oops',
+                        `You need a minimum purchase of ₹${data.min_amount} to apply this coupon.`,
+                        'Err'
+                    );
                 }
             })
     }

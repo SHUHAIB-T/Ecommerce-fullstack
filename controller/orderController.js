@@ -223,11 +223,8 @@ const cancel_order = async (req, res) => {
             ]);
 
             let count = quantity[0].quantity
-
-            //reduce the stock count 
-            for (let i = 0; i < items.length; i++) {
-                await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: items[i].quantity } })
-            }
+            const updateStock = await Product.updateOne({ _id: product_id }, { $inc: { stock: count } });
+            
             res.json({
                 success: true,
             })

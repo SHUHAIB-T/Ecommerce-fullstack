@@ -231,9 +231,13 @@
             </div>
             <div class="d-flex justify-content-between align-items-center">
                 <p class="text-success fw-bold">Discount: {{this.discount}}% </p>
-                <p class="fw-bold text-secondary">EXP: {{this.exp_date}}</p>
+                <p class="fw-bold text-secondary">EXP: {{this.exp_date}}<br>
+                    <span class="fw-bold text-secondary">Min: ₹{{this.min_amount}}</span>
+                </p>
             </div>
-            <p class="text-secondary fw-normal">{{this.discription}} </p>
+            <p class="text-secondary description fw-normal">{{this.discription}} </p>
+            <div role="button" class="text-primary know-more h6">show more</div>
+            <div role="button" class="text-primary know-less h6">show less</div>
         </div>
         {{/each}}
     </div>

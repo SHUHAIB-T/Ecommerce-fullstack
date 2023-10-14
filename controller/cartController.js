@@ -221,16 +221,24 @@ const render_checkout = async (req, res) => {
     })
 
     if (req.query.coupen) {
+        const total = req.query.total;
         const coupen = await Coupen.findOne({ _id: req.query.coupen });
-        let dicount = coupen.discount;
-        totalAmount = totalAmount - (totalAmount * dicount / 100);
-        res.json({
-            success: true,
-            total: totalAmount,
-            coupen_id: coupen._id,
-            discount: coupen.discount,
-            coupen_code: coupen.coupon_code
-        })
+        if (coupen.min_amount <= total) {
+            let dicount = coupen.discount;
+            totalAmount = totalAmount - (totalAmount * dicount / 100);
+            res.json({
+                success: true,
+                total: totalAmount,
+                coupen_id: coupen._id,
+                discount: coupen.discount,
+                coupen_code: coupen.coupon_code
+            });
+        } else {
+            res.json({
+                success: false,
+                min_amount: coupen.min_amount
+            })
+        }
     }
 
 

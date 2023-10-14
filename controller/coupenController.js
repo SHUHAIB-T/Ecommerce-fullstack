@@ -31,6 +31,7 @@ const create_new_coupen = async (req, res) => {
         start_date: req.body.start_date,
         exp_date: req.body.exp_date,
         max_count: req.body.max_count,
+        min_amount: req.body.min_amount,
         used_count: req.body.used_count,
         discription: req.body.discription,
     });

@@ -21,6 +21,10 @@ const couponSchema = new Schema(
             type: Date,
             required: true,
         },
+        min_amount: {
+            type: Number,
+            required: true
+        },
         max_count: {
             type: Number,
             required: true,
@@ -47,4 +51,4 @@ const couponSchema = new Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model('Coupen',couponSchema);
+module.exports = mongoose.model('Coupen', couponSchema);
