@@ -41,8 +41,7 @@ const render_user_orders = async (req, res) => {
     }
     let last = arr[arr.length - 1];
 
-
-    res.render('user/order', { user: true, arr, last, User: true, orderDetails, footer: true })
+    res.render('user/order', { user: true, arr, last, User: true, orderDetails, footer: true });
 }
 
 const render_order_details = async (req, res) => {
