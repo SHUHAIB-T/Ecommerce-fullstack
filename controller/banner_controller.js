@@ -16,8 +16,6 @@ const render_new_banners_page = async (req, res) => {
 
 //create new banner
 const create_new_banner = async (req, res) => {
-    console.log(req.body)
-    console.log(req.files)
     const banner = new Banner({
         banner_name: req.body.banner_name,
         reference: req.body.reference,

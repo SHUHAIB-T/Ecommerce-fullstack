@@ -130,7 +130,8 @@ const render_order_details = async (req, res) => {
 
 //cancel order function
 const cancel_order = async (req, res) => {
-    let user_id = res.locals.userData._id;
+    const user = res.locals.userData;
+    let user_id = user._id;
     let product_id = new mongoose.Types.ObjectId(req.params.product_id);
     let order_id = new mongoose.Types.ObjectId(req.params.order_id);
 
@@ -189,6 +190,8 @@ const cancel_order = async (req, res) => {
                 ]);
 
                 const wallet = price[0].price;
+                // updating wallet
+                const updateWallet = await User.findByIdAndUpdate({ _id: user_id }, { $set: { user_wallet: parseFloat(user.user_wallet) + parseInt(wallet) } });
 
                 // Marking in wallet history
                 const newHistoryItem = {
@@ -196,6 +199,8 @@ const cancel_order = async (req, res) => {
                     status: "Credit",
                     time: Date.now()
                 };
+
+                const MarkWallet = await User.findByIdAndUpdate({ _id: user_id }, { $push: { wallet_history: newHistoryItem } });
 
 
             }
@@ -224,7 +229,7 @@ const cancel_order = async (req, res) => {
 
             let count = quantity[0].quantity
             const updateStock = await Product.updateOne({ _id: product_id }, { $inc: { stock: count } });
-            
+
             res.json({
                 success: true,
             })
@@ -236,8 +241,9 @@ const cancel_order = async (req, res) => {
 
 // cancel all prodcts
 const cancel_all_order = async (req, res) => {
+    const user = res.locals.userData;
+    let user_id = user._id;
     const order_id = req.params.order_id;
-
     const updateOrder = await Order.updateOne(
         { _id: order_id },
         {
@@ -255,12 +261,24 @@ const cancel_all_order = async (req, res) => {
 
         let order = await Order.findById({ _id: order_id });
 
+        // changin the quantity of All products
+        let items = await Order.find(
+            { _id: order_id },
+            { _id: 0, items: 1 }
+        );
+        let arrayItem = items[0].items;
+        for (const item of arrayItem) {
+            let product_id = item.product_id;
+            let Quantity = item.quantity;
+            await Product.findByIdAndUpdate({ _id: product_id }, { $inc: { stock: Quantity } });
+        }
+
         //adding money to wallet if it is online payment
         if (order.payment_method === 'Online Payment' || order.payment_method === 'wallet') {
             let price = await Order.aggregate([
                 {
                     $match: {
-                        _id: order_id
+                        _id: new mongoose.Types.ObjectId(order_id)
                     }
                 },
                 {
@@ -270,8 +288,10 @@ const cancel_all_order = async (req, res) => {
                     }
                 }
             ]);
+            const wallet = price[0].total_amount;
 
-            const wallet = price[0].price;
+            // updating wallet
+            const updateWallet = await User.findByIdAndUpdate({ _id: user_id }, { $set: { user_wallet: parseFloat(user.user_wallet) + parseInt(wallet) } });
 
             // Marking in wallet history
             const newHistoryItem = {
@@ -280,25 +300,10 @@ const cancel_all_order = async (req, res) => {
                 time: Date.now()
             };
 
+            const marckWallet = await User.findByIdAndUpdate({ _id: user_id }, { $push: { wallet_history: newHistoryItem } });
+
 
         }
-        let quantity = await Order.aggregate([
-            {
-                $match: {
-                    _id: order_id
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    quantity: '$items.quantity'
-                }
-            }
-        ]);
-
-        let count = quantity[0].quantity
-
-
         res.json({
             success: true,
         })
