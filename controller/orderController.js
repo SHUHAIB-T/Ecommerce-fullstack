@@ -426,7 +426,7 @@ const get_invoice = async (req, res) => {
         res.setHeader("Content-Disposition", `attachment; filename=invoice.pdf`);
         pdfStream.pipe(res);
     }).catch((error) => {
-        console.error(error);
+        console.error("this is the error",error);
         res.status(500).send("Error generating the PDF");
     });
 }
