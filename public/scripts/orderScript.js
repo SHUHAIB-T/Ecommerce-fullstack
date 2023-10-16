@@ -62,41 +62,4 @@ $(document).ready(() => {
         });
     }
 
-    // download invoice
-    // /user/orders/get-invoice?productId={{this.items.product_id}}&orderId={{this._id}}
-    downloadInvoice = async (product_id, order_id) => {
-        let timerInterval
-        Swal.fire({
-            title: 'downloading...',
-            timer: 1000,
-            timerProgressBar: true,
-            didOpen: () => {
-                Swal.showLoading()
-            },
-            willClose: () => {
-                clearInterval(timerInterval)
-            }
-        }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-                console.log('I was closed by the timer')
-            }
-        })
-        try {
-            await fetch(`/orders/get-invoice?productId=${product_id}&orderId=${order_id}`, {
-                method: 'GET',
-            }).then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'invoice.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                })
-        } catch (err) {
-            console.log("Error:" + err);
-        }
-    }
-
 })

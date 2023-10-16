@@ -39,9 +39,11 @@
             <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2"
                 value="Need Help?">
             {{/if}}
-            {{#if this.items.delivered}}<button onclick="downloadInvoice('{{this.items.product_id}}','{{this._id}}')"
-                class="text-center btn bg-light text-primary py-2 px-4"> <i class="fa-solid fa-download"></i>
-                Download Invoice</button>
+            {{#if this.items.delivered}}<a
+                href="/orders/get-invoice?productId={{this.items.product_id}}&orderId={{this._id}}"
+                class="text-center btn bg-light text-primary text-decoration-none py-2 px-4"> <i
+                    class="fa-solid fa-download"></i>
+                Download Invoice</a>
             {{/if}}
         </div>
         <div class="row d-flex align-items-center">
