@@ -1,5 +1,6 @@
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
+const Return = require('../models/returnSchema');
 const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const pdf = require("pdf-creator-node");
@@ -407,8 +408,8 @@ const get_invoice = async (req, res) => {
         },
         childProcessOptions: {
             env: {
-                OPENSSL_CONF: '/dev/null',
-            },
+                OPENSSL_CONF: '/dev/null'
+            }
         }
     };
     const document = {
@@ -425,10 +426,48 @@ const get_invoice = async (req, res) => {
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", `attachment; filename=invoice.pdf`);
         pdfStream.pipe(res);
+        setTimeout(() => {
+            fs.unlink('./invoice.pdf', (err) => {
+                if (err) {
+                    throw new Error(err.message);
+                }
+            });
+        }, 5000);
     }).catch((error) => {
-        console.error("this is the error",error);
+        console.error("this is the error", error);
         res.status(500).send("Error generating the PDF");
     });
+}
+const return_order = async (req, res) => {
+    let orderId = req.query.order_id;
+    let product_id = req.query.product_id;
+    let user_id = res.locals.userData._id;
+    let returnDetails = {
+        order_id: orderId,
+        product_id: product_id,
+        user_id: user_id
+    }
+    res.render('user/return', { user: true, User: true, returnDetails });
+}
+
+// retun request post
+const order_return = async (req, res) => {
+    let user_id = new mongoose.Types.ObjectId(res.locals.userData.Id);
+    let retrn = new Return({
+        order_id: req.body.order_id,
+        user_id: user_id,
+        reason: req.body.reason,
+        status: "pending",
+        comment: req.body.comment
+    });
+    retrn.save()
+        .then((retrn) => {
+            console.log('Return request saved:', retrn);
+        });
+    res.json({
+        success: true
+    });
+
 }
 
 module.exports = {
@@ -436,5 +475,7 @@ module.exports = {
     cancel_order,
     get_invoice,
     render_order_details,
-    cancel_all_order
+    cancel_all_order,
+    return_order,
+    order_return
 }

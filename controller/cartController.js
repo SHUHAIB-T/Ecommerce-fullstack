@@ -501,8 +501,25 @@ const verifyPaymenet = async (req, res) => {
 }
 
 //render sucecess page 
-const order_success = (req, res) => {
-    res.render('user/orderSuccess', { user: true, footer: true });
+const order_success = async (req, res) => {
+    let user_id = new mongoose.Types.ObjectId(res.locals.userData._id);
+    let order = await Order.aggregate([
+        {
+            $match: {
+                customer_id: user_id
+            }
+        },
+        {
+            $sort: {
+                createdAt: -1
+            }
+        },
+        {
+            $limit: 1
+        }
+    ]);
+    let order_id = order[0]._id;
+    res.render('user/orderSuccess', { order: order_id, user: true, footer: true });
 }
 
 //prevent going back to checkout page

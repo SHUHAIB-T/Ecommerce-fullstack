@@ -1,0 +1,30 @@
+<style>
+    .error {
+        color: red;
+    }
+</style>
+<div class="container mt-3">
+    <div class="headind">
+        <p class="h3 fw-bold user-text">Return?</p>
+    </div>
+    <form id="return_form" class="card px-3 py-2 row">
+        <div class="col-md-12">
+            <input class="form-control" type="hidden" id="order_id" name="order_id" value="{{returnDetails.order_id}}">
+            <input class="form-control" type="hidden" name="product_id" value="{{returnDetails.product_id}}">
+        </div>
+        <label for="reason" class="fw-bold">Reason for return</label>
+        <select class="col-md-6 form-select" id="reason" name="reason">
+            <option value=""></option>
+            <option value="wrong-item">Wrong Item Received</option>
+            <option value="defective-damaged">Defective or Damaged Product</option>
+            <option value="changed-mind">Changed Mind</option>
+            <option value="size-fit-issue">Size or Fit Issue</option>
+        </select>
+        <label for="comment" class="fw-bold">Comment</label>
+        <textarea name="comment" id="comment" class="col-md-8 form-control" rows="4"></textarea>
+        <div class="button-wrapper mt-2 col-md-6">
+            <input type="submit" class="btn add-btn" value="Send Return Request">
+            <input type="reset" class="btn clear-btn" value="clear">
+        </div>
+    </form>
+</div>

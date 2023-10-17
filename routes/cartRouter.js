@@ -32,6 +32,6 @@ router.post('/place-order', authenicateUser, place_order);
 
 router.post('/verify-payment', authenicateUser, verifyPaymenet)
 
-router.get('/order-success', order_success)
+router.get('/order-success', authenicateUser, order_success)
 
 module.exports = router;

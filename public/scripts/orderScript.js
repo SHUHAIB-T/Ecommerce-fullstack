@@ -62,4 +62,34 @@ $(document).ready(() => {
         });
     }
 
+
+    // return order 
+    $("#return_form").validate({
+        rules: {
+            reason: {
+                required: true
+            },
+            comment: {
+                required: true
+            }
+        },
+        submitHandler: async () => {
+            let form = document.getElementById('return_form');
+            let order_id = document.getElementById('order_id').ariaValueMax;
+            let fomrdata = new FormData(form);
+            let payload = Object.fromEntries(fomrdata);
+            await fetch('/ordes/order-return', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.assign(`/orders/order-details/${order_id}`)
+                    }
+                })
+        }
+
+    });
+
 })
