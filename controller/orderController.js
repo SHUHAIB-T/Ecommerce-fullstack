@@ -99,7 +99,7 @@ const render_order_details = async (req, res) => {
                 order.items.ordered = true;
                 order.items.delivered = false;
                 order.items.cancelled = false;
-                order.items.shipped = false;
+                order.items.shipped = true;
                 order.items.outdelivery = true;
                 order.items.return = false;
                 order.items.inReturn = false;
@@ -109,9 +109,9 @@ const render_order_details = async (req, res) => {
                 order.items.track = 100;
                 order.items.ordered = false;
                 order.items.cancelled = false;
-                order.items.shipped = false;
+                order.items.shipped = true;
                 order.items.delivered = true;
-                order.items.outdelivery = false;
+                order.items.outdelivery = true;
                 order.items.return = true;
                 order.items.inReturn = false;
                 order.items.needHelp = false;
@@ -147,7 +147,7 @@ const render_order_details = async (req, res) => {
             }
         }
     }
-
+    
     res.render('user/order-details', { User: true, orderDetails, footer: true, user: true });
 }
 
