@@ -37,7 +37,12 @@
                 href="/orders/return-order?order_id={{this._id}}&product_id={{this.items.product_id}}">
                 <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2"
                     value="Return?"></a>
-            {{else}}
+            {{/if}}
+            {{#if this.items.inReturn}}
+            <input role="button" readonly type="none" class="text-center btn bg-secondary text-warning py-2 px-2"
+                value="Return: {{this.items.status}}">
+            {{/if}}
+            {{#if this.items.needHelp}}
             <input role="button" readonly type="none" class="text-center btn bg-light text-primary py-2 px-2"
                 value="Need Help?">
             {{/if}}

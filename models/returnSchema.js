@@ -9,6 +9,9 @@ const returnRequestSchema = new Schema({
         type: ObjectId,
         ref: 'orders'
     },
+    product_id: {
+        type: ObjectId,
+    },
     user_id: {
         type: ObjectId,
         ref: 'users'

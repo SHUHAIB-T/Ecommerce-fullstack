@@ -24,6 +24,7 @@ const customerRouter = require('./routes/customer_router');
 const salesRoute = require('./routes/sales_route');
 const coupensRoute = require('./routes/coupen_route');
 const bannerRoute = require('./routes/banner_route');
+const notificationRoute = require('./routes/notification_route');
 
 //user routers 
 const userRouter = require('./routes/userRouter');
@@ -116,6 +117,7 @@ app.use('/admin/customers', customerRouter);
 app.use('/admin/sales-report', salesRoute);
 app.use('/admin/coupens', coupensRoute);
 app.use('/admin/banners', bannerRoute);
+app.use('/admin/notificatons', notificationRoute);
 
 //error handling
 app.use(notFound);

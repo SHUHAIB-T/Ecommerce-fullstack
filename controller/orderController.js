@@ -80,6 +80,8 @@ const render_order_details = async (req, res) => {
                 order.items.shipped = false;
                 order.items.outdelivery = false;
                 order.items.return = false;
+                order.items.inReturn = false;
+                order.items.needHelp = true;
                 break;
             case 'Shipped':
                 order.items.track = 38;
@@ -89,7 +91,8 @@ const render_order_details = async (req, res) => {
                 order.items.shipped = true;
                 order.items.outdelivery = false;
                 order.items.return = false;
-
+                order.items.inReturn = false;
+                order.items.needHelp = true;
                 break;
             case 'Out for Delivery':
                 order.items.track = 65;
@@ -99,6 +102,8 @@ const render_order_details = async (req, res) => {
                 order.items.shipped = false;
                 order.items.outdelivery = true;
                 order.items.return = false;
+                order.items.inReturn = false;
+                order.items.needHelp = true;
                 break;
             case 'Delivered':
                 order.items.track = 100;
@@ -108,6 +113,8 @@ const render_order_details = async (req, res) => {
                 order.items.delivered = true;
                 order.items.outdelivery = false;
                 order.items.return = true;
+                order.items.inReturn = false;
+                order.items.needHelp = false;
                 break;
             case 'cancelled':
                 order.items.track = 0;
@@ -117,13 +124,29 @@ const render_order_details = async (req, res) => {
                 order.items.shipped = false;
                 order.items.outdelivery = false;
                 order.items.return = false;
+                order.items.inReturn = false;
+                order.items.needHelp = true;
                 break;
             default:
                 order.items.track = 0;
                 order.items.pending = true;
+                order.items.inReturn = false;
         }
     }
+    const isInReturn = await Return.findOne({ order_id: order_id });
+    if (isInReturn) {
+        for (const order of orderDetails) {
+            const orderProductId = (await order.items.product_id).toString();
+            const returnProductId = (await isInReturn.product_id).toString();
 
+            if (orderProductId === returnProductId) {
+                order.items.inReturn = true;
+                order.items.return = false;
+                order.items.needHelp = false;
+                order.items.status = isInReturn.status;
+            }
+        }
+    }
 
     res.render('user/order-details', { User: true, orderDetails, footer: true, user: true });
 }
@@ -452,10 +475,11 @@ const return_order = async (req, res) => {
 
 // retun request post
 const order_return = async (req, res) => {
-    let user_id = new mongoose.Types.ObjectId(res.locals.userData.Id);
+    let user_id = new mongoose.Types.ObjectId(res.locals.userData._id);
     let retrn = new Return({
         order_id: req.body.order_id,
         user_id: user_id,
+        product_id: req.body.product_id,
         reason: req.body.reason,
         status: "pending",
         comment: req.body.comment

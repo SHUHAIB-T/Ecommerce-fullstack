@@ -1,0 +1,100 @@
+<section style="width: 100vw;" class="category d-flex mt-2">
+    <div class="object-fit-contain mt-3" style="width: 98%;">
+        <div class="header d-flex justify-content-between">
+            <h3 class="h3 text-second fw-bold mb-3">Return Requests</h3>
+        </div>
+        <table style="width: 100%;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0"
+            width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm">User Name</th>
+                    <th class="th-sm">Product Name</th>
+                    <th class="th-sm">Reason</th>
+                    <th class="th-sm">Comment</th>
+                    <th class="th-sm">Status</th>
+                    <th class="th-sm">Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each returns}}
+                <tr>
+                    <td>{{this.user.user_name}}</td>
+                    <td>{{this.product.product_name}}</td>
+                    <td>{{this.reason}}</td>
+                    <td>{{this.comment}}</td>
+                    <td class="fw-bold text-primary">{{this.status}}</td>
+                    <td>
+                        <input onclick="approveReturn('{{this._id}}')" type="button" role="button"
+                            class="btn btn-success" value="Aprove">
+                        <input onclick="declineReturn('{{this._id}}')" type="button" role="button"
+                            class="btn btn-danger" value="decline">
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    $(document).ready(() => {
+        approveReturn = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure want to approve this return",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Aprove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/notificatons/approve/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    'Aproved!',
+                                    'the return request has been aproved.',
+                                    'success'
+                                ).then(() => {
+                                    location.assign('/admin/notificatons')
+                                })
+                            }
+                        })
+                }
+            })
+
+        }
+
+        //decline the request
+        declineReturn = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure want to Decline this return",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Aprove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/notificatons/decline/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    'Declined!',
+                                    'the return request has been aproved.',
+                                    'success'
+                                ).then(() => {
+                                    location.assign('/admin/notificatons')
+                                })
+                            }
+                        })
+                }
+            })
+
+        }
+    })
+</script>

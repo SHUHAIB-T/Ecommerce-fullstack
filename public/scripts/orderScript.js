@@ -73,12 +73,11 @@ $(document).ready(() => {
                 required: true
             }
         },
-        submitHandler: async () => {
-            let form = document.getElementById('return_form');
-            let order_id = document.getElementById('order_id').ariaValueMax;
+        submitHandler: async (form) => {
+            let order_id = document.getElementById('order_id').value;
             let fomrdata = new FormData(form);
             let payload = Object.fromEntries(fomrdata);
-            await fetch('/ordes/order-return', {
+            await fetch('/orders/order-return', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
