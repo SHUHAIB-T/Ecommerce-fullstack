@@ -216,6 +216,12 @@ const get_orders = async (req, res) => {
         }
     ]);
 
+    orderDetails.sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return dateB - dateA;
+    });
+
     orderDetails.forEach(obj => {
         if (obj?.createdAt) {
             obj.createdAt = formatDate(obj.createdAt);
@@ -233,7 +239,7 @@ const get_orders = async (req, res) => {
         }
     });
 
-    console.log(orderDetails)
+
     orderDetails.forEach((e) => {
         if (e.items.status === "cancelled") {
             e.items.cancelled = true;
@@ -249,7 +255,6 @@ const get_orders = async (req, res) => {
             e.items.delivered = false;
         }
     });
-    console.log(orderDetails)
 
     const admin = res.locals.admin;
 
