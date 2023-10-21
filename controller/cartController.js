@@ -462,7 +462,6 @@ const verifyPaymenet = async (req, res) => {
     let isSignatureValid = generatedSignature === req.body.razorpay_signature;
 
     if (isSignatureValid) {
-
         let customer_id = res.locals.userData._id
         //empty the cart
         await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } })

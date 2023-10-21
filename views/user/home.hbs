@@ -2,13 +2,13 @@
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
       {{#each banners}}
-      <li data-target="#carouselExampleIndicators" data-slide-to="" class="{{this.new}}"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="{{@index}}" class="{{this.new}}"></li>
       {{/each}}
     </ol>
     <div class="carousel-inner">
       {{#each banners}}
       <div class="carousel-item {{this.new}}">
-        <img  class="d-block w-100" src="/banners/{{this.image.filename}}" alt="First slide">
+        <img class="d-block w-100" src="/banners/{{this.image.filename}}" alt="First slide">
         <div class="carousel-caption d-none d-md-block">
           <input type="button" onclick="window.open('{{this.reference}}','_blank')" class="btn btn-warning"
             value="Know more..">
@@ -21,59 +21,60 @@
       <span class="sr-only">Previous</span>
     </a>
     <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="carousel-control-next-icon" ariahidden="true"></span>
       <span class="sr-only">Next</span>
     </a>
   </div>
+
   <hr>
   <div class="h3 text-center fw-bold">Watches</div>
   <hr>
 
   <div class="row">
-
     {{#each product}}
-    <div class="card ms-3 mb-3 col-md-3">
+    <div class="card ms-3 mb-3 col-lg-3 col-md-4 col-sm-6">
       <img class="card-img-top" src="/productImages/{{this.primary_image.name}}" alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{this.product_name}}</h5>
-        <p class="card-text">{{this.color}}
-          <span class="fw-bold ms-4 text-success">₹{{this.selling_price}}</span>
-          <span style="text-decoration: line-through;"
-            class="fw-nomal ms-4 text-secondary">₹{{this.actual_price}}</span>
+        <p class="card-text d-flex justify-content-between align-items-center">
+          <span>{{this.color}}</span>
+          <span class="fw-bold text-success">₹{{this.selling_price}}</span>
+          <span style="text-decoration: line-through;" class="fw-normal text-secondary">₹{{this.actual_price}}</span>
         </p>
-        <div class="ms-4">
+        <div class="d-flex justify-content-between">
           <a href="/view_product/{{this._id}}" class="btn btn-warning">Buy Now</a>
           <a onclick="addToCart('{{this._id}}')" class="btn btn-secondary">Add to Cart</a>
         </div>
       </div>
     </div>
     {{/each}}
+  </div>
 
-    {{!-- pagination part --}}
-    <div class="d-flex justify-content-center ">
-      <nav aria-label="Page navigation  example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          {{#each arr}}
-          <li class="page-item"><a id="href" class="page-link" href="/?page={{this}}">{{this}}</a></li>
-          {{/each}}
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <input id="last" type="hidden" value="{{last}}">
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        {{#each arr}}
+        <li class="page-item"><a id="href" class="page-link" href="/?page={{this}}">{{this}}</a></li>
+        {{/each}}
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <input id="last" type="hidden" value="{{last}}">
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
+
 
 <script>
 
@@ -89,21 +90,21 @@
     let page = parseInt(qParamValue);
     if (page) {
       nextPageButton.addEventListener('click', function (event) {
-        if (page >=1 && page < last) {
+        if (page >= 1 && page < last) {
           page = page + 1;
         }
         location.assign(`/?page=${page}`);
       });
 
       prevPageButton.addEventListener('click', function (event) {
-        if(page >1 && page <= last) {
+        if (page > 1 && page <= last) {
           page = page - 1;
         }
         location.assign(`/?page=${page}`);
       });
-    } else{
+    } else {
       location.assign(`/?page=1`);
     }
   });
-  
+
 </script>

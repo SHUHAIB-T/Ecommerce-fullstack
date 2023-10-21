@@ -1,92 +1,81 @@
-<div style="margin-right: 13rem;" class="d-flex flex-column ">
-    <div class="h3 fw-bold mt-3 user-text text-center py-1">
-        Account details
+<div class="container">
+  <div class="d-flex flex-column mt-3 user-text text-center py-1">
+    <h3 class="fw-bold">
+      Account Details
+    </h3>
+  </div>
+
+  <div class="card p-2 d-flex flex-row justify-content-between mt-3">
+    <div class="d-flex flex-column">
+      <p class="h5 fw-bold">
+        Name: <span class="fw-normal">{{userData.user_name}}</span>
+      </p>
+      <p class="h5 fw-bold">
+        Email: <span class="fw-normal">{{userData.user_email}}</span>
+      </p>
+      <p class="h5 fw-bold">
+        Phone: <span class="fw-normal">{{userData.user_mobile}}</span>
+      </p>
     </div>
-    <div class="card d-flex flex-row px-5 py-3 justify-content-between ">
-        <div class="div">
-            <p class="h5 fw-bold ">
-                Name: <span class="fw-normal"> {{userData.user_name}}</span>
-            </p>
-            <p class="h5 fw-bold ">
-                Email: <span class="fw-normal"> {{userData.user_email}}</span>
-            </p>
-            <p class="h5 fw-bold ">
-                Phone: <span class="fw-normal"> {{userData.user_mobile}}</span>
-            </p>
-        </div>
-        <div class="userWallet card add-btn px-3 py-1 d-flex flex-column align-items-center  justify-content-center">
-            <p style="line-height:1rem; margin-bottom:1px; " class="text-white mt-2 text-center">My Wallet</p>
-            <i class="fa-solid text-warning fa-2x fa-money-check-dollar"></i>
-            <div class="h3 fw-bold text-white ">₹{{userData.user_wallet}}.00</div>
-        </div>
+    <div class="userWallet px-4 card add-btn d-flex flex-column align-items-center justify-content-center">
+      <p class="text-white mt-2 text-center">My Wallet</p>
+      <i class="fa-solid text-warning fa-2x fa-money-check-dollar"></i>
+      <div class="h3 fw-bold text-white">₹{{userData.user_wallet}}.00</div>
     </div>
-    <div style=" max-height:200px;overflow:auto" class="card wallet-history mt-2">
-        <div class="card-title h5 mt-2 user-text text-center fw-bold">Wallet History</div>
-        <div style="width: 100%; height: 2px;" class="bg-secondary"></div>
-        {{#each userData.wallet_history}}
-        <div class="card bg-light px-5 py-2 mt-2 d-flex flex-row justify-content-between align-items-center">
-            <div class="fw-normal">{{toDateAndTime this.time}}</div>
-            {{#checkSatatus this.status}}
-            <div class="fw-bold text-danger">{{this.status}}</div>
-            <div class="fw-bold text-danger">₹{{this.amount}}</div>
-            {{else}}
-            <div class="fw-bold text-success">{{this.status}}</div>
-            <div class="fw-bold text-success ">₹{{this.amount}}</div>
-            {{/checkSatatus}}
-        </div>
-        {{/each}}
+  </div>
+
+  <div class="card wallet-history mt-2">
+    <div class="card-title h5 mt-2 user-text text-center fw-bold">Wallet History</div>
+    <div class="bg-secondary" style="height: 2px;"></div>
+    {{#each userData.wallet_history}}
+    <div class="card bg-light mt-2 d-flex flex-row justify-content-between align-items-center">
+      <div class="fw-normal">{{toDateAndTime this.time}}</div>
+      {{#checkSatatus this.status}}
+      <div class="fw-bold text-danger">{{this.status}}</div>
+      <div class="fw-bold text-danger">₹{{this.amount}}</div>
+      {{else}}
+      <div class="fw-bold text-success">{{this.status}}</div>
+      <div class="fw-bold text-success">₹{{this.amount}}</div>
+      {{/checkSatatus}}
     </div>
-    <div class="d-flex">
-        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
-            <a href="/orders"
-                class="d-flex text-decoration-none flex-column  align-items-center justify-content-center"><i
-                    class="fa-solid user-icon fa-box-archive fa-4x"></i>
-                <p class="h3 user-icon fw-bold">
-                    Orders
-                </p>
-                <p class="h6 user-text fw-normal">
-                    check your orders
-                </p>
-            </a>
-        </div>
-        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
-            <a href="/my-account/wishlist"
-                class="d-flex text-decoration-none flex-column  align-items-center justify-content-center"><i
-                    class="fa-regular user-icon fa-heart fa-4x"></i>
-                <p class="h3 user-icon fw-bold">
-                    Wish List
-                </p>
-                <p class="h6 user-text fw-normal">
-                    check your Wish list
-                </p>
-            </a>
-        </div>
-        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
-            <a href="/cart"
-                class="d-flex text-decoration-none flex-column  align-items-center justify-content-center"><i
-                    class="fa-solid user-icon fa-cart-shopping fa-4x"></i>
-                <p class="h3 user-icon fw-bold">
-                    Cart
-                </p>
-                <p class="h6 user-text fw-normal">
-                    check your Cart
-                </p>
-            </a>
-        </div>
-        <div style="width: 10rem;" class="card d-flex py-3 mt-3 me-3 align-items-center justify-content-center">
-            <a href="/my-account/edit-details/{{userData._id}}"
-                class="d-flex text-decoration-none flex-column  align-items-center justify-content-center"><i
-                    class="fa-solid user-icon fa-user-pen fa-4x"></i>
-                <p class="h3 user-icon fw-bold">
-                    Edit
-                </p>
-                <p class="h6 user-text fw-normal">
-                    Edit your details
-                </p>
-            </a>
-        </div>
+    {{/each}}
+  </div>
+
+  <div class="d-flex flex-wrap justify-content-center">
+    <div class="card py-3 mt-3 me-3 align-items-center justify-content-center" style="width: 10rem;">
+      <a href="/orders" class="text-decoration-none d-flex flex-column align-items-center justify-content-center">
+        <i class="fa-solid user-icon fa-box-archive fa-4x"></i>
+        <h3 class="user-icon fw-bold">Orders</h3>
+        <p class="h6 user-text fw-normal">Check your orders</p>
+      </a>
     </div>
+
+    <div class="card py-3 mt-3 me-3 align-items-center justify-content-center" style="width: 10rem;">
+      <a href="/my-account/wishlist" class="text-decoration-none d-flex flex-column align-items-center justify-content-center">
+        <i class="fa-regular user-icon fa-heart fa-4x"></i>
+        <h3 class="user-icon fw-bold">Wish List</h3>
+        <p class="h6 user-text fw-normal">Check your Wish list</p>
+      </a>
+    </div>
+
+    <div class="card py-3 mt-3 me-3 align-items-center justify-content-center" style="width: 10rem;">
+      <a href="/cart" class="text-decoration-none d-flex flex-column align-items-center justify-content-center">
+        <i class="fa-solid user-icon fa-cart-shopping fa-4x"></i>
+        <h3 class="user-icon fw-bold">Cart</h3>
+        <p class="h6 user-text fw-normal">Check your Cart</p>
+      </a>
+    </div>
+
+    <div class="card py-3 mt-3 align-items-center justify-content-center" style="width: 10rem;">
+      <a href="/my-account/edit-details/{{userData._id}}" class="text-decoration-none d-flex flex-column align-items-center justify-content-center">
+        <i class="fa-solid user-icon fa-user-pen fa-4x"></i>
+        <h3 class="user-icon fw-bold">Edit</h3>
+        <p class="h6 user-text fw-normal">Edit your details</p>
+      </a>
+    </div>
+  </div>
 </div>
+
 
 <script>
     $(document).ready(function () {

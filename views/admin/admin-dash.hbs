@@ -13,7 +13,7 @@
 
     <canvas id="myChart" style="width:100%;margin-right:3rem;margin-top:-1.5rem"></canvas>
 
-    <div class="details d-flex justify-content-around ">
+    <div class="details d-flex justify-content-around mb-3 ">
         <div class="d-flex rounded flex-column align-items-center px-4 justify-content-center bg-success fw-bold">
             <p class="text-white mt-4" style="margin-bottom:-10px;">Total Revenue</p>
             <p class="text-white fw-bold fa-2x">₹{{totalRevenew}}/-</p>
@@ -27,11 +27,122 @@
             <p class="text-white fw-bold fa-2x">{{products}}</p>
         </div>
     </div>
+
+    <div class="wrap-year d-flex justify-content-betweem">
+        <p class="fw-bold h6 mt-2 me-1">Today</p>
+        <input type="checkbox" class="me-5 " name="day" id="1day">
+
+        <p class="fw-bold h6 ms-5 mt-2 me-1">This Month</p>
+        <input type="checkbox" class="me-5 ms-2 " name="week" value="1" id="month">
+        
+        <p class="fw-bold h6 ms-5 mt-2 me-1">This Week</p>
+        <input type="checkbox" class="me-5 ms-2 " name="week" value="1" id="week">
+    </div>
+
+    <table style="width: 100%;" id="exportToTable" class="table mt-5 table-striped table-bordered table-sm"
+        cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th class="th-sm">Customer</th>
+                <th class="th-sm">Product_Name</th>
+                <th class="th-sm">Ordered_Date</th>
+                <th class="th-sm">Delivered_Date</th>
+                <th class="th-sm">Quantity</th>
+                <th class="th-sm">Payment</th>
+                <th class="th-sm">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{this.user.user_name}} </td>
+                <td>{{this.product.product_name}}</td>
+                <td>{{toDateAndTime this.createdAt}}</td>
+                {{#if this.items.delivered_on}}
+                <td>{{toDateAndTime this.items.delivered_on}}</td>
+                {{else}}
+                <td>Item not delivered yet</td>
+                {{/if}}
+                <td>{{this.items.quantity}}</td>
+                <td>{{this.payment_method}}</td>
+                <td>{{this.items.price}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
 
 
 <script>
     $(document).ready(async () => {
+        const dayCheckbox = document.getElementById("1day");
+        const monthSelect = document.getElementById("month");
+        const weekSelect = document.getElementById("week");
+
+        dayCheckbox.addEventListener("change", function () {
+            const currentURL = window.location.href;
+            const url = new URL(currentURL);
+            if (dayCheckbox.checked) {
+                url.searchParams.set("day", "1");
+            } else {
+                url.searchParams.delete("day");
+            }
+            window.location.href = url.toString();
+        });
+
+
+        //update month query
+        function updateMonthQueryParameter() {
+            const currentURL = window.location.href;
+            const url = new URL(currentURL);
+            if (monthSelect.checked) {
+                url.searchParams.set("month", "1");
+            } else {
+                url.searchParams.delete("month");
+            }
+            window.location.href = url.toString();
+        }
+
+        monthSelect.addEventListener("change", function () {
+            updateMonthQueryParameter();
+        });
+
+        function updateWeekQueryParameter(){
+            const currentURL = window.location.href;
+            const url = new URL(currentURL);
+            if (weekSelect.checked) {
+                url.searchParams.set("week", "1");
+            } else {
+                url.searchParams.delete("week");
+            }
+            window.location.href = url.toString();
+        }
+
+        weekSelect.addEventListener("change", function () {
+            updateWeekQueryParameter();
+        })
+
+        function hasDayQueryParameter() {
+            const url = new URL(window.location.href);
+            return url.searchParams.has("day");
+        }
+        function hasWeekQueryParameter() {
+            const url = new URL(window.location.href);
+            return url.searchParams.has("week");
+        }
+        function hasMonthQueryParameter() {
+            const url = new URL(window.location.href);
+            return url.searchParams.has("month");
+        }
+
+        function updateCheckboxState() {
+            dayCheckbox.checked = hasDayQueryParameter();
+            monthSelect.checked = hasMonthQueryParameter ();
+            weekSelect.checked = hasWeekQueryParameter ();
+        }
+        updateCheckboxState();
+
+
         try {
             await fetch('/admin/get-sales')
                 .then(response => response.json())

@@ -32,9 +32,101 @@ const render_dharboard = async (req, res) => {
     }
 
     const custommers = (await User.find({ is_delete: false })).length;
-    const products = (await Product.find({ delete: false })).length
+    const products = (await Product.find({ delete: false })).length;
+    try {
+        let orders = await Order.aggregate([
 
-    res.render('admin/admin-dash', { custommers, products, totalRevenew, yearsArray, Admin: admin, footer: true })
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'customer_id',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $unwind: '$items'
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'items.product_id',
+                    foreignField: '_id',
+                    as: 'product'
+                }
+            },
+            {
+                $unwind: '$product'
+            },
+            {
+                $project: {
+                    _id: 1,
+                    'user.user_name': 1,
+                    'product.product_name': 1,
+                    address: 1,
+                    items: 1,
+                    total_amount: 1,
+                    createdAt: 1,
+                    payment_method: 1
+                }
+            }
+        ]);
+
+
+        const queryParams = req.query;
+
+        // Filter by day if "day" query parameter is provided
+        if (queryParams.day !== undefined && queryParams.day !== "") {
+            const day = new Date();
+            orders = orders.filter((order) => {
+                // Extract the day from the "createdAt" field and compare
+                const orderDay = new Date(order.createdAt).setHours(0, 0, 0, 0);
+                return orderDay >= day.setHours(0, 0, 0, 0);
+            });
+        }
+
+        // to get the start and end of the month
+        function getStartAndEndOfMonth() {
+            const today = new Date();
+            const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            return { startOfMonth, endOfMonth };
+        }
+
+        if (queryParams.month !== undefined && queryParams.month !== "") {
+            const { startOfMonth, endOfMonth } = getStartAndEndOfMonth();
+            orders = orders.filter((order) => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate >= startOfMonth && orderDate <= endOfMonth;
+            });
+        }
+
+        // get the start and end of the week
+        function getStartAndEndOfWeek() {
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setHours(0, 0, 0, 0);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
+            return { startOfWeek, endOfWeek };
+        }
+
+        if (queryParams.week !== undefined && queryParams.week !== "") {
+            const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
+            orders = orders.filter((order) => {
+                const orderDate = new Date(order.createdAt);
+                return orderDate >= startOfWeek && orderDate < endOfWeek;
+            });
+        }
+        res.render('admin/admin-dash', { custommers, orders, products, totalRevenew, yearsArray, Admin: admin, footer: true });
+        
+    } catch (err) {
+        res.send( err.message)
+    }
 }
 
 // get dashboard Items

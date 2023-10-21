@@ -1,30 +1,34 @@
-<div class="container-fluid">
-    <div class="h3 fw-bold mt-3 user-text py-1">
-        Wish List
-    </div>
+<div class="container">
+  <div class="h3 fw-bold mt-3 user-text py-1">
+    Wish List
+  </div>
 
+  <div class="row">
     {{#each wishList}}
-    <div style="position: relative;" class="card my-3 col-md-8 p-3 d-flex flex-row align-items-center">
-        <div class="img-div">
-            <img style="width: 5rem;" src="/productImages/{{this.products.primary_image.name}}" alt="">
-        </div>
-        <div class="details-div ms-3">
-            <p class=" h5 fw-bold">{{this.products.product_name}}</p>
+    <div class="col-md-8 my-3">
+      <div class="card p-3">
+        <div class="row align-items-center">
+          <div class="col-4 col-md-2">
+            <img style="max-width: 100%;" src="/productImages/{{this.products.primary_image.name}}" alt="">
+          </div>
+          <div class="col-8 col-md-10">
+            <p class="h5 fw-bold">{{this.products.product_name}}</p>
             <p style="font-size: 0.8rem;">{{this.products.color}} &nbsp &nbsp
-                Brand:<span>{{this.products.brand_name}}</span></p>
-            <div style="margin-top: -15px;" class="d-flex">
-                <p class="text-success fw-bold">₹{{this.products.selling_price}}</p>
-                <p style="text-decoration: line-through;" class=" ms-5 text-muted">₹{{this.products.actual_price}}</p>
+              Brand: <span>{{this.products.brand_name}}</span></p>
+            <div class="d-flex align-items-center">
+              <p class="text-success fw-bold">₹{{this.products.selling_price}}</p>
+              <p style="text-decoration: line-through;" class="ms-5 text-muted">₹{{this.products.actual_price}}</p>
             </div>
+            <div class="d-flex align-items-center">
+              <input onclick="addToCart('{{this.products._id}}')" type="button" value="Add to cart" class="btn user-btn">
+              <input type="button" value="remove" onclick="remove_wishlist('{{this.products._id}}')" style="cursor:pointer" class="ms-3 btn clear-btn">
+            </div>
+          </div>
         </div>
-        <div style="position: absolute; top:1.5rem;right:2rem" class="div d-flex align-items-center">
-            <input onclick="addToCart('{{this.products._id}}')" type="button" value="Add to cart" class="btn user-btn">
-            <span onclick="remove_wishlist('{{this.products._id}}')" style="cursor:pointer"> <i
-                    class="fa-regular fa-lg ms-3 fa-circle-xmark"></i></span>
-        </div>
-
+      </div>
     </div>
     {{/each}}
+  </div>
 </div>
 
 <script>
