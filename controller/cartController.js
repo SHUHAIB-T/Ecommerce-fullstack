@@ -250,189 +250,194 @@ const render_checkout = async (req, res) => {
 
 //create order 
 const place_order = async (req, res) => {
-    let customer_id = res.locals.userData._id;
-    let status;
-    if (req.body.payment_method === 'COD' || req.body.payment_method === 'wallet') {
-        status = 'confirmed'
-    } else {
-        status = 'pending'
-    }
-    let order;
-
-    let cartList = await User.aggregate([
-        { $match: { _id: customer_id } },
-        { $project: { cart: 1, _id: 0 } },
-        { $unwind: { path: '$cart' } },
-        {
-            $lookup: {
-                from: 'products',
-                localField: 'cart.product_id',
-                foreignField: '_id',
-                as: 'prod_detail'
-            }
-        },
-        { $unwind: { path: '$prod_detail' }, },
-        {
-            $project: {
-                'prod_detail_id': 1,
-                'prod_detail.selling_price': 1,
-                cart: 1
-            }
+    try {
+        let customer_id = res.locals.userData._id;
+        let status;
+        if (req.body.payment_method === 'COD' || req.body.payment_method === 'wallet') {
+            status = 'confirmed'
+        } else {
+            status = 'pending'
         }
-    ])
+        let order;
 
-    let items = [];
-    const address = await Address.findOne({ _id: req.body.address });
-    if (req.body.coupen != '') {
-
-        const couponId = new mongoose.Types.ObjectId(req.body.coupen);
-        const userId = res.locals.userData._id;
-        if (status === 'confirmed') {
-            let coupon = await Coupen.findByIdAndUpdate(
-                { _id: couponId },
-                {
-                    $inc: { used_count: 1 },
-                    $push: { user_list: userId },
-                },
-                {
-                    new: true
+        let cartList = await User.aggregate([
+            { $match: { _id: customer_id } },
+            { $project: { cart: 1, _id: 0 } },
+            { $unwind: { path: '$cart' } },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'cart.product_id',
+                    foreignField: '_id',
+                    as: 'prod_detail'
                 }
-            );
+            },
+            { $unwind: { path: '$prod_detail' }, },
+            {
+                $project: {
+                    'prod_detail_id': 1,
+                    'prod_detail.selling_price': 1,
+                    cart: 1
+                }
+            }
+        ])
+
+        let items = [];
+        const address = await Address.findOne({ _id: req.body.address });
+        if (req.body.coupen != '') {
+
+            const couponId = new mongoose.Types.ObjectId(req.body.coupen);
+            const userId = res.locals.userData._id;
+            if (status === 'confirmed') {
+                let coupon = await Coupen.findByIdAndUpdate(
+                    { _id: couponId },
+                    {
+                        $inc: { used_count: 1 },
+                        $push: { user_list: userId },
+                    },
+                    {
+                        new: true
+                    }
+                );
+            }
+            let dicount = req.body.discount
+            let coupen_code = req.body.coupen_code
+            for (let i = 0; i < cartList.length; i++) {
+                items.push({
+                    product_id: cartList[i].cart.product_id,
+                    quantity: cartList[i].cart.quantity,
+                    price: (parseInt(cartList[i].prod_detail.selling_price)) - (parseInt(cartList[i].prod_detail.selling_price) * dicount / 100),
+                    status: status
+                });
+            }
+            order = {
+                customer_id: customer_id,
+                items: items,
+                address: address,
+                payment_method: req.body.payment_method,
+                total_amount: parseInt(req.body.price),
+                status: status,
+                coupon: {
+                    coupon_id: couponId,
+                    discount: dicount,
+                    code: coupen_code
+                }
+            }
+
+
+
+        } else {
+            for (let i = 0; i < cartList.length; i++) {
+                items.push({
+                    product_id: cartList[i].cart.product_id,
+                    quantity: cartList[i].cart.quantity,
+                    price: parseInt(cartList[i].prod_detail.selling_price),
+                    status: status
+                });
+            }
+            order = {
+                customer_id: customer_id,
+                items: items,
+                address: address,
+                status: status,
+                payment_method: req.body.payment_method,
+                total_amount: parseInt(req.body.price)
+            }
         }
-        let dicount = req.body.discount
-        let coupen_code = req.body.coupen_code
-        for (let i = 0; i < cartList.length; i++) {
-            items.push({
-                product_id: cartList[i].cart.product_id,
-                quantity: cartList[i].cart.quantity,
-                price: (parseInt(cartList[i].prod_detail.selling_price)) - (parseInt(cartList[i].prod_detail.selling_price) * dicount / 100),
-                status: status
+
+        if (req.body.payment_method === 'COD') {
+            const createOrder = await Order.create(order);
+            if (createOrder) {
+
+                //empty the cart
+                await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } })
+
+                //reduce the stock count 
+                for (let i = 0; i < items.length; i++) {
+                    await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
+                }
+                req.session.order = {
+                    status: true
+                }
+                res.json({
+                    success: true
+                });
+            }
+        } else if (req.body.payment_method === 'wallet') {
+            const createOrder = await Order.create(order);
+            if (createOrder) {
+                const user = res.locals.userData;
+                // empty cart
+                await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } });
+
+                // decreasing the wallet amount
+                await User.updateOne({ _id: customer_id }, { $set: { user_wallet: parseInt(user.user_wallet) - parseInt(req.body.price) } });
+
+                // Marking in wallet history
+                const newHistoryItem = {
+                    amount: parseInt(req.body.price),
+                    status: "Debit",
+                    time: Date.now()
+                };
+
+
+                const updatedUser = await User.findByIdAndUpdate(
+                    { _id: customer_id },
+                    { $push: { wallet_history: newHistoryItem } },
+                    { new: true }
+                );
+
+
+                //reduce the stock count 
+                for (let i = 0; i < items.length; i++) {
+                    await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
+                }
+                req.session.order = {
+                    status: true
+                }
+                res.json({
+                    success: true
+                })
+            }
+        } else {
+            const createOrder = await Order.create(order);
+
+            let total = parseInt(req.body.price);
+            let orderId = createOrder._id;
+
+            let user = await User.findById(res.locals.userData._id);
+
+            //craete order for razorpay
+            const Razorder = await createRazOrder(orderId, total).then((order) => order);
+
+            const timestamp = Razorder.created_at;
+            const date = new Date(timestamp * 1000); // Convert the Unix timestamp to milliseconds
+
+            // Format the date and time
+            const formattedDate = date.toISOString();
+
+            //creating a instance for payment details
+            let payment = new Payment({
+                payment_id: Razorder.id,
+                amount: parseInt(Razorder.amount) / 100,
+                currency: Razorder.currency,
+                order_id: orderId,
+                status: Razorder.status,
+                created_at: formattedDate,
             });
-        }
-        order = {
-            customer_id: customer_id,
-            items: items,
-            address: address,
-            payment_method: req.body.payment_method,
-            total_amount: parseInt(req.body.price),
-            status: status,
-            coupon: {
-                coupon_id: couponId,
-                discount: dicount,
-                code: coupen_code
-            }
-        }
 
+            //saving in to db
+            await payment.save();
 
-
-    } else {
-        for (let i = 0; i < cartList.length; i++) {
-            items.push({
-                product_id: cartList[i].cart.product_id,
-                quantity: cartList[i].cart.quantity,
-                price: parseInt(cartList[i].prod_detail.selling_price),
-                status: status
-            });
-        }
-        order = {
-            customer_id: customer_id,
-            items: items,
-            address: address,
-            status: status,
-            payment_method: req.body.payment_method,
-            total_amount: parseInt(req.body.price)
-        }
-    }
-
-    if (req.body.payment_method === 'COD') {
-        const createOrder = await Order.create(order);
-        if (createOrder) {
-
-            //empty the cart
-            await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } })
-
-            //reduce the stock count 
-            for (let i = 0; i < items.length; i++) {
-                await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
-            }
-            req.session.order = {
-                status: true
-            }
             res.json({
-                success: true
-            });
-        }
-    } else if (req.body.payment_method === 'wallet') {
-        const createOrder = await Order.create(order);
-        if (createOrder) {
-            const user = res.locals.userData;
-            // empty cart
-            await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } });
-
-            // decreasing the wallet amount
-            await User.updateOne({ _id: customer_id }, { $set: { user_wallet: parseInt(user.user_wallet) - parseInt(req.body.price) } });
-
-            // Marking in wallet history
-            const newHistoryItem = {
-                amount: parseInt(req.body.price),
-                status: "Debit",
-                time: Date.now()
-            };
-
-
-            const updatedUser = await User.findByIdAndUpdate(
-                { _id: customer_id },
-                { $push: { wallet_history: newHistoryItem } },
-                { new: true }
-            );
-
-
-            //reduce the stock count 
-            for (let i = 0; i < items.length; i++) {
-                await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } })
-            }
-            req.session.order = {
-                status: true
-            }
-            res.json({
-                success: true
+                status: true,
+                order: Razorder,
+                user
             })
         }
-    } else {
-        const createOrder = await Order.create(order);
 
-        let total = parseInt(req.body.price);
-        let orderId = createOrder._id;
-
-        let user = await User.findById(res.locals.userData._id);
-
-        //craete order for razorpay
-        const Razorder = await createRazOrder(orderId, total).then((order) => order);
-
-        const timestamp = Razorder.created_at;
-        const date = new Date(timestamp * 1000); // Convert the Unix timestamp to milliseconds
-
-        // Format the date and time
-        const formattedDate = date.toISOString();
-
-        //creating a instance for payment details
-        let payment = new Payment({
-            payment_id: Razorder.id,
-            amount: parseInt(Razorder.amount) / 100,
-            currency: Razorder.currency,
-            order_id: orderId,
-            status: Razorder.status,
-            created_at: formattedDate,
-        });
-
-        //saving in to db
-        await payment.save();
-
-        res.json({
-            status: true,
-            order: Razorder,
-            user
-        })
+    } catch (err) {
+        res.send(err.message)
     }
 }
 
@@ -462,10 +467,19 @@ const verifyPaymenet = async (req, res) => {
     let isSignatureValid = generatedSignature === req.body.razorpay_signature;
 
     if (isSignatureValid) {
-        let customer_id = res.locals.userData._id
+        let customer_id = res.locals.userData._id;
+
+        let items = res.locals.userData.cart;
+        //reduce the stock count 
+        for (let i = 0; i < items.length; i++) {
+            await Product.updateOne({ _id: items[i].product_id }, { $inc: { stock: -(items[i].quantity) } });
+        }
+
+
         //empty the cart
         await User.updateOne({ _id: customer_id }, { $unset: { cart: '' } })
         let paymentId = req.body.razorpay_order_id;
+
         const orderID = await Payment.findOne({ payment_id: paymentId }, { _id: 0, order_id: 1 });
 
         const order_id = orderID.order_id;

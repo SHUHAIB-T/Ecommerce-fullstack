@@ -147,7 +147,7 @@ const render_order_details = async (req, res) => {
             }
         }
     }
-    
+
     res.render('user/order-details', { User: true, orderDetails, footer: true, user: true });
 }
 
@@ -418,6 +418,13 @@ const get_invoice = async (req, res) => {
     let productIdToFind = req.query.productId
 
     const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
+    function generateRandomInvoiceId() {
+        let id = showOrder.items.product_id.toString().slice(3, 10);
+        const invoiceId = `INV-${id}`;
+        return invoiceId;
+    }
+    const randomInvoiceId = generateRandomInvoiceId();
+    showOrder.invoiceId = randomInvoiceId;
 
     // download pdf
     const html = fs.readFileSync('./views/pdf/invoice.hbs', "utf8");

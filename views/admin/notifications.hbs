@@ -23,12 +23,16 @@
                     <td>{{this.reason}}</td>
                     <td>{{this.comment}}</td>
                     <td class="fw-bold text-primary">{{this.status}}</td>
+                    {{#if this.return}}
+                    <td></td>
+                    {{else}}
                     <td>
                         <input onclick="approveReturn('{{this._id}}')" type="button" role="button"
                             class="btn btn-success" value="Aprove">
                         <input onclick="declineReturn('{{this._id}}')" type="button" role="button"
                             class="btn btn-danger" value="decline">
                     </td>
+                    {{/if}}
                 </tr>
                 {{/each}}
             </tbody>

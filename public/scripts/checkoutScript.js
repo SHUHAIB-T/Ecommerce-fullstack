@@ -149,7 +149,8 @@ $(document).ready(() => {
                     const newTotalAmount = data.total;
                     const productsElement = document.querySelector('.list-group-item:nth-child(1) span');
                     const shippingElement = document.querySelector('.list-group-item:nth-child(2) span');
-                    const totalAmountElement = document.querySelector('.list-group-item:nth-child(3) span strong');
+                    const Showdiscount = document.getElementById('showDiscount')
+                    const totalAmountElement = document.querySelector('.list-group-item:nth-child(4) span strong');
                     let price = document.getElementById('price');
                     price.value = newTotalAmount
                     let coupen = document.getElementById('coupen');
@@ -161,6 +162,8 @@ $(document).ready(() => {
                     productsElement.textContent = `₹${newTotalAmount}`;
                     shippingElement.textContent = '₹ 0';
                     totalAmountElement.textContent = `₹${newTotalAmount}`;
+                    Showdiscount.textContent = `${data.discount}%`
+                    console.log(Showdiscount);
                     $('.coupenss').hide();
                     $('#proceedPayment').show();
                     $('#submitOrder').show();

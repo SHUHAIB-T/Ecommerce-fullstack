@@ -39,6 +39,13 @@ const getNotifications = async (req, res) => {
         }
     ]);
     const admin = res.locals.admin;
+    for (let request of returns) {
+        if (request.status !== 'pending') {
+            request.return = true;
+        } else {
+            request.return = false;
+        }
+    }
     res.render('admin/notifications', { Admin: admin, returns, admin: true, footer: true });
 }
 

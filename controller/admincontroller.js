@@ -82,7 +82,7 @@ const render_dharboard = async (req, res) => {
         if (queryParams.day !== undefined && queryParams.day !== "") {
             const day = new Date();
             orders = orders.filter((order) => {
-                // Extract the day from the "createdAt" field and compare
+
                 const orderDay = new Date(order.createdAt).setHours(0, 0, 0, 0);
                 return orderDay >= day.setHours(0, 0, 0, 0);
             });
@@ -123,9 +123,9 @@ const render_dharboard = async (req, res) => {
             });
         }
         res.render('admin/admin-dash', { custommers, orders, products, totalRevenew, yearsArray, Admin: admin, footer: true });
-        
+
     } catch (err) {
-        res.send( err.message)
+        res.send(err.message)
     }
 }
 
@@ -604,6 +604,13 @@ const get_invoice = async (req, res) => {
 
     const showOrder = order.find(order => order.items.product_id.toString() === productIdToFind);
 
+    function generateRandomInvoiceId() {
+        let id = showOrder.items.product_id.toString().slice(3,10);
+        const invoiceId = `INV-${id}`;
+        return invoiceId;
+    }
+    const randomInvoiceId = generateRandomInvoiceId();
+    showOrder.invoiceId = randomInvoiceId;
     res.render('pdf/invoice', { admin: true, showOrder, Admin: admin })
 }
 
