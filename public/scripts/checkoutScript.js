@@ -52,7 +52,6 @@ $(document).ready(() => {
             if (form) {
                 let formData = new FormData(form);
                 const body = Object.fromEntries(formData);
-                console.log(body)
                 await fetch('/cart/place-order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

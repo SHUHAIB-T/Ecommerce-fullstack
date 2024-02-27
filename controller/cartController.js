@@ -407,7 +407,7 @@ const place_order = async (req, res) => {
 
             let user = await User.findById(res.locals.userData._id);
 
-            //craete order for razorpay
+            //creat order for razorpay
             const Razorder = await createRazOrder(orderId, total).then((order) => order);
 
             const timestamp = Razorder.created_at;
@@ -503,7 +503,6 @@ const verifyPaymenet = async (req, res) => {
                 );
             }
         }
-
         req.session.order = {
             status: true
         }
