@@ -72,6 +72,7 @@ const genarate_otp = async (req, res) => {
     res.json(req.body.user_email)
     // Define email data
     const otp = getRandomSixDigitNumber();
+    console.log("OTP>>>>>>>>>>>>>>",otp)
     const mail = req.body.user_email
     await OTP.create({ email: mail, otp: otp })
     const mailOptions = {
