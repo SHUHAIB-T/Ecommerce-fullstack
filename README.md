@@ -1,8 +1,11 @@
 <p align="center">
     <picture>
-    <img alt="thalia" src="./assets/logo.png" height="180">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/SHUHAIB-T/Ecommerce-fullstack/blob/main/assets/logo.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/SHUHAIB-T/Ecommerce-fullstack/blob/main/assets/logo_light.png">
+    <img alt="Hashnode logo" src="https://github.com/SHUHAIB-T/Ecommerce-fullstack/blob/main/assets/logo.png" height="130">
     </picture>
 </p>
+
 
 <p align="center">    
     <a href="">
