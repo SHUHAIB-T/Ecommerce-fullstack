@@ -47,22 +47,44 @@ Times Cart is an ecommerce platform specializing in the sale of watches. It offe
     <img alt="thalia" src="./assets/home.png" width=90%>
     </picture>
 </p>
-
-## Technologies Used
-
-- **Frontend:** HTML, CSS, Handlebars, jquery, Bootstrap
-- **Backend:** Express.js, Node.js
-- **Database:** MongoDB
-- **Payment integration:** Razorpay
- 
 <p align="center">
     <picture>
     <img alt="thalia" src="./assets/filter-page.png" width=90%>
     </picture>
 </p>
 
+## Tech stack
+Main web-frameworks and libraries:
+- **Node.js:** Server-side JavaScript execution environment to produce dynamic web pages and service requests.
+- **Express.js:** The de facto standard web application framework for Node.js to build web applications including this one.
+- **MongoDB(& mongoose.js):** NoSQL database, which serves as the database for this tech stack, for storing and retrieving data(CRUD opreations).
+- **Handlebars.js(& Bootstrap):** Templating engine to produce client-side generated dynamic web pages, used to separate UI(view) from logic(model and controller)
+- **Payment integration:** Razorpay 
+- Sweet Alert, Session, Connect Flash & Validation
+- JWT tocken based Authentication
+- BCrypt Hashing
+
 Times cart is successfully hosted on render You can access the live site [ecommerce-fullstack-b3nc.onrender.com](https://ecommerce-fullstack-b3nc.onrender.com/).
 
+## How to Host the E-Commerce Website locally on your system
+
+1. Cloning the repository
+   
+   ```
+   git clone https://github.com/SHUHAIB-T/Ecommerce-fullstack.git
+   ```
+2. go to the cloned directory & install dependancies
+   
+   ```
+   cd Ecommerce-fullstack
+   npm install
+   ```
+3. set up the env file by refering the `.examle.env`
+4. Start Node.js server using npm, the server starts processing request at [http://localhost:3000](http://localhost:3000) 
+   
+   ```
+   npm start
+   ```
 
 ## Contributing
 
